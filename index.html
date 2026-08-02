@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Jérôme Fafchamps · sMug — IT & Sûreté · DevOps, Réseau, Salles de contrôle</title>
+<meta name="description" content="Jérôme Fafchamps (sMug) — 20 ans à l'intersection de l'IT et de la sûreté : DevOps, administration système & réseau, développement, et conception, supervision & pilotage de systèmes de sécurité (salles de contrôle, vidéosurveillance, contrôle d'accès). Belgique.">
+<meta name="keywords" content="Jérôme Fafchamps, sMug, Responsable IT, Responsable sûreté, Gardiennage, DevOps, SysAdmin, Réseau, Développeur, PHP, Java, Cybersécurité, Sécurité informatique, Sûreté, Vidéosurveillance, CCTV, Contrôle d'accès, Salles de contrôle, Gestion de projet, Belgique, Wolfplex">
+<meta name="author" content="Jérôme Fafchamps">
+<meta name="theme-color" content="#0a0c10">
+<link rel="canonical" href="https://www.fafchamps.be/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='7'%20fill='%230d1016'/%3E%3Cpath%20d='M9%209H55V43L43%2055H9Z'%20fill='%23ffb13d'/%3E%3Ctext%20x='32'%20y='42'%20font-family='monospace'%20font-size='26'%20font-weight='700'%20text-anchor='middle'%20fill='%230a0c10'%3EJF%3C/text%3E%3C/svg%3E">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Jérôme Fafchamps — IT & Sûreté · DevOps, Réseau, Salles de contrôle">
+<meta property="og:description" content="20 ans à l'intersection de l'IT et de la sûreté : infrastructure, réseau, développement et systèmes de sécurité (salles de contrôle, vidéosurveillance, contrôle d'accès). Belgique.">
+<meta property="og:url" content="https://www.fafchamps.be/">
+<meta property="og:locale" content="fr_BE">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- Fallback : si JS est désactivé, on retire l'écran de boot pour ne pas masquer le site -->
+<noscript><style>.boot{display:none!important}</style></noscript>
+
+<!-- Données structurées -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Jérôme Fafchamps",
+  "alternateName": "sMug",
+  "url": "https://www.fafchamps.be/",
+  "jobTitle": "IT & Sûreté · DevOps, Réseau & Salles de contrôle",
+  "email": "mailto:jerome@fafchamps.be",
+  "address": { "@type": "PostalAddress", "addressCountry": "BE" },
+  "knowsAbout": ["DevOps","Administration système","Réseau","Cybersécurité","Sûreté","Vidéosurveillance","Contrôle d'accès","Salles de contrôle","Gestion de projet","Analyse fonctionnelle","PHP","Java","C#","JavaScript","Flutter","SQL"],
+  "sameAs": ["https://github.com/replicatorbe","https://www.wolfplex.be/"]
+}
+</script>
+
+<style>
+/* ============================================================= *
+ *  fafchamps.be — refonte "terminal" 2026                       *
+ *  Esthétique console / dark — © Jérôme Fafchamps               *
+ * ============================================================= */
+
+:root{
+  --bg:#0a0c10;
+  --bg-2:#0d1016;
+  --panel:#11151d;
+  --panel-2:#141923;
+  --line:rgba(126,148,178,.10);
+  --line-bright:rgba(126,148,178,.22);
+  --text:#c4ccd8;
+  --text-dim:#6c7686;
+  --text-faint:#444c5a;
+  --amber:#ffb13d;
+  --amber-soft:#ffca74;
+  --cyan:#48d6cf;
+  --green:#62e08a;
+  --red:#ff5d5d;
+  --ff-display:'Chakra Petch', sans-serif;
+  --ff-body:'IBM Plex Sans', sans-serif;
+  --ff-mono:'JetBrains Mono', monospace;
+  --maxw:1240px;
+  --ease:cubic-bezier(.16,.84,.44,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+body{
+  font-family:var(--ff-body);
+  color:var(--text);
+  background-color:var(--bg);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:46px 46px;
+  background-position:center top;
+}
+/* atmospheric glow + vignette */
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(900px 600px at 78% -5%, rgba(255,177,61,.10), transparent 60%),
+    radial-gradient(800px 700px at 0% 100%, rgba(72,214,207,.07), transparent 60%),
+    radial-gradient(1200px 900px at 50% 50%, transparent 55%, rgba(0,0,0,.55) 100%);
+}
+/* film grain */
+.grain{
+  position:fixed;inset:0;z-index:9997;pointer-events:none;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* scanlines */
+.scanlines{
+  position:fixed;inset:0;z-index:9996;pointer-events:none;opacity:.35;
+  background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(5,7,10,.55) 3px,rgba(5,7,10,.55) 3px);
+}
+/* scroll progress (HUD top line) */
+.scrollprog{position:fixed;top:0;left:0;height:2px;width:0;z-index:905;
+  background:linear-gradient(90deg,var(--amber),var(--amber-soft));
+  box-shadow:0 0 10px rgba(255,177,61,.6)}
+
+::selection{background:var(--amber);color:#0a0c10}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:#1c222d;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--amber)}
+
+/* ============================================================= *
+ *  BOOT LOADER                                                  *
+ * ============================================================= */
+.boot{
+  position:fixed;inset:0;z-index:10000;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-mono);font-size:13px;
+  transition:opacity .6s var(--ease),visibility .6s;
+}
+.boot.done{opacity:0;visibility:hidden}
+.boot__inner{width:min(560px,86vw)}
+.boot__bar{display:flex;justify-content:space-between;color:var(--text-faint);
+  font-size:10.5px;letter-spacing:.18em;margin-bottom:18px;
+  border-bottom:1px solid var(--line-bright);padding-bottom:10px}
+.boot__line{opacity:0;transform:translateY(4px);white-space:nowrap;overflow:hidden;
+  animation:bootline .35s var(--ease) forwards;color:var(--text-dim);margin:3px 0}
+.boot__line .ok{color:var(--green)}
+.boot__line .run{color:var(--amber)}
+.boot__line.grant{color:var(--amber);font-weight:700;letter-spacing:.05em;margin-top:14px}
+@keyframes bootline{to{opacity:1;transform:none}}
+.boot__skip{margin-top:22px;color:var(--text-faint);font-size:10px;letter-spacing:.2em}
+.boot__skip b{color:var(--text-dim)}
+
+/* ============================================================= *
+ *  HUD CHROME (top status bar + side rail)                      *
+ * ============================================================= */
+.statusbar{
+  position:fixed;top:0;left:0;right:0;z-index:900;height:34px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.14em;
+  color:var(--text-dim);background:rgba(10,12,16,.72);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+}
+.statusbar .seg{display:flex;align-items:center;gap:8px}
+.statusbar .sep{color:var(--text-faint);margin:0 6px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.statusbar .hide-s{display:none}
+@media(min-width:720px){.statusbar .hide-s{display:flex}}
+
+/* logo */
+.brand{position:fixed;top:46px;left:24px;z-index:901;display:flex;align-items:center;gap:11px}
+.brand__mono{
+  width:38px;height:38px;display:grid;place-items:center;flex:0 0 auto;
+  font-family:var(--ff-display);font-weight:700;font-size:16px;color:var(--bg);
+  background:var(--amber);position:relative;
+  clip-path:polygon(0 0,100% 0,100% 72%,72% 100%,0 100%);
+  box-shadow:0 0 18px rgba(255,177,61,.4);
+}
+.brand__txt{font-family:var(--ff-mono);font-size:11px;line-height:1.3;letter-spacing:.05em}
+.brand__txt b{color:var(--text);display:block;letter-spacing:.12em}
+.brand__txt span{color:var(--text-dim)}
+@media(max-width:980px){.brand{top:42px;left:16px}.brand__txt{display:none}}
+
+/* side nav rail */
+.rail{
+  position:fixed;top:50%;right:26px;transform:translateY(-50%);z-index:901;
+  display:flex;flex-direction:column;gap:4px;
+}
+.rail a{
+  display:flex;align-items:center;gap:10px;justify-content:flex-end;
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.12em;color:var(--text-faint);
+  padding:5px 2px;transition:color .3s;
+}
+.rail a .num{opacity:.5}
+.rail a .label{opacity:0;transform:translateX(8px);transition:.3s var(--ease);
+  text-transform:uppercase;white-space:nowrap}
+.rail a .tick{width:22px;height:1px;background:currentColor;transition:width .3s,background .3s}
+.rail a:hover,.rail a.active{color:var(--amber)}
+.rail a:hover .label,.rail a.active .label{opacity:1;transform:none}
+.rail a.active .tick{width:34px;height:2px}
+@media(max-width:980px){.rail{display:none}}
+
+/* mobile nav */
+.burger{position:fixed;top:42px;right:16px;z-index:903;width:46px;height:46px;
+  display:none;align-items:center;justify-content:center;flex-direction:column;gap:5px;
+  background:var(--panel);border:1px solid var(--line-bright);cursor:pointer}
+.burger span{width:20px;height:2px;background:var(--amber);transition:.3s}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-nav{position:fixed;inset:0;z-index:902;background:rgba(8,10,14,.97);
+  backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:6px;opacity:0;visibility:hidden;transition:.4s var(--ease)}
+.mobile-nav.open{opacity:1;visibility:visible}
+.mobile-nav a{font-family:var(--ff-display);font-size:30px;font-weight:600;color:var(--text);
+  letter-spacing:.04em;display:flex;align-items:baseline;gap:14px}
+.mobile-nav a .num{font-family:var(--ff-mono);font-size:13px;color:var(--amber)}
+@media(max-width:980px){.burger{display:flex}}
+
+/* ============================================================= *
+ *  LAYOUT PRIMITIVES                                            *
+ * ============================================================= */
+main{position:relative;z-index:1}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+section{position:relative;padding:120px 0;scroll-margin-top:44px}
+@media(max-width:680px){section{padding:84px 0}.wrap{padding:0 18px}}
+
+.sec-head{margin-bottom:54px;max-width:720px}
+.sec-meta{display:flex;align-items:center;gap:14px;font-family:var(--ff-mono);
+  font-size:11px;letter-spacing:.22em;color:var(--amber);margin-bottom:16px}
+.sec-meta .idx{color:var(--text-faint)}
+.sec-meta .ln{flex:1;height:1px;background:linear-gradient(90deg,var(--line-bright),transparent)}
+.sec-title{font-family:var(--ff-display);font-weight:700;line-height:1.05;
+  font-size:clamp(30px,5vw,52px);color:#eef1f6;letter-spacing:-.01em}
+.sec-title em{font-style:normal;color:var(--amber)}
+.sec-sub{margin-top:18px;color:var(--text-dim);max-width:620px;font-size:16px}
+
+.mono-tag{font-family:var(--ff-mono);font-size:11px;letter-spacing:.14em;
+  color:var(--cyan);text-transform:uppercase}
+
+/* frame w/ targeting corners */
+.frame{position:relative;background:var(--panel);border:1px solid var(--line)}
+.frame::after{
+  content:"";position:absolute;inset:-1px;pointer-events:none;
+  background:
+    linear-gradient(var(--amber),var(--amber)) 0 0/14px 2px no-repeat,
+    linear-gradient(var(--amber),var(--amber)) 0 0/2px 14px no-repeat,
+    linear-gradient(var(--amber),var(--amber)) 100% 0/14px 2px no-repeat,
+    linear-gradient(var(--amber),var(--amber)) 100% 0/2px 14px no-repeat,
+    linear-gradient(var(--amber),var(--amber)) 0 100%/14px 2px no-repeat,
+    linear-gradient(var(--amber),var(--amber)) 0 100%/2px 14px no-repeat,
+    linear-gradient(var(--amber),var(--amber)) 100% 100%/14px 2px no-repeat,
+    linear-gradient(var(--amber),var(--amber)) 100% 100%/2px 14px no-repeat;
+  opacity:0;transition:opacity .35s var(--ease);
+}
+.frame:hover::after{opacity:1}
+
+/* ============================================================= *
+ *  HERO                                                          *
+ * ============================================================= */
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:90px}
+.hero__grid{display:grid;grid-template-columns:1.25fr .85fr;gap:48px;width:100%;align-items:center}
+@media(max-width:980px){.hero__grid{grid-template-columns:1fr;gap:36px}}
+
+.hero__kicker{display:inline-flex;align-items:center;gap:10px;font-family:var(--ff-mono);
+  font-size:11px;letter-spacing:.22em;color:var(--text-dim);margin-bottom:26px;
+  border:1px solid var(--line-bright);padding:7px 13px;border-radius:2px}
+.hero__kicker .dot{width:6px;height:6px}
+.hero h1{font-family:var(--ff-display);font-weight:700;letter-spacing:-.02em;
+  font-size:clamp(44px,8.2vw,92px);line-height:.95;color:#f3f5f8}
+.hero h1 .last{color:var(--amber);text-shadow:0 0 34px rgba(255,177,61,.35)}
+.hero__role{margin-top:22px;font-family:var(--ff-mono);font-size:clamp(15px,2.4vw,21px);
+  color:var(--cyan);min-height:1.6em;letter-spacing:.02em}
+.hero__role .pre{color:var(--text-faint)}
+.cursor{display:inline-block;width:9px;height:1.05em;background:var(--cyan);
+  transform:translateY(2px);margin-left:3px;animation:blink 1.05s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.hero__lead{margin-top:28px;max-width:560px;color:var(--text-dim);font-size:16.5px}
+.hero__cta{margin-top:38px;display:flex;flex-wrap:wrap;gap:14px}
+
+.btn{font-family:var(--ff-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  padding:15px 26px;border:1px solid var(--line-bright);color:var(--text);
+  display:inline-flex;align-items:center;gap:10px;cursor:pointer;position:relative;
+  transition:.3s var(--ease);background:transparent;overflow:hidden}
+.btn::before{content:"";position:absolute;inset:0;background:var(--amber);
+  transform:translateX(-101%);transition:transform .4s var(--ease);z-index:-1}
+.btn:hover{color:var(--bg);border-color:var(--amber)}
+.btn:hover::before{transform:none}
+.btn--ghost{color:var(--text-dim)}
+.btn--ghost::before{background:var(--panel-2)}
+.btn--ghost:hover{color:var(--text);border-color:var(--line-bright)}
+.btn .ar{transition:transform .3s}
+.btn:hover .ar{transform:translateX(4px)}
+
+/* hero console panel */
+.console{padding:0;font-family:var(--ff-mono)}
+.console__bar{display:flex;align-items:center;gap:8px;padding:11px 14px;
+  border-bottom:1px solid var(--line);font-size:10.5px;letter-spacing:.14em;color:var(--text-dim)}
+.console__bar .dots{display:flex;gap:6px;margin-right:6px}
+.console__bar .dots i{width:9px;height:9px;border-radius:50%;background:#2a323f}
+.console__bar .dots i:first-child{background:var(--red)}
+.console__bar .dots i:nth-child(2){background:var(--amber)}
+.console__bar .dots i:nth-child(3){background:var(--green)}
+.console__body{padding:18px 18px 20px}
+.console__row{display:flex;justify-content:space-between;padding:9px 0;
+  border-bottom:1px dashed var(--line);font-size:12.5px}
+.console__row:last-child{border:0}
+.console__row .k{color:var(--text-dim)}
+.console__row .v{color:var(--text)}
+.console__row .v.amber{color:var(--amber)}
+.console__row .v.cyan{color:var(--cyan)}
+.console__row .v.green{color:var(--green)}
+.console__foot{margin-top:6px;padding:12px 18px;border-top:1px solid var(--line);
+  font-size:11px;color:var(--text-faint);letter-spacing:.08em}
+.console__foot .live{color:var(--green)}
+/* interactive terminal */
+.term{height:300px;display:flex;flex-direction:column}
+.term__out{flex:1;overflow-y:auto;font-size:12.5px;line-height:1.6;padding-right:6px}
+.term__out .ln{white-space:pre-wrap;word-break:break-word;margin:1px 0}
+.term__out .cmd{color:var(--text)}
+.term__out .cmd .pr{color:var(--green)}
+.term__out .res{color:var(--text-dim)}
+.term__out b{color:var(--text);font-weight:500}
+.term__out .amber{color:var(--amber)}
+.term__out .cyan{color:var(--cyan)}
+.term__out .green{color:var(--green)}
+.term__out .red{color:var(--red)}
+.term__out a{color:var(--cyan);text-decoration:underline}
+.term__line{display:flex;align-items:center;gap:8px;border-top:1px solid var(--line);padding-top:9px;margin-top:8px}
+.term__prompt{color:var(--green);white-space:nowrap;font-size:12.5px}
+.term__sep{color:var(--text-dim)}
+.term__input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--text);
+  font-family:var(--ff-mono);font-size:12.5px;caret-color:var(--amber);padding:0}
+
+/* konami easter egg */
+.konami{position:fixed;inset:0;z-index:10001;display:none;background:rgba(6,8,11,.94)}
+.konami.on{display:block}
+.konami canvas{position:absolute;inset:0;display:block}
+.konami__msg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
+  text-align:center;padding:26px 36px;background:rgba(10,12,16,.72);border:1px solid var(--amber);
+  box-shadow:0 0 50px rgba(255,177,61,.35);backdrop-filter:blur(2px)}
+.konami__msg h3{font-family:var(--ff-display);font-weight:700;font-size:clamp(22px,4vw,34px);
+  color:var(--amber);letter-spacing:.04em;text-shadow:0 0 24px rgba(255,177,61,.5)}
+.konami__msg p{font-family:var(--ff-mono);font-size:12px;color:var(--cyan);margin-top:10px;letter-spacing:.1em}
+.konami__msg small{display:block;margin-top:16px;font-family:var(--ff-mono);font-size:10px;color:var(--text-dim);letter-spacing:.12em}
+
+/* stat strip */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:64px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat{padding:22px 18px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat .n{font-family:var(--ff-display);font-weight:700;font-size:clamp(26px,4vw,40px);color:#eef1f6}
+.stat .n .u{color:var(--amber);font-size:.5em;vertical-align:super}
+.stat .l{font-family:var(--ff-mono);font-size:10px;letter-spacing:.14em;color:var(--text-dim);
+  text-transform:uppercase;margin-top:4px}
+@media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:0}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}}
+
+/* ============================================================= *
+ *  MISSION / OBJECTIF                                            *
+ * ============================================================= */
+.mission{background:linear-gradient(180deg,transparent,rgba(255,177,61,.03),transparent)}
+.mission__grid{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center}
+@media(max-width:900px){.mission__grid{grid-template-columns:1fr;gap:34px}}
+.mission p{color:var(--text-dim);font-size:16.5px;margin-bottom:18px}
+.mission p strong{color:var(--text);font-weight:500}
+.mission .hl{color:var(--amber)}
+.obj-card{padding:30px 28px}
+.obj-card h3{font-family:var(--ff-mono);font-size:12px;letter-spacing:.2em;color:var(--cyan);
+  text-transform:uppercase;margin-bottom:22px;display:flex;align-items:center;gap:10px}
+.obj-list{list-style:none;display:flex;flex-direction:column;gap:16px}
+.obj-list li{display:flex;gap:14px;align-items:flex-start;font-size:14.5px}
+.obj-list .ic{flex:0 0 auto;width:30px;height:30px;display:grid;place-items:center;
+  border:1px solid var(--line-bright);color:var(--amber);font-family:var(--ff-mono);font-size:13px}
+.obj-list b{color:var(--text);font-weight:600;display:block;font-family:var(--ff-display);letter-spacing:.01em}
+.obj-list span{color:var(--text-dim);font-size:13.5px}
+
+/* ============================================================= *
+ *  PROFIL                                                        *
+ * ============================================================= */
+.profil__grid{display:grid;grid-template-columns:1fr 1fr;gap:50px}
+@media(max-width:900px){.profil__grid{grid-template-columns:1fr;gap:30px}}
+.profil p{color:var(--text-dim);font-size:16px;margin-bottom:16px}
+.profil p strong{color:var(--text);font-weight:500}
+.idcard{padding:0}
+.idcard__hd{display:flex;align-items:center;gap:16px;padding:22px 24px;border-bottom:1px solid var(--line)}
+.idcard__ph{width:64px;height:64px;flex:0 0 auto;background:
+  repeating-linear-gradient(45deg,#161b25,#161b25 6px,#11151d 6px,#11151d 12px);
+  border:1px solid var(--line-bright);display:grid;place-items:center;
+  font-family:var(--ff-display);font-weight:700;font-size:24px;color:var(--amber)}
+.idcard__hd h3{font-family:var(--ff-display);font-size:20px;color:#eef1f6;letter-spacing:.01em}
+.idcard__hd .alias{font-family:var(--ff-mono);font-size:11px;color:var(--cyan);letter-spacing:.08em}
+.idcard__body{padding:8px 24px 22px}
+.idrow{display:flex;justify-content:space-between;gap:14px;padding:11px 0;
+  border-bottom:1px dashed var(--line);font-family:var(--ff-mono);font-size:12.5px}
+.idrow:last-child{border:0}
+.idrow .k{color:var(--text-faint);letter-spacing:.06em}
+.idrow .v{color:var(--text);text-align:right}
+.idrow .v.green{color:var(--green)}
+
+/* ============================================================= *
+ *  COMPETENCES                                                   *
+ * ============================================================= */
+.comp__grid{display:grid;grid-template-columns:1fr 1fr;gap:50px}
+@media(max-width:900px){.comp__grid{grid-template-columns:1fr;gap:42px}}
+.bars{display:flex;flex-direction:column;gap:22px}
+.bar__top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.bar__top .name{font-family:var(--ff-display);font-size:15px;color:var(--text)}
+.bar__top .pct{font-family:var(--ff-mono);font-size:12px;color:var(--amber)}
+.bar__top .pct.grow{color:var(--cyan);font-size:10.5px;letter-spacing:.04em}
+.bar__track{height:7px;background:#161b25;position:relative;overflow:hidden}
+.bar__fill{position:absolute;left:0;top:0;bottom:0;width:0;
+  background:linear-gradient(90deg,var(--amber),var(--amber-soft));
+  box-shadow:0 0 12px rgba(255,177,61,.4);transition:width 1.3s var(--ease)}
+.bar__fill::after{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,transparent,transparent 7px,rgba(10,12,16,.5) 7px,rgba(10,12,16,.5) 8px)}
+
+.invest-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.invest-list{grid-template-columns:1fr}}
+.invest{padding:15px 16px;border:1px solid var(--line);background:var(--panel);
+  display:flex;flex-direction:column;gap:6px;transition:.3s var(--ease)}
+.invest:hover{border-color:var(--line-bright);transform:translateY(-3px);
+  background:var(--panel-2)}
+.invest .h{display:flex;align-items:center;gap:9px;font-family:var(--ff-display);
+  font-size:14px;color:var(--text)}
+.invest .h .ic{color:var(--cyan);font-family:var(--ff-mono);font-size:13px}
+.invest p{font-size:12px;color:var(--text-dim);line-height:1.5;margin:0}
+
+/* ============================================================= *
+ *  STACK                                                         *
+ * ============================================================= */
+.stack-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--line);border:1px solid var(--line)}
+@media(max-width:820px){.stack-cols{grid-template-columns:repeat(2,1fr)}}
+.stack-col{background:var(--bg);padding:26px 22px}
+.stack-col h4{font-family:var(--ff-mono);font-size:11px;letter-spacing:.16em;
+  color:var(--amber);text-transform:uppercase;margin-bottom:18px;
+  display:flex;align-items:center;gap:8px}
+.stack-col h4 .idx{color:var(--text-faint)}
+.stack-col ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.stack-col li{font-family:var(--ff-mono);font-size:13px;color:var(--text-dim);
+  display:flex;align-items:center;gap:10px;transition:color .25s}
+.stack-col li::before{content:"";width:5px;height:5px;background:var(--text-faint);
+  transform:rotate(45deg);transition:.25s}
+.stack-col li:hover{color:var(--text)}
+.stack-col li:hover::before{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+
+/* ============================================================= *
+ *  PARCOURS (timeline)                                           *
+ * ============================================================= */
+.timeline{position:relative;padding-left:34px;margin-top:10px}
+.timeline::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:1px;
+  background:linear-gradient(180deg,var(--amber),var(--line),transparent)}
+.tl-item{position:relative;padding:0 0 38px 18px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:"";position:absolute;left:-32px;top:5px;width:13px;height:13px;
+  background:var(--bg);border:2px solid var(--amber);border-radius:50%;
+  transform:rotate(45deg)}
+.tl-item .yr{font-family:var(--ff-mono);font-size:11px;letter-spacing:.14em;color:var(--cyan)}
+.tl-item h4{font-family:var(--ff-display);font-size:18px;color:#eef1f6;margin:5px 0 6px}
+.tl-item p{color:var(--text-dim);font-size:14px;max-width:560px}
+
+/* ============================================================= *
+ *  PROJETS                                                       *
+ * ============================================================= */
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:900px){.proj-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.proj-grid{grid-template-columns:1fr}}
+.proj{display:flex;flex-direction:column;min-height:230px;padding:0;
+  transition:transform .35s var(--ease)}
+.proj:hover{transform:translateY(-5px)}
+.proj__thumb{height:108px;position:relative;overflow:hidden;border-bottom:1px solid var(--line);
+  display:grid;place-items:center;background:radial-gradient(120% 120% at 30% 0%,#171d28,#0c0f15)}
+.proj__thumb .glyph{font-family:var(--ff-display);font-weight:700;font-size:42px;
+  color:rgba(255,177,61,.85);text-shadow:0 0 24px rgba(255,177,61,.35);z-index:1}
+.proj__thumb::before{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(126,148,178,.07) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(126,148,178,.07) 1px,transparent 1px);
+  background-size:14px 14px;opacity:.7}
+.proj__thumb .yr{position:absolute;top:9px;right:11px;font-family:var(--ff-mono);
+  font-size:10px;color:var(--text-dim);z-index:1;letter-spacing:.1em}
+.proj__body{padding:16px 17px 18px;flex:1;display:flex;flex-direction:column}
+.proj__body h4{font-family:var(--ff-display);font-size:17px;color:#eef1f6;display:flex;
+  justify-content:space-between;align-items:center;gap:10px}
+.proj__body .st{font-family:var(--ff-mono);font-size:9px;letter-spacing:.12em;
+  padding:3px 7px;border:1px solid var(--line-bright);color:var(--text-dim);white-space:nowrap}
+.proj__body .st.on{color:var(--green);border-color:rgba(98,224,138,.35)}
+.proj__body p{font-size:13px;color:var(--text-dim);margin:8px 0 14px;flex:1;line-height:1.55}
+.proj__tags{display:flex;flex-wrap:wrap;gap:6px}
+.proj__tags span{font-family:var(--ff-mono);font-size:10px;color:var(--cyan);
+  border:1px solid rgba(72,214,207,.22);padding:3px 8px;letter-spacing:.05em}
+.proj__body p a{color:var(--cyan);text-decoration:underline;text-underline-offset:2px}
+.proj__body p a:hover{color:var(--amber)}
+
+/* ============================================================= *
+ *  RÉALISATIONS (dossiers pro)                                  *
+ * ============================================================= */
+.real-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:820px){.real-grid{grid-template-columns:1fr}}
+.dossier{display:flex;flex-direction:column;padding:22px 22px 20px}
+.dossier__top{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.16em;color:var(--text-faint);
+  text-transform:uppercase;border-bottom:1px dashed var(--line);padding-bottom:11px;margin-bottom:15px}
+.dossier__cls{color:var(--cyan)}
+.dossier__st{color:var(--green);display:flex;align-items:center;gap:7px;white-space:nowrap}
+.dossier__st::before{content:"";width:6px;height:6px;border-radius:50%;
+  background:currentColor;box-shadow:0 0 7px currentColor}
+.dossier__st.prog{color:var(--amber)}
+.dossier__st.arch{color:var(--text-dim)}
+.dossier h4{font-family:var(--ff-display);font-size:18px;color:#eef1f6;line-height:1.22;margin-bottom:7px}
+.dossier .role{font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.05em;
+  color:var(--amber);margin-bottom:13px}
+.dossier p{font-size:13.5px;color:var(--text-dim);line-height:1.56;flex:1;margin:0}
+.dossier .kpis{display:flex;gap:22px;flex-wrap:wrap;margin:16px 0 2px;
+  padding-top:14px;border-top:1px solid var(--line)}
+.dossier .kpi{display:flex;flex-direction:column}
+.dossier .kpi b{font-family:var(--ff-display);font-weight:700;font-size:23px;color:var(--amber);line-height:1}
+.dossier .kpi small{font-family:var(--ff-mono);font-size:9px;letter-spacing:.1em;
+  color:var(--text-dim);text-transform:uppercase;margin-top:4px}
+.dossier__tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.dossier__tags span{font-family:var(--ff-mono);font-size:10px;color:var(--cyan);
+  border:1px solid rgba(72,214,207,.22);padding:3px 8px;letter-spacing:.05em}
+.dossier--wide{grid-column:1/-1}
+.dossier--wide .dossier__tags.more span{color:var(--text-dim);
+  border-color:var(--line-bright);font-size:11px;padding:5px 11px}
+
+/* ---------- archives visuelles (galerie) ---------- */
+.archive-head{margin-top:68px;margin-bottom:26px}
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:780px){.gallery{grid-template-columns:1fr}}
+.shot{display:flex;flex-direction:column;padding:0;overflow:hidden}
+.shot__bar{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 14px;border-bottom:1px solid var(--line);font-family:var(--ff-mono);
+  font-size:10.5px;letter-spacing:.12em;color:var(--text-dim);text-transform:uppercase}
+.shot__bar .tag{color:var(--cyan)}
+.shot__img{position:relative;background:#fff;line-height:0}
+.shot__img img{display:block;width:100%;height:auto;filter:saturate(.96)}
+.shot__img::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,transparent 0,transparent 2px,rgba(10,12,16,.07) 3px,rgba(10,12,16,.07) 3px)}
+.shot figcaption{padding:14px 15px 16px;font-size:12.5px;color:var(--text-dim);line-height:1.55}
+.shot figcaption b{color:var(--text);font-family:var(--ff-display);font-weight:600}
+
+/* ---------- bloc fonction (rôle) ---------- */
+.role-block{padding:26px 26px 24px;margin-bottom:18px}
+.role-block__hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 16px;margin-bottom:14px}
+.role-block__hd .ttl{font-family:var(--ff-display);font-size:19px;color:#eef1f6;letter-spacing:.01em}
+.role-block p{font-size:14.5px;color:var(--text-dim);line-height:1.62;margin:0;max-width:920px}
+.role-block p strong{color:var(--text);font-weight:500}
+.role-block__resp{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.role-block__resp span{font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.04em;
+  color:var(--cyan);border:1px solid rgba(72,214,207,.22);padding:5px 10px}
+
+/* ============================================================= *
+ *  ACTIVITÉ GITHUB                                              *
+ * ============================================================= */
+.gh-panels{display:flex;flex-direction:column;gap:18px}
+.gh-panel{padding:0}
+.gh-panel__bar{display:flex;align-items:center;gap:8px;padding:11px 16px;
+  border-bottom:1px solid var(--line);font-family:var(--ff-mono);font-size:10.5px;
+  letter-spacing:.14em;color:var(--text-dim)}
+.gh-panel__bar .dots{display:flex;gap:6px;margin-right:6px}
+.gh-panel__bar .dots i{width:9px;height:9px;border-radius:50%;background:#2a323f}
+.gh-panel__bar .dots i:first-child{background:var(--red)}
+.gh-panel__bar .dots i:nth-child(2){background:var(--amber)}
+.gh-panel__bar .dots i:nth-child(3){background:var(--green)}
+.gh-panel__bar .grow{flex:1}
+.gh-panel__bar a{color:var(--cyan)}
+.gh-panel__bar a:hover{color:var(--amber)}
+.gh-panel__body{padding:22px 20px 20px}
+
+/* --- bandeau chiffre + mur --- */
+.gh-contrib__top{display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap;margin-bottom:22px}
+.gh-num{font-family:var(--ff-display);font-weight:700;line-height:.9;
+  font-size:clamp(44px,8vw,68px);color:#eef1f6;text-shadow:0 0 30px rgba(98,224,138,.35)}
+.gh-num .u{color:var(--green);font-size:.34em;vertical-align:super;letter-spacing:.04em}
+.gh-num__lab{font-family:var(--ff-mono);font-size:11.5px;letter-spacing:.08em;
+  color:var(--text-dim);max-width:240px;line-height:1.5}
+.gh-num__lab b{color:var(--green)}
+
+/* --- calendrier (heatmap) --- */
+.gh-cal-wrap{overflow-x:auto;padding-bottom:8px;scrollbar-width:thin}
+.gh-cal{display:inline-flex;flex-direction:column;gap:4px;min-width:max-content}
+.gh-months{display:flex;gap:3px;height:13px;font-family:var(--ff-mono);
+  font-size:9px;letter-spacing:.05em;color:var(--text-faint)}
+.gh-months span{width:11px;flex:0 0 11px;white-space:nowrap;overflow:visible}
+.gh-weeks{display:flex;gap:3px}
+.gh-week{display:flex;flex-direction:column;gap:3px}
+.gh-d{width:11px;height:11px;border-radius:2px;background:#161b25;
+  outline:1px solid rgba(126,148,178,.05);outline-offset:-1px}
+.gh-d.lv4{box-shadow:0 0 6px rgba(98,224,138,.55)}
+.gh-legend{display:flex;align-items:center;justify-content:flex-end;gap:7px;
+  margin-top:12px;font-family:var(--ff-mono);font-size:10px;color:var(--text-dim)}
+.gh-legend i{width:11px;height:11px;border-radius:2px;display:inline-block}
+.gh-foot{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.06em;color:var(--text-faint)}
+.gh-foot .live{color:var(--green)}
+
+/* --- git log (repos) --- */
+.gh-log{font-family:var(--ff-mono)}
+.gh-log__row{display:grid;grid-template-columns:auto 1fr auto;gap:4px 14px;
+  align-items:baseline;padding:13px 0;border-bottom:1px dashed var(--line)}
+.gh-log__row:last-child{border:0}
+.gh-log__main{grid-column:2;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;min-width:0}
+.gh-hash{grid-column:1;color:var(--amber);font-size:12px;opacity:.8}
+.gh-hash::before{content:"● ";color:var(--green)}
+.gh-name{font-size:13.5px;color:#eef1f6;font-weight:500}
+.gh-name:hover{color:var(--amber)}
+.gh-lang{font-size:10.5px;color:var(--text-dim);display:inline-flex;align-items:center;gap:6px}
+.gh-lang .ld{width:8px;height:8px;border-radius:50%;background:var(--text-faint)}
+.gh-stars{font-size:10.5px;color:var(--amber)}
+.gh-date{grid-column:3;font-size:11px;color:var(--text-faint);white-space:nowrap;text-align:right}
+.gh-desc{grid-column:2/-1;font-size:12px;color:var(--text-dim);line-height:1.5;margin-top:2px}
+.gh-loading{font-family:var(--ff-mono);font-size:12px;color:var(--text-dim);padding:8px 0}
+.gh-loading .bk{color:var(--amber);animation:blink 1.05s step-end infinite}
+@media(max-width:560px){
+  .gh-log__row{grid-template-columns:auto 1fr}
+  .gh-date{grid-column:2;text-align:left;margin-top:2px}
+}
+
+/* ============================================================= *
+ *  FORMATION / VEILLE                                            *
+ * ============================================================= */
+.learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:820px){.learn-grid{grid-template-columns:1fr}}
+.learn{padding:26px 24px}
+.learn .lab{font-family:var(--ff-mono);font-size:10px;letter-spacing:.18em;
+  color:var(--text-faint);text-transform:uppercase}
+.learn h4{font-family:var(--ff-display);font-size:22px;color:#eef1f6;margin:8px 0 12px;
+  display:flex;align-items:center;gap:10px}
+.learn h4 .ic{color:var(--amber)}
+.learn p{font-size:13.5px;color:var(--text-dim)}
+.learn a.lk{display:inline-flex;align-items:center;gap:7px;margin-top:14px;
+  font-family:var(--ff-mono);font-size:11px;letter-spacing:.1em;color:var(--cyan)}
+.learn a.lk:hover{color:var(--amber)}
+
+/* ============================================================= *
+ *  CONTACT                                                       *
+ * ============================================================= */
+.contact{background:linear-gradient(180deg,transparent,rgba(72,214,207,.03))}
+.contact__grid{display:grid;grid-template-columns:1.1fr .9fr;gap:54px;align-items:center}
+@media(max-width:900px){.contact__grid{grid-template-columns:1fr;gap:36px}}
+.contact h2{font-family:var(--ff-display);font-weight:700;font-size:clamp(32px,6vw,60px);
+  color:#eef1f6;line-height:1.02;letter-spacing:-.01em}
+.contact h2 em{font-style:normal;color:var(--cyan)}
+.contact p{color:var(--text-dim);margin-top:18px;max-width:460px;font-size:16px}
+.mailbtn{margin-top:30px;display:inline-flex;align-items:center;gap:14px;
+  font-family:var(--ff-mono);font-size:15px;color:var(--amber);
+  border:1px solid var(--line-bright);padding:18px 24px;transition:.3s var(--ease)}
+.mailbtn:hover{background:var(--amber);color:var(--bg);border-color:var(--amber)}
+.mailbtn .ar{transition:transform .3s}
+.mailbtn:hover .ar{transform:translate(4px,-4px)}
+.chan{padding:26px 26px}
+.chan h3{font-family:var(--ff-mono);font-size:11px;letter-spacing:.2em;color:var(--text-dim);
+  text-transform:uppercase;margin-bottom:20px}
+.chan a.line{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:16px 0;border-bottom:1px solid var(--line);transition:.3s var(--ease)}
+.chan a.line:last-child{border:0}
+.chan a.line:hover{padding-left:8px}
+.chan a.line .lbl{font-family:var(--ff-display);font-size:16px;color:var(--text)}
+.chan a.line .sub{font-family:var(--ff-mono);font-size:11px;color:var(--text-dim);display:block;margin-top:2px}
+.chan a.line .go{font-family:var(--ff-mono);font-size:11px;color:var(--cyan);letter-spacing:.1em}
+.chan a.line:hover .go{color:var(--amber)}
+
+/* ============================================================= *
+ *  FOOTER                                                        *
+ * ============================================================= */
+footer{border-top:1px solid var(--line);padding:30px 0 40px}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;
+  font-family:var(--ff-mono);font-size:11px;color:var(--text-faint);letter-spacing:.08em}
+.foot .amber{color:var(--amber)}
+.totop{font-family:var(--ff-mono);font-size:11px;color:var(--text-dim);
+  display:inline-flex;align-items:center;gap:8px;letter-spacing:.12em;transition:color .3s}
+.totop:hover{color:var(--amber)}
+
+/* ---------- reveal animation ---------- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}
+.reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+
+<body>
+
+<!-- ===================== OVERLAYS ===================== -->
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="scrollprog" id="scrollprog" aria-hidden="true"></div>
+<div class="konami" id="konami" aria-hidden="true">
+  <canvas id="konamiCanvas"></canvas>
+  <div class="konami__msg">
+    <h3>ACCÈS ROOT DÉBLOQUÉ</h3>
+    <p>// sMug@replicatorbe says hi 👋</p>
+    <small>[ clic ou Échap pour fermer ]</small>
+  </div>
+</div>
+
+<!-- ===================== BOOT ===================== -->
+<div class="boot" id="boot">
+  <div class="boot__inner">
+    <div class="boot__bar"><span>FAFCHAMPS-OS // SECURE TERMINAL</span><span>v3.0</span></div>
+    <div id="bootLines"></div>
+    <div class="boot__skip">[ <b>cliquez</b> ou faites défiler pour accéder ]</div>
+  </div>
+</div>
+
+<!-- ===================== HUD CHROME ===================== -->
+<div class="statusbar">
+  <div class="seg"><span class="dot"></span> SYS:ONLINE<span class="sep">/</span>SESSION SÉCURISÉE</div>
+  <div class="seg hide-s">BELGIQUE 🇧🇪<span class="sep">/</span>SESSION CHIFFRÉE<span class="sep">/</span>CLEARANCE:PUBLIC</div>
+  <div class="seg"><span id="clock">--:--:--</span><span class="sep">/</span>CET</div>
+</div>
+
+<a class="brand" href="#accueil" aria-label="Accueil">
+  <span class="brand__mono">JF</span>
+  <span class="brand__txt"><b>FAFCHAMPS</b><span>sMug@replicatorbe</span></span>
+</a>
+
+<nav class="rail" aria-label="Navigation">
+  <a href="#accueil"  data-sec="accueil"><span class="label">Accueil</span><span class="num">01</span><span class="tick"></span></a>
+  <a href="#profil"   data-sec="profil"><span class="label">Profil</span><span class="num">02</span><span class="tick"></span></a>
+  <a href="#competences" data-sec="competences"><span class="label">Compétences</span><span class="num">03</span><span class="tick"></span></a>
+  <a href="#realisations" data-sec="realisations"><span class="label">Réalisations</span><span class="num">04</span><span class="tick"></span></a>
+  <a href="#projets"  data-sec="projets"><span class="label">Projets</span><span class="num">05</span><span class="tick"></span></a>
+  <a href="#contact"  data-sec="contact"><span class="label">Contact</span><span class="num">06</span><span class="tick"></span></a>
+</nav>
+
+<button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+<div class="mobile-nav" id="mnav">
+  <a href="#accueil"><span class="num">01</span>Accueil</a>
+  <a href="#profil"><span class="num">02</span>Profil</a>
+  <a href="#competences"><span class="num">03</span>Compétences</a>
+  <a href="#realisations"><span class="num">04</span>Réalisations</a>
+  <a href="#projets"><span class="num">05</span>Projets</a>
+  <a href="#contact"><span class="num">06</span>Contact</a>
+</div>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section id="accueil" class="hero">
+  <div class="wrap">
+    <div class="hero__grid">
+      <div>
+        <span class="hero__kicker reveal"><span class="dot"></span>PROFIL DÉVERROUILLÉ · ID&nbsp;//&nbsp;0xJF</span>
+        <h1 class="reveal d1">Jérôme<br><span class="last">Fafchamps</span></h1>
+        <div class="hero__role reveal d2"><span class="pre">&gt; rôle:&nbsp;</span><span id="typed"></span><span class="cursor"></span></div>
+        <p class="hero__lead reveal d3">
+          20 ans à bâtir, sécuriser et piloter des systèmes — côté <strong style="color:var(--amber)">IT</strong>
+          (développement, DevOps, administration système &amp; réseau) comme côté <strong style="color:var(--amber)">sûreté</strong>
+          (salles de contrôle, vidéosurveillance, contrôle d'accès). Mon métier : faire le pont entre les deux,
+          de la technique au pilotage — avec la cybersécurité en fil rouge.
+        </p>
+        <div class="hero__cta reveal d4">
+          <a href="#profil" class="btn">À propos de moi <span class="ar">→</span></a>
+          <a href="#projets" class="btn btn--ghost">Explorer les projets</a>
+        </div>
+      </div>
+
+      <div class="frame console reveal d3">
+        <div class="console__bar"><span class="dots"><i></i><i></i><i></i></span> bash — visitor@fafchamps: ~</div>
+        <div class="console__body term" id="term">
+          <div class="term__out" id="termOut"></div>
+          <div class="term__line">
+            <span class="term__prompt">visitor@fafchamps<span class="term__sep">:</span><span id="termPath">~</span><span class="term__sep">$</span></span>
+            <input id="termInput" class="term__input" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Terminal interactif — tapez help">
+          </div>
+        </div>
+        <div class="console__foot"><span class="live">●</span> session interactive · tape <b style="color:var(--cyan)">help</b> · uptime <span id="uptime">--</span></div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat reveal"><div class="n" data-count="20"><span class="counter">0</span><span class="u">+ ANS</span></div><div class="l">D'informatique</div></div>
+      <div class="stat reveal d1"><div class="n"><span class="counter" data-count="25">0</span></div><div class="l">Projets livrés</div></div>
+      <div class="stat reveal d2"><div class="n"><span class="counter" data-count="6">0</span></div><div class="l">Langages maîtrisés</div></div>
+      <div class="stat reveal d3"><div class="n">∞</div><div class="l">Veille cyber active</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROFIL ===================== -->
+<section id="profil">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-meta"><span class="idx">02</span><span>// DOSSIER</span><span class="ln"></span></div>
+      <h2 class="sec-title">À propos du <em>sujet</em></h2>
+      <p class="sec-sub">Passionné d'informatique depuis l'enfance, autodidacte revendiqué, bâtisseur de communautés en ligne — devenu concepteur et pilote de systèmes de sûreté, à la croisée de l'IT et de la sécurité.</p>
+    </div>
+    <div class="profil__grid">
+      <div class="reveal">
+        <p>
+          Tout a commencé sur IRC et les premiers sites perso au début des années 2000. J'ai construit des
+          plateformes communautaires (chats, réseaux, forums) utilisées par des milliers de personnes,
+          en gérant <strong>tout le spectre</strong> : code, serveurs, réseau, modération, sécurité.
+        </p>
+        <p>
+          Cette polyvalence est devenue mon métier : <strong>DevOps & administration système</strong>.
+          Automatiser, déployer, surveiller, durcir. J'aime quand l'infrastructure tourne toute seule —
+          et savoir exactement quoi faire quand ce n'est pas le cas.
+        </p>
+        <p>
+          Puis j'ai changé d'échelle. Au sein du service de sécurité corporate d'un opérateur ferroviaire
+          majeur, je suis passé de l'exécution à la <strong>conception et au pilotage</strong> : penser les
+          salles de contrôle et le contrôle d'accès de dizaines de sites, traduire les besoins opérationnels
+          en analyses fonctionnelles, définir la cible, tenir les roadmaps et les budgets,
+          piloter les équipes IT comme les sous-traitants. Le rôle de celui qui <strong>conçoit, arbitre et
+          coordonne</strong> — à la croisée de la sûreté et de l'IT. Mais jamais enfermé dans un bureau :
+          je reste <strong>au plus près du terrain</strong> — voir les projets se déployer pour de vrai,
+          écouter les intervenants, ajuster avec eux. Mes analyses partent du réel et y retournent.
+        </p>
+        <p>
+          En dehors du clavier, je traîne à <strong>Wolfplex</strong>, le hackerspace de Charleroi, où l'on
+          partage projets, électronique et culture de la bidouille. La curiosité, c'est le carburant.
+        </p>
+      </div>
+      <div class="frame idcard reveal d1">
+        <div class="idcard__hd">
+          <div class="idcard__ph">JF</div>
+          <div>
+            <h3>Jérôme Fafchamps</h3>
+            <span class="alias">// sMug @ replicatorbe</span>
+          </div>
+        </div>
+        <div class="idcard__body">
+          <div class="idrow"><span class="k">FONCTION</span><span class="v">Sûreté ↔ IT · DevOps</span></div>
+          <div class="idrow"><span class="k">BASE</span><span class="v">Belgique 🇧🇪</span></div>
+          <div class="idrow"><span class="k">SPÉCIALITÉ</span><span class="v">Infra, réseau, scripting</span></div>
+          <div class="idrow"><span class="k">EN COURS</span><span class="v">Cybersécurité & forensic</span></div>
+          <div class="idrow"><span class="k">TERRAIN DE JEU</span><span class="v">Wolfplex · CTF · TryHackMe</span></div>
+          <div class="idrow"><span class="k">DISPONIBILITÉ</span><span class="v green">● ouverte aux échanges</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COMPETENCES ===================== -->
+<section id="competences">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-meta"><span class="idx">03</span><span>// CAPACITÉS</span><span class="ln"></span></div>
+      <h2 class="sec-title">Matrice de <em>compétences</em></h2>
+      <p class="sec-sub">Un socle IT généraliste très large, affûté sur 20 ans — du code à l'infra. Et des domaines plus spécialisés, comme l'investigation numérique, en développement actif : prêts à être approfondis en contexte professionnel.</p>
+    </div>
+
+    <div class="comp__grid">
+      <div class="reveal">
+        <p class="mono-tag" style="margin-bottom:24px">[ NIVEAU OPÉRATIONNEL ]</p>
+        <div class="bars">
+          <div class="bar"><div class="bar__top"><span class="name">Développement</span><span class="pct">96%</span></div><div class="bar__track"><div class="bar__fill" data-w="96"></div></div></div>
+          <div class="bar"><div class="bar__top"><span class="name">Réseau</span><span class="pct">90%</span></div><div class="bar__track"><div class="bar__fill" data-w="90"></div></div></div>
+          <div class="bar"><div class="bar__top"><span class="name">DevOps & Automatisation</span><span class="pct">90%</span></div><div class="bar__track"><div class="bar__fill" data-w="90"></div></div></div>
+          <div class="bar"><div class="bar__top"><span class="name">Administration système</span><span class="pct">84%</span></div><div class="bar__track"><div class="bar__fill" data-w="84"></div></div></div>
+          <div class="bar"><div class="bar__top"><span class="name">Forensic & investigation</span><span class="pct grow">en montée ↗</span></div><div class="bar__track"><div class="bar__fill" data-w="55"></div></div></div>
+        </div>
+      </div>
+
+      <div class="reveal d1">
+        <p class="mono-tag" style="margin-bottom:24px">[ SÉCURITÉ & ANALYSE ]</p>
+        <div class="invest-list">
+          <div class="invest"><div class="h"><span class="ic">›</span>Analyse réseau</div><p>Capture, inspection de trafic, lecture de logs.</p></div>
+          <div class="invest"><div class="h"><span class="ic">›</span>Forensic système</div><p>Linux/Windows internals, traces & artefacts.</p></div>
+          <div class="invest"><div class="h"><span class="ic">›</span>OSINT</div><p>Recherche & recoupement en sources ouvertes.</p></div>
+          <div class="invest"><div class="h"><span class="ic">›</span>Scripting</div><p>Bash, automatisation et outillage maison.</p></div>
+          <div class="invest"><div class="h"><span class="ic">›</span>Compréhension des menaces</div><p>Vecteurs d'attaque, malware, vulnérabilités.</p></div>
+          <div class="invest"><div class="h"><span class="ic">›</span>Traçabilité</div><p>Journalisation, intégrité, méthode rigoureuse.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STACK -->
+    <div class="sec-head reveal" style="margin-top:84px;margin-bottom:32px">
+      <div class="sec-meta"><span class="idx">03.B</span><span>// ARSENAL TECHNIQUE</span><span class="ln"></span></div>
+    </div>
+    <div class="stack-cols reveal">
+      <div class="stack-col">
+        <h4><span class="idx">/01</span>LANGAGES</h4>
+        <ul><li>PHP</li><li>Java</li><li>C#</li><li>JavaScript</li><li>Flutter / Dart</li><li>SQL</li><li>Bash</li></ul>
+      </div>
+      <div class="stack-col">
+        <h4><span class="idx">/02</span>SYSTÈMES & RÉSEAU</h4>
+        <ul><li>Linux (Debian)</li><li>Docker</li><li>Nginx / Apache</li><li>MySQL / MariaDB</li><li>TCP/IP · DNS · VPN</li><li>Pare-feu / VLAN</li></ul>
+      </div>
+      <div class="stack-col">
+        <h4><span class="idx">/03</span>DEVOPS</h4>
+        <ul><li>CI/CD</li><li>Git</li><li>Monitoring</li><li>Scripting / Cron</li><li>Reverse proxy</li><li>Hébergement</li></ul>
+      </div>
+      <div class="stack-col">
+        <h4><span class="idx">/04</span>SÉCURITÉ</h4>
+        <ul><li>Wireshark</li><li>Nmap</li><li>Burp / recon</li><li>Hardening</li><li>Forensic (en cours)</li><li>OSINT tooling</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RÉALISATIONS (PRO) ===================== -->
+<section id="realisations">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-meta"><span class="idx">04</span><span>// DOSSIERS OPÉRATIONNELS</span><span class="ln"></span></div>
+      <h2 class="sec-title">Réalisations <em>professionnelles</em></h2>
+      <p class="sec-sub">Plus de dix ans à concevoir, piloter et déployer des systèmes de sûreté et de supervision pour un opérateur d'infrastructure ferroviaire majeur en Belgique. De l'analyse du besoin à la réception : cahiers des charges, marchés publics, pilotage de sous-traitants et formation des équipes. <span style="color:var(--text-faint)">// détails anonymisés</span></p>
+    </div>
+
+    <div class="frame role-block reveal">
+      <div class="role-block__hd">
+        <span class="mono-tag">// FONCTION</span>
+        <span class="ttl">Le pont entre les opérations de sûreté et l'IT</span>
+      </div>
+      <p>Au sein du service de sécurité corporate d'un opérateur ferroviaire majeur, je conçois et je supporte les <strong>salles de contrôle</strong> (centre d'opérations, salles régionales et leurs back-ups) ainsi que la <strong>gestion des accès & badges</strong> sur des dizaines de sites. Je traduis les besoins opérationnels en <strong>analyses fonctionnelles</strong> exploitables par l'IT, je définis l'existant et la cible, j'établis les <strong>roadmaps</strong> et j'accompagne les arbitrages budgétaires — en pilotant les contrats-cadres, les équipes IT et les sous-traitants.</p>
+      <div class="role-block__resp">
+        <span>Analyses fonctionnelles</span>
+        <span>Roadmap & budget</span>
+        <span>Contrats-cadres</span>
+        <span>Mise en service & conformité</span>
+        <span>Vidéo · intrusion · incendie · accès</span>
+        <span>Formation des opérateurs</span>
+        <span>Haute disponibilité</span>
+        <span>Veille & benchmarking</span>
+      </div>
+    </div>
+
+    <div class="real-grid">
+
+      <div class="frame dossier reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // INFRA</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>Security Operation Center — nouvelle génération</h4>
+        <div class="role">RÔLE // Pilotage de A à Z · marché public · principal + repli</div>
+        <p>Conception et déploiement d'un nouveau centre d'opérations de sûreté et de son site de repli. De l'analyse du besoin à la réception : cahier des charges, ergonomie des postes opérateurs, continuité d'activité — chaque choix validé sur le terrain avec les agents.</p>
+        <div class="dossier__tags"><span>SOC</span><span>Continuité</span><span>Ergonomie</span></div>
+      </div>
+
+      <div class="frame dossier reveal d1">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // SUPERVISION</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>Refonte des Control Rooms techniques</h4>
+        <div class="role">RÔLE // Architecture & conduite du changement</div>
+        <p>Centralisation de la supervision — vidéo, intrusion, incendie, contrôle d'accès — sur des postes opérateurs unifiés répartis sur plusieurs positions. Une refonte pensée pour réduire la charge cognitive des opérateurs et fiabiliser la prise de décision.</p>
+        <div class="dossier__tags"><span>Supervision</span><span>CCTV</span><span>Multi-postes</span></div>
+      </div>
+
+      <div class="frame dossier reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // RÉSEAU</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>CommandCar — poste de commandement mobile</h4>
+        <div class="role">RÔLE // Conception intégrale · CSC · réception · formation</div>
+        <p>Poste de commandement mobile conçu de A à Z, communiquant en temps réel avec le centre fixe : module de communication sur-mesure (4G/APN dédié, 802.1x/Radius), accès vidéo complet, alarmes intrusion/CO/incendie, le tout pilotable à distance. Cahier des charges, tests et réception du véhicule, procédures et formation des intervenants pour les scénarios de crise.</p>
+        <div class="kpis">
+          <div class="kpi"><b>72&nbsp;h</b><small>Autonomie</small></div>
+          <div class="kpi"><b>4G</b><small>802.1x / Radius</small></div>
+          <div class="kpi"><b>Temps réel</b><small>Lien au SOC</small></div>
+        </div>
+        <div class="dossier__tags"><span>Réseau</span><span>802.1x</span><span>CSC</span><span>Terrain</span></div>
+      </div>
+
+      <div class="frame dossier reveal d1">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // DEV</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>Flotte de surveillance mobile — 21 unités</h4>
+        <div class="role">RÔLE // Dev applicatif · marché d'acquisition · sous-traitance</div>
+        <p>Mise en service d'un parc de 21 caméras mobiles autonomes sur remorque (PTZ 360°, zoom 36x, infrarouge). <strong style="color:var(--text)">Développement de l'application PHP/JS</strong> qui pilote toute la flotte via API. Côté gestion : marché d'acquisition, encadrement du sous-traitant, stocks, formation des chauffeurs et procédures d'exploitation.</p>
+        <div class="kpis">
+          <div class="kpi"><b>21</b><small>Unités</small></div>
+          <div class="kpi"><b>~28 j</b><small>Autonomie</small></div>
+          <div class="kpi"><b>PHP/JS</b><small>Pilotage API</small></div>
+        </div>
+        <div class="dossier__tags"><span>PHP</span><span>JS</span><span>API</span><span>Flotte</span></div>
+      </div>
+
+      <div class="frame dossier reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>Surveillance mobile — nouvelle génération</h4>
+        <div class="role">RÔLE // Analyse · CSC complet · nouvelles méthodes</div>
+        <p>Refonte complète de la flotte sur la base d'une analyse des défauts de la génération précédente : passage à une batterie lithium-ion, caméras 4K, GPS et lien 3G/4G. Rédaction du cahier des charges de transformation et définition des nouvelles méthodes de travail des équipes. « Exit l'analogique. »</p>
+        <div class="kpis">
+          <div class="kpi"><b>4K</b><small>Zoom 32x</small></div>
+          <div class="kpi"><b>Li-ion</b><small>Alimentation</small></div>
+          <div class="kpi"><b>GPS</b><small>3G / 4G</small></div>
+        </div>
+        <div class="dossier__tags"><span>4K</span><span>Lithium</span><span>GPS</span><span>CSC</span></div>
+      </div>
+
+      <div class="frame dossier reveal d1">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // PLATEFORME</span><span class="dossier__st prog">EN PRODUCTION</span></div>
+        <h4>Hypervisor — supervision unifiée des alarmes</h4>
+        <div class="role">RÔLE // Intégration & déploiement transverse</div>
+        <p>Déploiement d'une plateforme unifiant la gestion des alarmes, toutes technologies confondues — intrusion, incendie, ascenseurs, tunnels, ventilation… Une seule interface en remplacement d'une cinquantaine de logiciels métiers : moins d'erreurs, formation simplifiée, supervision homogène.</p>
+        <div class="kpis">
+          <div class="kpi"><b>~50 → 1</b><small>Logiciels unifiés</small></div>
+          <div class="kpi"><b>Multi-tech</b><small>Toutes alarmes</small></div>
+        </div>
+        <div class="dossier__tags"><span>Plateforme</span><span>Intégration</span><span>Alarmes</span></div>
+      </div>
+
+      <div class="frame dossier reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // DEV</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>CCTV embarquée — nouvelles rames</h4>
+        <div class="role">RÔLE // Définition technique & développement logiciel</div>
+        <p>Définition du parc de caméras pour les nouvelles voitures, puis développement du logiciel de récupération des images à distance (réseau cellulaire ou borne WiFi). Rédaction du manuel, formation des utilisateurs et suivi du sous-traitant.</p>
+        <div class="dossier__tags"><span>CCTV</span><span>Cellulaire</span><span>Logiciel</span></div>
+      </div>
+
+      <div class="frame dossier reveal d1">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>Valise de surveillance autonome</h4>
+        <div class="role">RÔLE // Conception sur-mesure · CSC · attribution de marché</div>
+        <p>Aucune solution du marché ne dépassait 3 à 5 jours d'autonomie sans secteur. En optimisant la consommation de chaque composant, conception d'une valise atteignant 14 jours — GPS, 3G/4G, analyse intelligente et zoom. Rédaction du cahier des charges et attribution du marché au fournisseur.</p>
+        <div class="kpis">
+          <div class="kpi"><b>14 j</b><small>Sans secteur</small></div>
+          <div class="kpi"><b>Sur-mesure</b><small>Vs. 3-5 j marché</small></div>
+        </div>
+        <div class="dossier__tags"><span>Autonomie</span><span>Sur-mesure</span><span>CSC</span></div>
+      </div>
+
+      <div class="frame dossier reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>Traçage anti-vol de câbles</h4>
+        <div class="role">RÔLE // Tests, déploiement & formation</div>
+        <p>Mise en place d'un système de traçage pour prévenir les vols de câbles. Validation en laboratoire puis en conditions réelles pour minimiser les fausses alarmes, formation des opérateurs des Control Rooms et rédaction des consignes.</p>
+        <div class="dossier__tags"><span>Traçage</span><span>Tests</span><span>Anti-vol</span></div>
+      </div>
+
+      <div class="frame dossier reveal d1">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // PRODUCT</span><span class="dossier__st prog">EN COURS</span></div>
+        <h4>Product Owner — applications terrain</h4>
+        <div class="role">RÔLE // Product Owner · méthode agile</div>
+        <p>Pilotage produit des applications smartphone des agents de terrain : analyse du besoin, backlog et priorisation, testing. Animation de groupes de référence d'agents (méthode agile) et formation des coachs au déploiement.</p>
+        <div class="dossier__tags"><span>Product Owner</span><span>Agile</span><span>Mobile</span></div>
+      </div>
+
+      <div class="frame dossier dossier--wide reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // DIVERS</span><span class="dossier__st arch">+ ARCHIVE</span></div>
+        <h4>Et encore…</h4>
+        <p>Un échantillon parmi d'autres chantiers menés sur la même période :</p>
+        <div class="dossier__tags more">
+          <span>Interface PHP de pilotage de flotte (API)</span>
+          <span>Outil web interne de gestion d'incidents (opérateurs)</span>
+          <span>Contrôle qualité trimestriel des caméras</span>
+          <span>Migration base Access → Azure / Power-BI</span>
+          <span>Signature digitale & lecteurs e-ID</span>
+          <span>Radio « trunking » & dispositif man-down</span>
+          <span>Caméras thermiques</span>
+          <span>Bodycam agents</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;margin-top:44px" class="reveal">
+      <a href="mailto:jerome@fafchamps.be?subject=Demande%20de%20dossier%20d%C3%A9taill%C3%A9" class="btn">Dossier détaillé sur demande <span class="ar">→</span></a>
+      <p style="margin-top:16px;font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;color:var(--text-faint)">Réalisations présentées de façon anonymisée · dossier complet communiqué sur demande, sous accord de confidentialité.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROJETS ===================== -->
+<section id="projets">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-meta"><span class="idx">05</span><span>// ARCHIVES</span><span class="ln"></span></div>
+      <h2 class="sec-title">Projets <em>perso & communautaires</em></h2>
+      <p class="sec-sub">Deux décennies de plateformes communautaires, de réseaux, de domotique et d'expérimentations. Sélection.</p>
+    </div>
+
+    <div class="proj-grid">
+      <div class="frame proj reveal">
+        <div class="proj__thumb"><span class="yr">2006–2010</span><span class="glyph">A</span></div>
+        <div class="proj__body"><h4>Adosbox <span class="st">ARCHIVÉ</span></h4>
+          <p>Communauté et chat pour ados — modération, infra et développement complet à grande échelle. <a href="https://web.archive.org/web/*/adosbox.com" target="_blank" rel="noopener">Voir sur archive.org ↗</a></p>
+          <div class="proj__tags"><span>PHP</span><span>Chat</span><span>Communauté</span></div></div>
+      </div>
+      <div class="frame proj reveal d1">
+        <div class="proj__thumb"><span class="yr">2008 → 2026</span><span class="glyph">B</span></div>
+        <div class="proj__body"><h4>Baboon.fr <span class="st on">● PROJET PHARE</span></h4>
+          <p>Mon chat IRC historique entièrement remis au goût du jour : appli mobile Flutter/Dart (iOS &amp; Android), client web KiwiIRC profondément modifié, visio Jitsi Meet et modération de chat assistée par IA. Mon dernier gros projet perso — fermeture en 2026.</p>
+          <div class="proj__tags"><span>Flutter/Dart</span><span>KiwiIRC</span><span>Modération IA</span><span>Jitsi</span></div></div>
+      </div>
+      <div class="frame proj reveal d2">
+        <div class="proj__thumb"><span class="yr">2007</span><span class="glyph">I</span></div>
+        <div class="proj__body"><h4>Espace-IRC <span class="st">ARCHIVÉ</span></h4>
+          <p>Chat et réseau IRC avec un client riche en Flash/Flex/AS3 et serveur Red5 (webcam), bots et sécurité du chan. Rendu obsolète par la fin de Flash Player — la relève moderne, c'est Baboon.fr. <a href="https://web.archive.org/web/*/espace-irc.org" target="_blank" rel="noopener">Voir sur archive.org ↗</a></p>
+          <div class="proj__tags"><span>IRC</span><span>Flash / AS3</span><span>Flex</span><span>Red5</span></div></div>
+      </div>
+      <div class="frame proj reveal">
+        <div class="proj__thumb"><span class="yr">2015 → ∞</span><span class="glyph">⌂</span></div>
+        <div class="proj__body"><h4>Domotique maison <span class="st">PERSO</span></h4>
+          <p>Maison connectée auto-hébergée sous Home Assistant : modules Shelly, microcontrôleurs ESP32, capteurs en réseau et automatisations sur mesure.</p>
+          <div class="proj__tags"><span>Home Assistant</span><span>Shelly</span><span>ESP32</span></div></div>
+      </div>
+      <div class="frame proj reveal d1">
+        <div class="proj__thumb"><span class="yr">2009</span><span class="glyph">M</span></div>
+        <div class="proj__body"><h4>MasterMind GUI <span class="st">PERSO</span></h4>
+          <p>Jeu MasterMind en Java : interface Swing, persistance Hibernate, architecture Spring MVC.</p>
+          <div class="proj__tags"><span>Java</span><span>Spring</span><span>Hibernate</span></div></div>
+      </div>
+      <div class="frame proj reveal d2">
+        <div class="proj__thumb"><span class="yr">2004 → ∞</span><span class="glyph">★</span></div>
+        <div class="proj__body"><h4>fafchamps.be <span class="st on">● ACTIF</span></h4>
+          <p>Mon espace personnel depuis 2004, refondu au fil des ans — vous y êtes (refonte 2026, façon terminal). <a href="https://web.archive.org/web/*/fafchamps.be" target="_blank" rel="noopener">Toutes les versions sur archive.org ↗</a></p>
+          <div class="proj__tags"><span>HTML/CSS</span><span>Design</span><span>Archive.org</span></div></div>
+      </div>
+      <div class="frame proj reveal">
+        <div class="proj__thumb"><span class="yr">2002–2007</span><span class="glyph">C</span></div>
+        <div class="proj__body"><h4>Chat.fr <span class="st">DEV &amp; GESTION</span></h4>
+          <p>Développement et gestion d'un des plus gros chats francophones (700+ connectés en soirée) : interface AS3, serveur Red5 webcam. Plateforme tierce, revendue par son propriétaire en 2007. <a href="https://web.archive.org/web/*/chat.fr" target="_blank" rel="noopener">Voir sur archive.org ↗</a></p>
+          <div class="proj__tags"><span>PHP</span><span>AS3</span><span>Red5</span></div></div>
+      </div>
+    </div>
+
+    <!-- ===== ACTIVITÉ GITHUB (alimentée par data/github.json) ===== -->
+    <div class="sec-head reveal" style="margin-top:74px;margin-bottom:30px">
+      <div class="sec-meta"><span class="idx">05.A</span><span>// ACTIVITÉ GITHUB</span><span class="ln"></span></div>
+      <h2 class="sec-title">Le code <em>parle</em></h2>
+      <p class="sec-sub">Flux synchronisé chaque jour depuis <a href="https://github.com/replicatorbe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">@replicatorbe</a> — contributions des 12 derniers mois et dépôts publics récents.</p>
+    </div>
+
+    <div class="gh-panels">
+      <!-- mur de contributions -->
+      <div class="frame gh-panel reveal">
+        <div class="gh-panel__bar"><span class="dots"><i></i><i></i><i></i></span> contributions — github.com/replicatorbe<span class="grow"></span><a href="https://github.com/replicatorbe" target="_blank" rel="noopener">voir le profil →</a></div>
+        <div class="gh-panel__body">
+          <div class="gh-contrib__top">
+            <div class="gh-num"><span id="ghTotal">2&thinsp;601</span> <span class="u">contrib.</span></div>
+            <div class="gh-num__lab">sur les <b>12 derniers mois</b> — une pratique quotidienne du code.</div>
+          </div>
+          <div class="gh-cal-wrap"><div class="gh-cal" id="ghCal">
+            <div class="gh-loading">chargement du mur de contributions <span class="bk">_</span></div>
+          </div></div>
+          <div class="gh-legend" id="ghLegend" hidden>Moins <i></i><i></i><i></i><i></i><i></i> Plus</div>
+          <div class="gh-foot"><span><span class="live">●</span> synchronisation quotidienne</span><span id="ghGen"></span></div>
+        </div>
+      </div>
+
+      <!-- git log : dépôts publics -->
+      <div class="frame gh-panel reveal d1">
+        <div class="gh-panel__bar"><span class="dots"><i></i><i></i><i></i></span> git log --oneline · dépôts publics<span class="grow"></span><span id="ghRepoCount"></span></div>
+        <div class="gh-panel__body">
+          <div class="gh-log" id="ghLog"><div class="gh-loading">git log <span class="bk">_</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-head reveal archive-head">
+      <div class="sec-meta"><span class="idx">05.B</span><span>// ARCHIVES VISUELLES</span><span class="ln"></span></div>
+      <p class="sec-sub" style="margin-top:4px">Quelques captures d'époque — parce que le web du début des années 2000 mérite qu'on s'en souvienne.</p>
+    </div>
+    <div class="gallery">
+      <figure class="frame shot reveal">
+        <div class="shot__bar"><span>adosbox · 2006 → 2012</span><span class="tag">PERSO</span></div>
+        <div class="shot__img"><img src="img/adosbox-evolution.jpg" alt="Évolution du site Adosbox de 2006 à 2012" loading="lazy" width="1497" height="768"></div>
+        <figcaption><b>Adosbox</b> — communauté & chat pour ados que j'ai développée et administrée de bout en bout (code, infra, modération). Trois générations d'interface, plus la page Facebook.</figcaption>
+      </figure>
+      <figure class="frame shot reveal d1">
+        <div class="shot__bar"><span>chat.fr · 2002 → 2007</span><span class="tag">DEV &amp; GESTION</span></div>
+        <div class="shot__img"><img src="img/chatfr-evolution.jpg" alt="Six versions de l'interface Chat.fr de 2002 à 2007" loading="lazy" width="1497" height="762"></div>
+        <figcaption><b>Chat.fr</b> — six versions, 2002 → 2007. J'en ai assuré le développement et la gestion (jusqu'à 700+ connectés en soirée) ; la plateforme appartenait à un tiers, qui l'a revendue en 2007.</figcaption>
+      </figure>
+    </div>
+
+    <div style="text-align:center;margin-top:42px" class="reveal">
+      <a href="https://github.com/replicatorbe" target="_blank" rel="noopener" class="btn">Tout voir sur GitHub <span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FORMATION ===================== -->
+<section id="formation">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-meta"><span class="idx">05.C</span><span>// ENTRAÎNEMENT CONTINU</span><span class="ln"></span></div>
+      <h2 class="sec-title">Veille & <em>montée en compétence</em></h2>
+    </div>
+    <div class="learn-grid">
+      <div class="frame learn reveal">
+        <div class="lab">PLATEFORME</div>
+        <h4><span class="ic">⬢</span>TryHackMe</h4>
+        <p>Labs pratiques en sécurité offensive et défensive, forensic et réseau. Progression régulière sur des parcours guidés.</p>
+        <a class="lk" href="https://tryhackme.com/" target="_blank" rel="noopener">accéder ↗</a>
+      </div>
+      <div class="frame learn reveal d1">
+        <div class="lab">COMPÉTITION</div>
+        <h4><span class="ic">⚑</span>CTF</h4>
+        <p>Capture The Flag : crypto, web, forensic, réseau. La meilleure école pour penser comme un attaquant et raisonner méthodiquement.</p>
+        <a class="lk" href="https://ctftime.org/" target="_blank" rel="noopener">en savoir + ↗</a>
+      </div>
+      <div class="frame learn reveal d2">
+        <div class="lab">COMMUNAUTÉ</div>
+        <h4><span class="ic">⬡</span>Wolfplex</h4>
+        <p>Hackerspace de Charleroi. Projets collectifs, électronique, partage de savoir et culture du hack au sens noble.</p>
+        <a class="lk" href="https://www.wolfplex.be/" target="_blank" rel="noopener">wolfplex.be ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:42px">
+      <div class="sec-meta"><span class="idx">06</span><span>// CANAL</span><span class="ln"></span></div>
+    </div>
+    <div class="contact__grid">
+      <div class="reveal">
+        <h2>Ouvrons un <em>canal sécurisé</em>.</h2>
+        <p>Un projet, une opportunité, une collaboration ou simplement envie d'échanger sur l'infra et la sécurité ? Le terminal est ouvert.</p>
+        <a class="mailbtn" href="mailto:jerome@fafchamps.be">jerome@fafchamps.be <span class="ar">↗</span></a>
+      </div>
+      <div class="frame chan reveal d1">
+        <h3>// AUTRES POINTS D'ACCÈS</h3>
+        <a class="line" href="https://github.com/replicatorbe" target="_blank" rel="noopener">
+          <span><span class="lbl">GitHub</span><span class="sub">@replicatorbe — code & projets</span></span><span class="go">CONNECT →</span></a>
+        <a class="line" href="https://www.wolfplex.be/" target="_blank" rel="noopener">
+          <span><span class="lbl">Wolfplex</span><span class="sub">Hackerspace de Charleroi</span></span><span class="go">CONNECT →</span></a>
+        <a class="line" href="mailto:jerome@fafchamps.be">
+          <span><span class="lbl">E-mail direct</span><span class="sub">jerome@fafchamps.be</span></span><span class="go">CONNECT →</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap foot">
+    <div>© <span id="year">2026</span> JÉRÔME FAFCHAMPS <span class="amber">//</span> sMug@replicatorbe <span class="amber">//</span> BELGIQUE 🇧🇪</div>
+    <a class="totop" href="#accueil">↑ RETOUR EN HAUT</a>
+  </div>
+</footer>
+
+<script>
+/* ---------- BOOT SEQUENCE ---------- */
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const boot = document.getElementById('boot');
+  const host = document.getElementById('bootLines');
+  const lines = [
+    "<span class='ok'>[ OK ]</span> initialisation des modules noyau",
+    "<span class='ok'>[ OK ]</span> montage de /dev/evidence",
+    "<span class='ok'>[ OK ]</span> chargement de la boîte à outils forensic",
+    "<span class='run'>[ .. ]</span> établissement du canal sécurisé … <span class='ok'>AES-256</span>",
+    "<span class='ok'>[ OK ]</span> déchiffrement du profil :: J. FAFCHAMPS",
+  ];
+  const SEEN='fcb_boot_seen';
+  function finish(){ try{sessionStorage.setItem(SEEN,'1');}catch(e){} boot.classList.add('done'); document.body.style.overflow=''; }
+  let seen=false; try{ seen=!!sessionStorage.getItem(SEEN); }catch(e){}
+  if(reduce || seen){ finish(); return; }
+  document.body.style.overflow='hidden';
+  lines.forEach((l,i)=>{
+    const d=document.createElement('div');
+    d.className='boot__line'; d.style.animationDelay=(i*0.26)+'s'; d.innerHTML=l;
+    host.appendChild(d);
+  });
+  const g=document.createElement('div');
+  g.className='boot__line grant'; g.style.animationDelay=(lines.length*0.26+0.15)+'s';
+  g.textContent='> ACCÈS AUTORISÉ';
+  host.appendChild(g);
+  const t=setTimeout(finish, lines.length*260 + 1150);
+  function skip(){ clearTimeout(t); finish(); }
+  boot.addEventListener('click',skip);
+  window.addEventListener('wheel',skip,{once:true,passive:true});
+  window.addEventListener('touchmove',skip,{once:true,passive:true});
+})();
+
+/* ---------- CLOCK (Europe/Brussels) ---------- */
+(function(){
+  const el=document.getElementById('clock');
+  function tick(){
+    try{ el.textContent=new Date().toLocaleTimeString('fr-BE',{timeZone:'Europe/Brussels',hour12:false}); }
+    catch(e){ el.textContent=new Date().toLocaleTimeString('fr-FR',{hour12:false}); }
+  }
+  tick(); setInterval(tick,1000);
+  document.getElementById('year').textContent=new Date().getFullYear();
+  const start=new Date('2004-01-01');
+  const yrs=((Date.now()-start)/(365.25*24*3600*1000)).toFixed(1);
+  const u=document.getElementById('uptime'); if(u) u.textContent=yrs+' ans';
+})();
+
+/* ---------- TYPEWRITER ---------- */
+(function(){
+  const el=document.getElementById('typed');
+  const items=['DevOps · SysAdmin · Développeur','Sûreté & salles de contrôle','Administration réseau & sécurité','Passionné de cybersécurité'];
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches){ el.textContent=items[0]; return; }
+  let i=0,j=0,del=false;
+  function loop(){
+    const w=items[i];
+    el.textContent = del ? w.slice(0,j--) : w.slice(0,j++);
+    let s=del?40:75;
+    if(!del && j>w.length){ del=true; s=1700; }
+    else if(del && j<0){ del=false; i=(i+1)%items.length; j=0; s=380; }
+    setTimeout(loop,s);
+  }
+  setTimeout(loop,1300);
+})();
+
+/* ---------- TERMINAL INTERACTIF ---------- */
+(function(){
+  const out=document.getElementById('termOut');
+  const inp=document.getElementById('termInput');
+  const term=document.getElementById('term');
+  const pathEl=document.getElementById('termPath');
+  if(!out||!inp||!term) return;
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function print(html,cls){ const d=document.createElement('div'); d.className='ln '+(cls||'res'); d.innerHTML=html; out.appendChild(d); out.scrollTop=out.scrollHeight; }
+
+  /* --- mini système de fichiers virtuel --- */
+  const FS={type:'dir',children:{
+    'about.txt':{type:'file',content:[
+      'Jérôme Fafchamps — alias sMug@replicatorbe','',
+      "20+ ans d'informatique. DevOps, sysadmin et développeur.",
+      'Bâtisseur de communautés en ligne, bidouilleur, passionné',
+      'de cybersécurité et de réseau. Basé en Belgique.',
+      'Membre du hackerspace Wolfplex (Charleroi).'].join('\n')},
+    'skills.txt':{type:'file',content:[
+      'Développement .......... 96%','Réseau ................. 90%',
+      'DevOps & automatisation  90%','Administration système . 84%',
+      'Forensic & investigation  en montée'].join('\n')},
+    'contact.txt':{type:'file',content:[
+      'E-mail   : jerome@fafchamps.be','GitHub   : github.com/replicatorbe',
+      'Wolfplex : wolfplex.be'].join('\n')},
+    'projets':{type:'dir',children:{
+      'adosbox.md':{type:'file',content:'# Adosbox (2006-2010)\nCommunauté & chat pour ados. PHP, modération, infra complète.\narchive : web.archive.org/web/*/adosbox.com'},
+      'chat.fr.md':{type:'file',content:'# Chat.fr (2002-2007)\nDev & gestion d\'un gros chat FR (700+ connectés). AS3, Red5 webcam.\nPlateforme tierce, revendue par son propriétaire en 2007.\narchive : web.archive.org/web/*/chat.fr'},
+      'baboon.md':{type:'file',content:'# Baboon.fr (2008 → 2026)\nChat IRC remis au goût du jour : appli Flutter/Dart (iOS/Android), KiwiIRC modifié, visio Jitsi Meet, modération IA.\nDernier gros projet perso, fermé en 2026.'},
+      'espace-irc.md':{type:'file',content:'# Espace-IRC (2007)\nChat IRC en Flash/Flex/AS3 + Red5 (webcam), bots & sécurité du chan.\nObsolète avec la fin de Flash Player ; relève moderne = Baboon.fr.\narchive : web.archive.org/web/*/espace-irc.org'},
+      'domotique.md':{type:'file',content:'# Domotique maison (2015 -> maintenant)\nAuto-hébergée sous Home Assistant. Modules Shelly, ESP32 (lecteur de badge, capteurs température), automatisations maison.'},
+      'mastermind.md':{type:'file',content:'# MasterMind GUI (2009)\nJeu Java — Swing, Hibernate, Spring MVC.'},
+      'fafchamps.be.md':{type:'file',content:'# fafchamps.be (2004 -> maintenant)\nMon espace perso depuis 2004, refondu au fil des ans. Refonte 2026 façon terminal.\narchive : web.archive.org/web/*/fafchamps.be'}
+    }},
+    'realisations':{type:'dir',children:{
+      'soc.md':{type:'file',content:'# SOC nouvelle génération\nCentre d\'opérations de sûreté + site de repli. Ergonomie, continuité d\'activité, tests avec les agents.'},
+      'control-rooms.md':{type:'file',content:'# Control Rooms techniques\nSupervision unifiée (CCTV, intrusion, incendie, contrôle d\'accès) sur postes opérateurs.'},
+      'commandcar.md':{type:'file',content:'# CommandCar — PC mobile\nPoste de commandement mobile, lien temps réel au SOC. 4G/802.1x/Radius, 72h d\'autonomie, pilotage à distance.'},
+      'flotte-mobile.md':{type:'file',content:'# Flotte surveillance mobile\n21 unités autonomes sur remorque. Appli PHP/JS de pilotage de tout le parc via API.'},
+      'flotte-v2.md':{type:'file',content:'# Surveillance mobile — gen. 2\n4K zoom 32x, batterie lithium-ion, GPS, 3G/4G. CSC de transformation. Exit l\'analogique.'},
+      'hypervisor.md':{type:'file',content:'# Hypervisor\nSupervision unifiée des alarmes (intrusion, incendie, ascenseurs, tunnels...). ~50 logiciels -> 1 interface.'},
+      'cctv-rames.md':{type:'file',content:'# CCTV embarquée\nCaméras dans les nouvelles rames + logiciel de récupération d\'images à distance (cellulaire/WiFi).'},
+      'valise-14j.md':{type:'file',content:'# Valise de surveillance\nAutonomie 14 jours sans secteur (vs 3-5 j du marché). Optimisation conso de chaque composant.'},
+      'anti-vol.md':{type:'file',content:'# Traçage anti-vol de câbles\nTests labo + conditions réelles, formation des opérateurs Control Rooms.'}
+    }},
+    'stack':{type:'dir',children:{
+      'langages.txt':{type:'file',content:'PHP, Java, C#, JavaScript, Flutter/Dart, SQL, Bash'},
+      'systemes.txt':{type:'file',content:'Linux (Debian), Docker, Nginx/Apache, MySQL/MariaDB, VLAN, VPN'},
+      'securite.txt':{type:'file',content:'Wireshark, Nmap, hardening, OSINT, analyse réseau & logs'}
+    }},
+    '.secret':{type:'dir',children:{
+      'flag.txt':{type:'file',content:'Bien joué, fouineur. 🕵\nIndice : le code Konami -> haut haut bas bas gauche droite gauche droite B A'}
+    }}
+  }};
+  let cwd=[];
+  function pathStr(){ return '~'+(cwd.length?'/'+cwd.join('/'):''); }
+  function updatePrompt(){ if(pathEl) pathEl.textContent=pathStr(); }
+  function nodeAt(parts){ let n=FS; for(const p of parts){ if(n.type!=='dir'||!n.children[p]) return null; n=n.children[p]; } return n; }
+  function resolve(arg){
+    arg=(arg||'').trim();
+    let parts=(arg===''||arg==='~'||arg[0]==='/'||arg[0]==='~') ? [] : cwd.slice();
+    const segs=arg.replace(/^~/,'').replace(/^\/+/,'').split('/').filter(Boolean);
+    for(const s of segs){ if(s==='.') continue; if(s==='..'){ parts.pop(); continue; } parts.push(s); }
+    return parts;
+  }
+  function echo(c){ print('<span class="pr">visitor@fafchamps:'+pathStr()+'$</span> '+esc(c),'cmd'); }
+
+  const C={
+    help:()=>['Commandes disponibles :',
+      '  <span class="cyan">ls [-a]</span>    lister le dossier courant',
+      '  <span class="cyan">cd</span> &lt;dir&gt;     entrer (.. pour remonter, ~ racine)',
+      '  <span class="cyan">cat</span> &lt;file&gt;  afficher un fichier',
+      '  <span class="cyan">pwd</span>        chemin courant',
+      '  <span class="cyan">whoami · skills · stack · work · projects · github</span>',
+      '  <span class="cyan">social · contact · date · matrix · clear · sudo</span>',
+      'astuce : <span class="green">Tab</span> complète · <span class="green">ls</span> · <span class="green">cat about.txt</span> · <span class="green">cd projets</span>'].join('\n'),
+    whoami:()=>['<b>Jérôme Fafchamps</b> · alias <span class="cyan">sMug@replicatorbe</span>',
+      'DevOps · SysAdmin · Développeur — <span class="amber">20+ ans</span> d\'informatique',
+      'Belgique · focus : cybersécurité & réseau'].join('\n'),
+    skills:()=>['Développement .......... <span class="amber">96%</span>',
+      'Réseau ................. <span class="amber">90%</span>',
+      'DevOps & automatisation  <span class="amber">90%</span>',
+      'Administration système . <span class="amber">84%</span>',
+      'Forensic & investigation <span class="cyan">en montée ↗</span>'].join('\n'),
+    stack:()=>['<b>Langages</b> : PHP, Java, C#, JavaScript, Flutter/Dart, SQL, Bash',
+      '<b>Systèmes</b> : Linux (Debian), Docker, Nginx/Apache, MySQL',
+      '<b>DevOps</b>   : CI/CD, Git, monitoring, reverse proxy',
+      '<b>Sécurité</b> : Wireshark, Nmap, hardening, OSINT'].join('\n'),
+    projects:()=>['<span class="amber">[2002-2007]</span> Chat.fr       dev & gestion (700+ connectés)',
+      '<span class="amber">[2006-2010]</span> Adosbox       communauté & chat (PHP)',
+      '<span class="amber">[2008-2026]</span> Baboon.fr     chat IRC modernisé (Flutter/IA/Jitsi)',
+      '<span class="amber">[2007]     </span> Espace-IRC    chat IRC Flash/AS3/Red5 (pré-Baboon)',
+      '<span class="amber">[2015-∞]   </span> Domotique     Home Assistant / Shelly / ESP32',
+      '<span class="amber">[2009]     </span> MasterMind    Java / Spring / Hibernate',
+      '<span class="amber">[2004-∞]   </span> fafchamps.be  ce site (historique sur archive.org)',
+      '-> détails : <span class="cyan">cd projets</span> puis <span class="cyan">ls</span>'].join('\n'),
+    work:()=>['<span class="amber">[ DOSSIERS PRO ]</span> opérateur ferroviaire (BE) — <span class="green">anonymisé</span>',
+      'SOC nouvelle gen .... centre d\'opérations de sûreté + repli',
+      'Control Rooms ....... supervision unifiée CCTV/intrusion/incendie',
+      'CommandCar .......... PC mobile · 4G/802.1x · 72h autonomie',
+      'Flotte mobile ....... 21 unités · appli <span class="cyan">PHP/JS</span> via API',
+      'Hypervisor .......... ~50 logiciels -> 1 interface (toutes alarmes)',
+      'Valise 14 j ......... surveillance autonome sans secteur',
+      '+ CCTV rames, anti-vol câbles, Product Owner mobile…',
+      '-> détails : <span class="cyan">cd realisations</span> puis <span class="cyan">ls</span>'].join('\n'),
+    social:()=>['GitHub   : <a href="https://github.com/replicatorbe" target="_blank" rel="noopener">github.com/replicatorbe</a>',
+      'Wolfplex : <a href="https://www.wolfplex.be/" target="_blank" rel="noopener">wolfplex.be</a>'].join('\n'),
+    github:()=>{
+      const g=window.fcbGitHub;
+      if(!g||!g.contributions){ return ['github : flux en cours de chargement… réessaie dans un instant.',
+        'profil : <a href="https://github.com/replicatorbe" target="_blank" rel="noopener">github.com/replicatorbe</a>'].join('\n'); }
+      const t=(g.contributions.total!=null)?Number(g.contributions.total).toLocaleString('fr-FR'):'?';
+      const out=['<b>@'+esc(g.login)+'</b> — activité GitHub',
+        '<span class="green">'+t+'</span> contributions sur les 12 derniers mois',
+        (g.repos_count||0)+' dépôts publics récents :'];
+      (g.repos||[]).slice(0,8).forEach(r=>{
+        out.push('  <span class="amber">*</span> <b>'+esc(r.name)+'</b>'
+          +(r.lang?' <span class="cyan">['+esc(r.lang)+']</span>':'')
+          +' <span class="res">'+esc(r.updated)+'</span>');
+      });
+      out.push('profil : <a href="'+esc(g.profile_url)+'" target="_blank" rel="noopener">'+esc(g.profile_url.replace(/^https?:\/\//,''))+'</a>');
+      return out.join('\n');
+    },
+    contact:()=>'E-mail : <a href="mailto:jerome@fafchamps.be">jerome@fafchamps.be</a>',
+    date:()=>{try{return new Date().toLocaleString('fr-BE',{timeZone:'Europe/Brussels'});}catch(e){return new Date().toString();}},
+    pwd:()=>'/home/visitor'+(cwd.length?'/'+cwd.join('/'):''),
+    ls:(arg)=>{
+      let showAll=false, target='';
+      (arg||'').split(/\s+/).filter(Boolean).forEach(t=>{ if(t==='-a'||t==='-la'||t==='-al') showAll=true; else target=t; });
+      const node=nodeAt(resolve(target));
+      if(!node) return 'ls: '+esc(target)+' : aucun fichier ou dossier de ce type';
+      if(node.type==='file') return esc(target);
+      let names=Object.keys(node.children);
+      if(!showAll) names=names.filter(n=>n[0]!=='.');
+      if(!names.length) return '(vide)';
+      return names.map(n=> node.children[n].type==='dir' ? '<span class="cyan">'+esc(n)+'/</span>' : esc(n)).join('   ');
+    },
+    cd:(arg)=>{
+      arg=(arg||'').trim();
+      if(arg===''){ cwd=[]; updatePrompt(); return; }
+      const parts=resolve(arg), node=nodeAt(parts);
+      if(!node) return 'cd: '+esc(arg)+' : aucun dossier de ce type';
+      if(node.type!=='dir') return 'cd: '+esc(arg)+' : n\'est pas un dossier';
+      cwd=parts; updatePrompt(); return;
+    },
+    cat:(arg)=>{
+      arg=(arg||'').trim();
+      if(!arg) return 'cat : indiquer un fichier — ex. <span class="cyan">cat about.txt</span>';
+      const node=nodeAt(resolve(arg));
+      if(!node) return 'cat: '+esc(arg)+' : fichier introuvable';
+      if(node.type==='dir') return 'cat: '+esc(arg)+' : est un dossier';
+      return esc(node.content);
+    },
+    matrix:()=>{ if(window.fcbUnlock){ window.fcbUnlock(); return '<span class="green">décryptage…</span> 🔓  (Échap pour fermer)'; } return 'effet indisponible.'; },
+    sudo:()=>'<span class="red">[sudo]</span> mot de passe pour visitor : ****\n<span class="red">Désolé</span>, visitor n\'est pas dans le fichier sudoers. Cet incident sera rapporté. 🙂'
+  };
+  const alias={projets:'projects','compétences':'skills',competences:'skills',cls:'clear',aide:'help','?':'help',man:'help',dir:'ls',konami:'matrix',hack:'matrix',rain:'matrix',realisations:'work','réalisations':'work',pro:'work',career:'work',boulot:'work',activity:'github',gh:'github',git:'github',contributions:'github','activité':'github'};
+  const hist=[]; let hi=-1;
+  function run(raw){
+    const cmd=(raw||'').trim(); echo(cmd);
+    if(!cmd) return;
+    hist.unshift(cmd); hi=-1;
+    const p=cmd.split(/\s+/), base=p[0].toLowerCase(), arg=p.slice(1).join(' ');
+    const name=alias[base]||base;
+    if(name==='clear'){ out.innerHTML=''; return; }
+    const fn=C[name];
+    if(fn){ const r=fn(arg); if(r!=null && r!=='') print(r); }
+    else print('bash : '+esc(base)+' : commande introuvable — tape <span class="cyan">help</span>','res');
+  }
+  const CMDNAMES=Object.keys(C).concat('clear');
+  function commonPrefix(a){ if(!a.length) return ''; let p=a[0]; for(const s of a){ while(s.indexOf(p)!==0) p=p.slice(0,-1); if(!p) break; } return p; }
+  function complete(){
+    const raw=inp.value, trailing=/\s$/.test(raw), toks=raw.split(/\s+/).filter(Boolean);
+    if(toks.length===0 || (toks.length===1 && !trailing)){
+      const frag=(toks[0]||'').toLowerCase();
+      const cands=CMDNAMES.filter(n=>n.indexOf(frag)===0).sort();
+      if(cands.length===1) inp.value=cands[0]+' ';
+      else if(cands.length>1){ const cp=commonPrefix(cands); if(cp.length>frag.length) inp.value=cp; else { echo(raw); print(cands.join('   ')); } }
+      return;
+    }
+    const cmd=alias[toks[0].toLowerCase()]||toks[0].toLowerCase();
+    if(['cd','cat','ls'].indexOf(cmd)<0) return;
+    const last= trailing ? '' : toks[toks.length-1];
+    const sl=last.lastIndexOf('/'), dirPart= sl>=0?last.slice(0,sl+1):'', frag= sl>=0?last.slice(sl+1):last;
+    const node=nodeAt(resolve(dirPart));
+    if(!node||node.type!=='dir') return;
+    let names=Object.keys(node.children);
+    if(frag[0]!=='.') names=names.filter(n=>n[0]!=='.');
+    const cands=names.filter(n=>n.indexOf(frag)===0).sort();
+    if(!cands.length) return;
+    const head=toks.slice(0, trailing?toks.length:toks.length-1).join(' ');
+    const tok=name=>dirPart+name+(node.children[name].type==='dir'?'/':'');
+    if(cands.length===1){ inp.value=head+' '+tok(cands[0]); }
+    else { const cp=commonPrefix(cands); if(cp.length>frag.length) inp.value=head+' '+dirPart+cp;
+      else { echo(raw); print(cands.map(n=>node.children[n].type==='dir'?'<span class="cyan">'+esc(n)+'/</span>':esc(n)).join('   ')); } }
+  }
+  inp.addEventListener('keydown',(e)=>{
+    if(e.key==='Enter'){ run(inp.value); inp.value=''; }
+    else if(e.key==='Tab'){ e.preventDefault(); complete(); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); if(hist.length){ hi=Math.min(hi+1,hist.length-1); inp.value=hist[hi]; } }
+    else if(e.key==='ArrowDown'){ e.preventDefault(); if(hi>0){ hi--; inp.value=hist[hi]; } else { hi=-1; inp.value=''; } }
+    else if(e.ctrlKey && (e.key==='l'||e.key==='L')){ e.preventDefault(); out.innerHTML=''; }
+  });
+  term.addEventListener('click',(e)=>{ if(e.target.tagName!=='A') inp.focus(); });
+  updatePrompt();
+  print('<span class="cyan">fafchamps.be</span> — terminal interactif <span class="amber">v1.1</span>','res');
+  echo('whoami'); print(C.whoami());
+  print('Tape <span class="cyan">help</span>, ou explore : <span class="cyan">ls</span> · <span class="cyan">cd</span> · <span class="cyan">cat</span>.','res');
+})();
+
+/* ---------- KONAMI ---------- */
+(function(){
+  const seq=['arrowup','arrowup','arrowdown','arrowdown','arrowleft','arrowright','arrowleft','arrowright','b','a'];
+  let pos=0,running=false,raf,ctx,cols,drops;
+  const el=document.getElementById('konami'), cv=document.getElementById('konamiCanvas');
+  if(!el||!cv) return;
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const fs=16, chars='アカサタナハマヤラ0123456789ABCDEF#$%&@/<>'.split('');
+  function resize(){ cv.width=innerWidth; cv.height=innerHeight; cols=Math.ceil(cv.width/fs); drops=Array(cols).fill(0).map(()=>Math.random()*-40); }
+  function draw(){
+    ctx.fillStyle='rgba(8,10,13,0.10)'; ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.font=fs+'px monospace';
+    for(let i=0;i<cols;i++){
+      const x=i*fs, y=drops[i]*fs, r=Math.random();
+      ctx.fillStyle = r>0.93?'#ffb13d' : (r>0.5?'#48d6cf':'#62e08a');
+      ctx.fillText(chars[Math.floor(Math.random()*chars.length)],x,y);
+      if(y>cv.height && Math.random()>0.97) drops[i]=0;
+      drops[i]++;
+    }
+    raf=requestAnimationFrame(draw);
+  }
+  function open(){
+    if(running) return; running=true;
+    el.classList.add('on'); el.setAttribute('aria-hidden','false');
+    if(!reduce){ ctx=cv.getContext('2d'); resize(); addEventListener('resize',resize); draw(); }
+    clearTimeout(open._t); open._t=setTimeout(close,8000);
+  }
+  function close(){
+    if(!running) return; running=false;
+    el.classList.remove('on'); el.setAttribute('aria-hidden','true');
+    cancelAnimationFrame(raf); removeEventListener('resize',resize);
+  }
+  el.addEventListener('click',close);
+  window.fcbUnlock=open;
+  addEventListener('keydown',(e)=>{
+    if(running && e.key==='Escape'){ close(); return; }
+    const k=(e.key||'').toLowerCase();
+    pos = (k===seq[pos]) ? pos+1 : (k===seq[0]?1:0);
+    if(pos===seq.length){ pos=0; open(); }
+  });
+})();
+
+/* ---------- SCROLL PROGRESS ---------- */
+(function(){
+  const sp=document.getElementById('scrollprog'); if(!sp) return;
+  const d=document.documentElement;
+  function upd(){ const max=d.scrollHeight-d.clientHeight; sp.style.width=(max>0?(d.scrollTop/max*100):0)+'%'; }
+  addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd,{passive:true}); upd();
+})();
+
+/* ---------- REVEAL + SKILLBARS + COUNTERS ---------- */
+(function(){
+  const io=new IntersectionObserver((es)=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting) return;
+      e.target.classList.add('in');
+      e.target.querySelectorAll('.bar__fill').forEach(f=>{ f.style.width=f.dataset.w+'%'; });
+      e.target.querySelectorAll('.counter').forEach(c=>{
+        const goal=+c.dataset.count||+c.parentElement.dataset.count||0;
+        if(!goal||c.dataset.done) return; c.dataset.done=1;
+        let n=0; const step=Math.max(1,Math.round(goal/34));
+        const iv=setInterval(()=>{ n+=step; if(n>=goal){n=goal;clearInterval(iv);} c.textContent=n; },28);
+      });
+      io.unobserve(e.target);
+    });
+  },{threshold:.18});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+
+/* ---------- ACTIVE NAV ---------- */
+(function(){
+  const links=[...document.querySelectorAll('.rail a')];
+  const map={}; links.forEach(l=>map[l.dataset.sec]=l);
+  const io=new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const id=e.target.id; if(map[id]) map[id].classList.add('active');
+    }});
+  },{rootMargin:'-45% 0px -50% 0px'});
+  ['accueil','profil','competences','realisations','projets','contact'].forEach(id=>{
+    const s=document.getElementById(id); if(s) io.observe(s);
+  });
+})();
+
+/* ---------- MOBILE NAV ---------- */
+(function(){
+  const b=document.getElementById('burger'), m=document.getElementById('mnav');
+  b.addEventListener('click',()=>{ b.classList.toggle('open'); m.classList.toggle('open'); });
+  m.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{ b.classList.remove('open'); m.classList.remove('open'); }));
+})();
+
+/* ---------- ACTIVITÉ GITHUB (data/github.json) ---------- */
+(function(){
+  const LV=['#161b25','rgba(98,224,138,.28)','rgba(98,224,138,.48)','rgba(98,224,138,.72)','#62e08a'];
+  const MOIS=['jan','fév','mar','avr','mai','jun','jui','aoû','sep','oct','nov','déc'];
+  const LANGC={Python:'#3572A5',PHP:'#4F5D95',JavaScript:'#f1e05a',TypeScript:'#3178c6',PowerShell:'#012456',
+    Shell:'#89e051',Tcl:'#e4cc98',Dockerfile:'#384d54','C++':'#f34b7d',C:'#555555','C#':'#178600',
+    Java:'#b07219',Dart:'#00B4AB',HTML:'#e34c26',CSS:'#563d7c',Go:'#00ADD8',Ruby:'#701516',Rust:'#dea584'};
+  const el=id=>document.getElementById(id);
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const fmt=n=>Number(n).toLocaleString('fr-FR');
+
+  function pseudoHash(s){ let h=0; for(let i=0;i<s.length;i++){ h=(h*33+s.charCodeAt(i))>>>0; } return ('0000000'+h.toString(16)).slice(-7); }
+
+  function animateCount(node,goal){
+    if(reduce||goal<=0){ node.textContent=fmt(goal); return; }
+    let n=0; const step=Math.max(1,Math.round(goal/40));
+    const iv=setInterval(()=>{ n+=step; if(n>=goal){ n=goal; clearInterval(iv); } node.textContent=fmt(n); },26);
+  }
+
+  function levels(days){
+    const nz=days.map(d=>d.count).filter(c=>c>0).sort((a,b)=>a-b);
+    if(!nz.length) return ()=>0;
+    const q=p=>nz[Math.min(nz.length-1,Math.floor(nz.length*p))];
+    const q1=q(.25),q2=q(.5),q3=q(.75);
+    return c=> c<=0?0 : c<=q1?1 : c<=q2?2 : c<=q3?3 : 4;
+  }
+
+  function renderCal(days){
+    const cal=el('ghCal'); if(!cal) return;
+    const lvl=levels(days);
+    // colonnes (semaines), 1ère colonne calée sur le jour de semaine du 1er jour
+    const cells=days.slice();
+    const first=new Date(cells[0].date+'T00:00:00Z').getUTCDay(); // 0=dim
+    for(let i=0;i<first;i++) cells.unshift(null);
+    const cols=[]; for(let i=0;i<cells.length;i+=7) cols.push(cells.slice(i,i+7));
+
+    const months=document.createElement('div'); months.className='gh-months';
+    const weeks=document.createElement('div'); weeks.className='gh-weeks';
+    let lastMonth=-1;
+    cols.forEach(col=>{
+      const firstReal=col.find(Boolean);
+      const ms=document.createElement('span');
+      if(firstReal){ const mo=new Date(firstReal.date+'T00:00:00Z').getUTCMonth();
+        if(mo!==lastMonth){ ms.textContent=MOIS[mo]; lastMonth=mo; } }
+      months.appendChild(ms);
+      const wk=document.createElement('div'); wk.className='gh-week';
+      col.forEach(d=>{
+        const c=document.createElement('div'); c.className='gh-d';
+        if(!d){ c.style.visibility='hidden'; }
+        else { const L=lvl(d.count); c.style.background=LV[L]; if(L===4) c.classList.add('lv4');
+          c.title=d.count+' contribution'+(d.count>1?'s':'')+' · '+d.date; }
+        wk.appendChild(c);
+      });
+      weeks.appendChild(wk);
+    });
+    cal.innerHTML=''; cal.appendChild(months); cal.appendChild(weeks);
+
+    const leg=el('ghLegend');
+    if(leg){ leg.hidden=false; leg.querySelectorAll('i').forEach((i,k)=>i.style.background=LV[k]); }
+  }
+
+  function renderRepos(repos){
+    const log=el('ghLog'); if(!log) return;
+    log.innerHTML='';
+    repos.forEach(r=>{
+      const row=document.createElement('div'); row.className='gh-log__row';
+      const hash=document.createElement('span'); hash.className='gh-hash'; hash.textContent=pseudoHash(r.name);
+      const main=document.createElement('div'); main.className='gh-log__main';
+      const a=document.createElement('a'); a.className='gh-name'; a.href=r.url; a.target='_blank'; a.rel='noopener'; a.textContent=r.name;
+      main.appendChild(a);
+      if(r.lang){ const lg=document.createElement('span'); lg.className='gh-lang';
+        const dot=document.createElement('span'); dot.className='ld'; dot.style.background=LANGC[r.lang]||'#7e94b2';
+        lg.appendChild(dot); lg.appendChild(document.createTextNode(r.lang)); main.appendChild(lg); }
+      if(r.stars>0){ const st=document.createElement('span'); st.className='gh-stars'; st.textContent='★ '+r.stars; main.appendChild(st); }
+      const date=document.createElement('span'); date.className='gh-date'; date.textContent=r.updated;
+      row.appendChild(hash); row.appendChild(main); row.appendChild(date);
+      if(r.desc){ const dsc=document.createElement('div'); dsc.className='gh-desc'; dsc.textContent=r.desc; row.appendChild(dsc); }
+      log.appendChild(row);
+    });
+    const cnt=el('ghRepoCount'); if(cnt) cnt.textContent=repos.length+' repos';
+  }
+
+  fetch('data/github.json',{cache:'no-cache'}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(g=>{
+    window.fcbGitHub=g;
+    const c=g.contributions||{};
+    if(c.total!=null){ const t=el('ghTotal'); if(t){ const obs=new IntersectionObserver((es)=>{
+      es.forEach(e=>{ if(e.isIntersecting){ animateCount(t,c.total); obs.disconnect(); } }); },{threshold:.4});
+      obs.observe(t); } }
+    if(Array.isArray(c.days)&&c.days.length) renderCal(c.days);
+    if(Array.isArray(g.repos)) renderRepos(g.repos);
+    if(g.generated_at){ const gen=el('ghGen'); if(gen){
+      try{ gen.textContent='MAJ '+new Date(g.generated_at).toLocaleDateString('fr-BE',{day:'2-digit',month:'2-digit',year:'numeric'}); }catch(e){} } }
+  }).catch(()=>{
+    const cal=el('ghCal'); if(cal) cal.innerHTML='<div class="gh-loading">flux indisponible — <a href="https://github.com/replicatorbe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">voir directement sur GitHub →</a></div>';
+    const log=el('ghLog'); if(log) log.innerHTML='<div class="gh-loading"><a href="https://github.com/replicatorbe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">github.com/replicatorbe →</a></div>';
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+# ===========================================
+# fafchamps.be — .gitignore
+# ===========================================
+# Dépôt PUBLIC : on ratisse large. Mieux vaut ignorer un fichier de trop
+# que pousser un secret dans un historique permanent scanné par des bots.
+
+# ----- Secret (token GitHub) — ne doit JAMAIS être committé -----
+# Motif large : attrape aussi les résidus d'éditeurs (secret.php~,
+# secret.php.save de nano, secret.php.bak), puisque la procédure
+# d'installation passe par « nano secret.php ».
+# Les motifs sont en *nom*, pas en préfixe : « github-token.txt » doit être
+# attrapé aussi bien que « token.txt ».
+_cron/secret.php*
+_cron/*secret*
+_cron/*token*
+_cron/*creds*
+_cron/*credential*
+!_cron/secret.php.example
+
+# ----- Variables d'environnement -----
+# .env* couvre .env.local, .env.production, .envrc… que « .env » seul rate.
+.env*
+*.env
+!.env.example
+
+# ----- Clés, certificats, identifiants -----
+*.pem
+*.key
+*.p12
+id_rsa*
+id_ed25519*
+.netrc
+.pgpass
+.htpasswd
+.git-credentials
+credentials.json
+service-account.json
+secret*.json
+secret*.y*ml
+secrets*.y*ml
+
+# ----- Fichiers générés par le cron -----
+*.log
+data/*.json
+!data/.gitkeep
+
+# ----- Dumps, bases, archives -----
+*.sql
+*.sqlite*
+*.zip
+*.tar.gz
+
+# ----- Résidus d'éditeurs / OS / IDE -----
+*.bak
+*.old
+*.tmp
+*.orig
+*.swp
+*~
+.DS_Store
+.vscode/
+.idea/
