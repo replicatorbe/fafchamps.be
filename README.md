@@ -55,10 +55,14 @@ Des fichiers Markdown dans `_posts/`, un script PHP en CLI, du HTML statique dan
 
 ```bash
 # créer un article (la date est libre — y compris ancienne)
-docker exec shared-php php /var/www/fafchamps.be/_cron/new-post.php "Mon titre" 2019-03-14
+./publier.sh nouveau "Mon titre" 2019-03-14
 # l'écrire, passer status: draft -> published, puis générer
-docker exec shared-php php /var/www/fafchamps.be/_cron/build-blog.php
+./publier.sh publie
 ```
+
+`publier.sh` enrobe `docker exec -u "$(id -u):$(id -g)" shared-php php …` :
+l'option `-u` est nécessaire pour que les fichiers créés restent éditables
+depuis l'hôte au lieu d'appartenir à `root`.
 
 Le générateur écrit `blog/index.html`, `blog/<slug>/index.html`, `blog/feed.xml`,
 `sitemap.xml` et `data/blog.json` (lu par le teaser de la page d'accueil et par la

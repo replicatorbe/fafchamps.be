@@ -13,7 +13,11 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 CT_PATH=/var/www/fafchamps.be          # le dossier du site, vu depuis shared-php
-PHP=(docker exec shared-php php)
+
+# -u : on exécute PHP sous l'identité de l'utilisateur courant de l'hôte.
+# Sans ça, le conteneur écrit en root et les fichiers créés dans _posts/ ne
+# seraient plus éditables (nano échouerait à enregistrer).
+PHP=(docker exec -u "$(id -u):$(id -g)" shared-php php)
 
 case "${1:-aide}" in
 
