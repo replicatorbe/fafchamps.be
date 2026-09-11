@@ -2,7 +2,8 @@
 
 Site personnel de **Jérôme Fafchamps** ([@replicatorbe](https://github.com/replicatorbe)) —
 page unique statique, thème « terminal », avec une section **Activité GitHub** alimentée
-une fois par jour par un script PHP en CLI.
+une fois par jour par un script PHP en CLI, et un espace **Publications** généré
+à la demande depuis des fichiers Markdown.
 
 🌐 <https://www.fafchamps.be>
 
@@ -12,10 +13,14 @@ une fois par jour par un script PHP en CLI.
 
 | Chemin | Rôle |
 |---|---|
-| `index.html` | Le site (HTML/CSS/JS inline, aucune dépendance de build) |
+| `index.html` | La page d'accueil (HTML/CSS/JS inline, aucune dépendance de build) |
+| `assets/blog.css` | Feuille de style des pages de publications |
 | `img/` | Visuels des projets |
-| `_cron/` | Script de mise à jour de l'activité GitHub — voir [`_cron/README.md`](_cron/README.md) |
-| `data/` | Sortie générée : `github.json` (ignoré par git, recréé par le cron) |
+| `_cron/` | Scripts CLI : activité GitHub ([README](_cron/README.md)) et générateur du blog ([README-blog](_cron/README-blog.md)) |
+| `_posts/` | **Hors dépôt** — sources Markdown des publications |
+| `blog/` | **Hors dépôt** — HTML généré des publications |
+| `data/` | Sortie générée : `github.json`, `blog.json` (ignorés par git) |
+| `robots.txt` | Indexation + emplacement du sitemap |
 | `deploy/` | Configuration nginx du vhost |
 
 Le site n'a **aucune étape de build** : le déployer = copier le dossier.
@@ -41,6 +46,34 @@ Le serveur fait tourner une stack Docker mutualisée (nginx unique + PHP-FPM + M
    cd /var/www && docker compose up -d nginx-all
    ```
    > ⚠️ `docker compose restart` ne recharge **pas** les variables d'environnement — il faut `up -d`.
+
+---
+
+## Publications (blog)
+
+Des fichiers Markdown dans `_posts/`, un script PHP en CLI, du HTML statique dans `blog/`.
+
+```bash
+# créer un article (la date est libre — y compris ancienne)
+docker exec shared-php php /var/www/fafchamps.be/_cron/new-post.php "Mon titre" 2019-03-14
+# l'écrire, passer status: draft -> published, puis générer
+docker exec shared-php php /var/www/fafchamps.be/_cron/build-blog.php
+```
+
+Le générateur écrit `blog/index.html`, `blog/<slug>/index.html`, `blog/feed.xml`,
+`sitemap.xml` et `data/blog.json` (lu par le teaser de la page d'accueil et par la
+commande `blog` du terminal interactif).
+
+`_posts/` et `blog/` sont **hors du dépôt** : celui-ci porte le code du site, pas
+le contenu rédactionnel ni sa sortie générée. **Ils ne sont donc pas sauvegardés
+par git** — prévoir un dépôt privé ou un backup.
+
+La date inscrite dans le front-matter est la seule source de vérité : affichage,
+tri, `mtime` du fichier, RSS, sitemap et JSON-LD en découlent tous. Un article
+peut donc porter n'importe quelle date sans que le site se contredise.
+
+Front-matter, Markdown accepté et détails du générateur :
+[`_cron/README-blog.md`](_cron/README-blog.md).
 
 ---
 
