@@ -38,16 +38,22 @@ C'est tout : `blog/index.html`, `blog/<slug>/index.html`, `blog/feed.xml`,
 
 ```yaml
 ---
-title:   "Titre de l'article"     # obligatoire
-date:    2019-03-14 09:20         # obligatoire (heure facultative)
-slug:    durcir-nginx             # facultatif — déduit du titre/nom de fichier
-ref:     k7m2q9xd                 # facultatif — jeton aléatoire, aucun ordre
-updated: 2020-01-08               # facultatif — affiché « mis à jour le … »
-tags:    [nginx, tls]             # facultatif
-summary: "…"                      # facultatif — sinon 1er paragraphe tronqué
-status:  published                # published | draft | unlisted
+title:    "Titre de l'article"    # obligatoire
+date:     2019-03-14 09:20        # obligatoire (heure facultative)
+slug:     durcir-nginx            # facultatif — déduit du titre/nom de fichier
+ref:      k7m2q9xd                # facultatif — jeton aléatoire, aucun ordre
+updated:  2020-01-08              # facultatif — affiché « mis à jour le … »
+category: Infrastructure          # facultatif — une seule ; défaut « Divers »
+tags:     [nginx, tls]            # facultatif — autant qu'on veut
+summary:  "…"                     # facultatif — sinon 1er paragraphe tronqué
+status:   published               # published | draft | unlisted
 ---
 ```
+
+`category` accepte aussi l'orthographe `categorie`. Le libellé est repris tel
+qu'écrit ; le slug de l'URL en est dérivé (`Infrastructure` →
+`/blog/categorie/infrastructure/`). Aucun registre à maintenir : l'ensemble des
+catégories est reconstruit à chaque génération depuis les articles existants.
 
 | `status` | Page générée | Dans l'index / RSS / sitemap |
 |---|---|---|
@@ -63,6 +69,43 @@ tableaux `|…|`, filets `---`, liens et images.
 
 Le HTML brut dans le Markdown est **échappé**, jamais interprété, et les URL en
 `javascript:` / `data:` sont neutralisées.
+
+---
+
+## Taxonomie & pages générées
+
+| Page | Source | Indexable |
+|---|---|---|
+| `blog/index.html` | tous les articles listés + barre de filtres | oui |
+| `blog/<slug>/` | un article | oui (sauf `unlisted`) |
+| `blog/archives/` | sommaire année → mois | oui |
+| `blog/archives/<AAAA>/` | une année | oui |
+| `blog/archives/<AAAA>/<MM>/` | un mois | **noindex** (contenu trop mince) |
+| `blog/categorie/` | sommaire des catégories | oui |
+| `blog/categorie/<slug>/` | une catégorie | oui |
+
+Toutes sont bâties sur le gabarit commun `render_collection()`, qui produit le
+même rendu que l'index sans la barre de filtres.
+
+**Régénération intégrale.** `blog/archives/` et `blog/categorie/` sont effacés
+puis reconstruits à chaque passage (`purge_tree()`, qui ne supprime que les
+fichiers portant la marque du générateur). Sans cela, une catégorie renommée ou
+une année vidée laisserait une page orpheline toujours servie par nginx.
+
+**Slugs réservés.** `SLUGS_RESERVES` plus tout slug de 4 chiffres : le script
+échoue avec un message explicite plutôt que de produire deux pages en collision
+sur la même URL.
+
+**Filtres de l'index.** Entièrement côté client, sur le DOM déjà rendu : chaque
+`<li>` porte `data-cat`, `data-tags`, `data-y` et `data-m`. L'état est recopié
+dans l'URL (`?cat=&annee=&mois=&tag=&tri=`) et relu au chargement. La barre est
+masquée si JavaScript est absent — les pages de catégorie et d'archives
+assurent alors la navigation.
+
+**`mtime` des pages de liste.** Contrairement aux articles, les pages de liste
+gardent leur date de génération réelle : leur contenu change effectivement à
+chaque publication, et un `mtime` antidaté ferait servir une version périmée aux
+navigateurs qui les ont déjà en cache (`If-Modified-Since` → 304).
 
 ---
 

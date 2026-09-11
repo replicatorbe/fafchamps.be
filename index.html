@@ -692,6 +692,9 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 .pub__tags{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
 .pub__tags span{font-family:var(--ff-mono);font-size:10px;color:var(--cyan);
   border:1px solid var(--line-bright);padding:2px 7px}
+.pub__tags .c{color:var(--amber);border-color:rgba(255,177,61,.35);
+  background:rgba(255,177,61,.07);letter-spacing:.1em;text-transform:uppercase}
+.pub-nav{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:38px}
 @media(max-width:620px){
   .pub{grid-template-columns:1fr auto}
   .pub__title{grid-column:1/-1;font-size:16px}
@@ -1232,8 +1235,10 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       </div>
     </div>
 
-    <div style="text-align:center;margin-top:38px" class="reveal">
+    <div class="pub-nav reveal">
       <a href="/blog/" class="btn">Toutes les publications <span class="ar">→</span></a>
+      <a href="/blog/archives/" class="btn btn--ghost">Par date</a>
+      <a href="/blog/categorie/" class="btn btn--ghost">Par catégorie</a>
     </div>
   </div>
 </section>
@@ -1468,8 +1473,17 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       const out=['<b>Publications</b> — '+(b.count||b.posts.length)+' article(s) publié(s)',''];
       b.posts.forEach(p=>{
         out.push('  <span class="amber">'+esc(p.date)+'</span>  <a href="'+esc(p.url)+'">'+esc(p.title)+'</a>'
-          +((p.tags&&p.tags.length)?' <span class="cyan">['+esc(p.tags.join(' '))+']</span>':''));
+          +(p.category?' <span class="amber">['+esc(p.category)+']</span>':'')
+          +((p.tags&&p.tags.length)?' <span class="cyan">'+esc(p.tags.join(' '))+'</span>':''));
       });
+      if(Array.isArray(b.categories)&&b.categories.length){
+        out.push('','<b>par catégorie</b> : '+b.categories.map(c=>
+          '<a href="'+esc(c.url)+'">'+esc(c.label)+'</a> <span class="res">('+c.count+')</span>').join(' · '));
+      }
+      if(Array.isArray(b.years)&&b.years.length){
+        out.push('<b>par année</b>     : '+b.years.map(y=>
+          '<a href="'+esc(y.url)+'">'+esc(y.year)+'</a> <span class="res">('+y.count+')</span>').join(' · '));
+      }
       out.push('','-> index complet : <a href="/blog/">fafchamps.be/blog/</a> · flux <a href="/blog/feed.xml">RSS</a>');
       return out.join('\n');
     },
@@ -1670,11 +1684,10 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       const rt=document.createElement('div'); rt.className='pub__rt'; rt.textContent=(p.minutes||1)+' min';
       const s=document.createElement('p'); s.className='pub__sum'; s.textContent=p.summary||'';
       a.append(d,t,rt,s);
-      if(Array.isArray(p.tags)&&p.tags.length){
-        const g=document.createElement('div'); g.className='pub__tags';
-        p.tags.forEach(x=>{ const sp=document.createElement('span'); sp.textContent=x; g.appendChild(sp); });
-        a.appendChild(g);
-      }
+      const g=document.createElement('div'); g.className='pub__tags';
+      if(p.category){ const c=document.createElement('span'); c.className='c'; c.textContent=p.category; g.appendChild(c); }
+      if(Array.isArray(p.tags)) p.tags.forEach(x=>{ const sp=document.createElement('span'); sp.textContent=x; g.appendChild(sp); });
+      if(g.children.length) a.appendChild(g);
       host.appendChild(a);
     });
   }).catch(()=>{
