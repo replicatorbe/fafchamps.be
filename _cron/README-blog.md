@@ -21,15 +21,27 @@ hors du dépôt public**, cf. `.gitignore`.
 cd /var/www/sites/fafchamps.be
 
 # 1. créer le squelette (date facultative : par défaut maintenant)
-docker exec shared-php php /var/www/fafchamps.be/_cron/new-post.php \
-        "Durcir nginx sans casser le TLS" 2019-03-14
+./publier.sh nouveau "Durcir nginx sans casser le TLS" 2019-03-14
 
 # 2. écrire
 nano _posts/2019-03-14-durcir-nginx-sans-casser-le-tls.md
 
 # 3. passer status: draft -> published, puis générer
-docker exec shared-php php /var/www/fafchamps.be/_cron/build-blog.php
+./publier.sh publie
 ```
+
+`publier.sh` est un simple enrobage de `docker exec`. **Passe par lui**, ou
+reprends son option `-u` si tu appelles les scripts à la main :
+
+```bash
+docker exec -u "$(id -u):$(id -g)" shared-php \
+        php /var/www/fafchamps.be/_cron/build-blog.php
+```
+
+Sans `-u`, PHP tourne en `root` dans le conteneur : les fichiers créés dans
+`_posts/` appartiennent alors à `root` et ne sont plus éditables depuis l'hôte
+(nano échoue à l'enregistrement), et tout ce qui est généré dans `blog/` le
+devient aussi.
 
 C'est tout : `blog/index.html`, `blog/<slug>/index.html`, `blog/feed.xml`,
 `sitemap.xml` et `data/blog.json` sont réécrits à chaque passage.

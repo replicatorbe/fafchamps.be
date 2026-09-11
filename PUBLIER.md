@@ -354,6 +354,7 @@ touch -d "2019-03-14 09:20" ma-capture.png       # recale la date du fichier
 | L'article n'apparaît pas | l'étape 4 a été oubliée | `./publier.sh publie` |
 | La mise en page est cassée | la feuille de style a été touchée | `git checkout assets/blog.css` |
 | `Cannot connect to the Docker daemon` | Docker est arrêté | `sudo systemctl start docker` |
+| `Permission denied` en enregistrant dans nano | le fichier appartient à `root` (script lancé sans `publier.sh`) | `sudo chown -R $(id -un): _posts blog` puis repasser par `./publier.sh` |
 
 Fonctionnement interne du générateur : [`_cron/README-blog.md`](_cron/README-blog.md).
 Relevé de tous les endroits où une date apparaît : `DATATION.md`.
