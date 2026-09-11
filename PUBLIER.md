@@ -51,13 +51,14 @@ fiche signalétique de l'article ; **en dessous**, c'est le texte.
 
 ```
 ---
-title:   "Durcir nginx sans casser le TLS"
-date:    2026-09-11 14:30
-slug:    durcir-nginx-sans-casser-le-tls
-ref:     k7m2q9xd
-tags:    []
-summary: ""
-status:  draft
+title:    "Durcir nginx sans casser le TLS"
+date:     2026-09-11 14:30
+slug:     durcir-nginx-sans-casser-le-tls
+ref:      k7m2q9xd
+category: ""
+tags:     []
+summary:  ""
+status:   draft
 ---
 
 Ici, ton texte.
@@ -71,6 +72,7 @@ Ce que tu touches, en pratique :
 | `date` | **la date affichée** (voir plus bas) | oui |
 | `slug` | l'adresse de la page : `fafchamps.be/blog/<slug>/` | rarement |
 | `ref` | code court aléatoire, juste une référence interne | non |
+| `category` | **la** rubrique de l'article : `category: Infrastructure` | oui |
 | `tags` | mots-clés : `tags: [nginx, tls]` | oui |
 | `summary` | le résumé sous le titre. Vide = premier paragraphe | oui, c'est mieux |
 | `status` | `draft` (invisible) ou `published` (public) | **oui, à la fin** |
@@ -151,6 +153,67 @@ Deux détails au passage :
 
 Le relevé complet de tous les endroits où une date apparaît — utile quand tu
 remets un gros lot d'archives en ligne — est dans `DATATION.md`.
+
+## Ranger et retrouver ses articles
+
+### Catégorie ou tag ?
+
+- **`category`** : **une seule** par article. C'est le grand rayonnage, celui qui
+  structure la navigation. Écris-la comme tu veux l'afficher :
+  `category: Infrastructure`, `category: Sûreté`, `category: Forensic`.
+  L'adresse de la page est dérivée automatiquement :
+  `/blog/categorie/infrastructure/`.
+- **`tags`** : autant que tu veux, en minuscules, pour le détail :
+  `tags: [nginx, tls, hardening]`.
+
+Si tu ne mets pas de `category`, l'article part dans **Divers**. Pas de liste de
+catégories à tenir à jour quelque part : écris simplement le nom, la catégorie
+est créée ; le dernier article qui la quitte la fait disparaître.
+
+> Un conseil : garde peu de catégories (4 ou 5), sinon le rangement ne sert plus
+> à rien. Les tags sont là pour la finesse.
+
+### Les trois vues, créées automatiquement
+
+| Page | Contenu |
+|---|---|
+| `/blog/` | tous les articles, avec la barre de filtres |
+| `/blog/archives/` | tout le classement par année puis par mois |
+| `/blog/archives/2019/` et `/blog/archives/2019/03/` | une année, un mois |
+| `/blog/categorie/` | toutes les catégories avec leur nombre d'articles |
+| `/blog/categorie/infrastructure/` | une catégorie |
+
+Tu n'as **rien à créer** : ces pages apparaissent, se mettent à jour et
+disparaissent toutes seules à chaque `./publier.sh publie`.
+
+### Trier et filtrer depuis /blog/
+
+En haut de la liste, quatre menus déroulants et un tri :
+
+```
+[ Catégorie ▾ ]  [ Année ▾ ]  [ Mois ▾ ]  [ Tag ▾ ]   Tri : [plus récent][plus ancien]
+```
+
+Les filtres se **combinent** (« Infrastructure » + « 2019 » + « mars »), le menu
+des mois ne propose que les mois où tu as effectivement publié, et le tri
+bascule du plus récent au plus ancien.
+
+L'état se recopie dans l'adresse, donc **un filtre est partageable** :
+
+```
+https://www.fafchamps.be/blog/?cat=infrastructure&annee=2019&tri=asc
+```
+
+Tout se passe dans le navigateur : aucun rechargement de page.
+
+### Un nom de slug interdit
+
+`archives`, `categorie`, `tag`, `page`, `feed`, `index`, `assets`, `media`,
+`img` et les nombres à 4 chiffres (`2019`) sont réservés à la navigation. Si tu
+en utilises un, la génération s'arrête avec un message explicite — il suffit de
+changer la ligne `slug:`.
+
+---
 
 ## Les autres opérations
 

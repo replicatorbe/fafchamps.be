@@ -49,6 +49,12 @@ const BLOG_DESC  = "Notes techniques, retours d'expérience et analyses — infr
 const TEASER_N   = 4;        // nb d'articles poussés dans data/blog.json
 const WPM        = 200;      // mots/minute pour le temps de lecture
 const MARKER     = '<!-- généré par _cron/build-blog.php — ne pas éditer à la main -->';
+const CAT_DEFAUT = 'Divers';   // catégorie des articles qui n'en déclarent pas
+
+/* Noms que les pages de taxonomie occupent déjà sous /blog/ : un article ne
+   peut pas prendre ces slugs, sinon son URL entrerait en collision. */
+const SLUGS_RESERVES = ['archives', 'categorie', 'categories', 'tag', 'tags',
+                        'page', 'feed', 'index', 'assets', 'media', 'img'];
 
 $ROOT     = dirname(__DIR__);
 $SRC_DIR  = $ROOT . '/_posts';
@@ -377,6 +383,10 @@ foreach ($files as $file) {
     // slug : front-matter, sinon nom de fichier débarrassé de son préfixe de date
     $slug = slugify((string)($meta['slug'] ?? preg_replace('/^\d{4}-\d{2}-\d{2}-/', '', $base)));
     if ($slug === '') { warn("slug vide, ignoré : {$base}.md"); continue; }
+    if (in_array($slug, SLUGS_RESERVES, true) || preg_match('/^\d{4}$/', $slug)) {
+        fail("slug réservé « {$slug} » dans {$base}.md — ce nom est pris par la "
+           . 'navigation du blog (archives, catégories, années). Choisis un autre slug.');
+    }
 
     // date : front-matter, sinon préfixe du nom de fichier
     $dateRaw = trim((string)($meta['date'] ?? ''));
@@ -404,6 +414,14 @@ foreach ($files as $file) {
     }
     if ($updated && $updated < $date) { $updated = null; }
 
+    /* Catégorie : UNE seule par article (taxonomie principale, qui structure la
+       navigation), là où les tags sont multiples et libres. Le libellé est celui
+       écrit dans le front-matter ; le slug de l'URL en est dérivé. */
+    $cat = trim((string)($meta['category'] ?? $meta['categorie'] ?? ''));
+    if ($cat === '') $cat = CAT_DEFAUT;
+    $catSlug = slugify($cat);
+    if ($catSlug === '') { $cat = CAT_DEFAUT; $catSlug = slugify(CAT_DEFAUT); }
+
     $tags = $meta['tags'] ?? [];
     if (is_string($tags)) {
         $tags = array_values(array_filter(array_map('trim', explode(',', $tags))));
@@ -426,6 +444,8 @@ foreach ($files as $file) {
         'title'    => $title,
         'date'     => $date,
         'updated'  => $updated,
+        'cat'      => $cat,
+        'cat_slug' => $catSlug,
         'tags'     => $tags,
         'summary'  => $sum,
         'ref'      => preg_replace('/[^a-z0-9]/', '', mb_strtolower((string)($meta['ref'] ?? ''))),
@@ -447,6 +467,33 @@ usort($all, function ($a, $b) {
     return $c !== 0 ? $c : strcmp($a['slug'], $b['slug']);
 });
 $listed = array_values(array_filter($all, fn($p) => $p['listed']));
+
+/* ---------------------------- TAXONOMIES --------------------------------
+   Catégories et archives chronologiques, dérivées des seules données déclarées.
+   $listed étant déjà trié par date décroissante, chaque sous-ensemble hérite de
+   cet ordre sans tri supplémentaire. */
+$cats  = [];   // slug => ['label'=>…, 'slug'=>…, 'posts'=>[…]]
+$years = [];   // 'AAAA' => ['posts'=>[…], 'months'=>['MM'=>[…]]]
+$tagsAll = []; // tag => nombre d'articles
+
+foreach ($listed as $p) {
+    $cs = $p['cat_slug'];
+    $cats[$cs] ??= ['label' => $p['cat'], 'slug' => $cs, 'posts' => []];
+    $cats[$cs]['posts'][] = $p;
+
+    $y = $p['date']->format('Y');
+    $m = $p['date']->format('m');
+    $years[$y]['posts'][]        = $p;
+    $years[$y]['months'][$m][]   = $p;
+
+    foreach ($p['tags'] as $t) $tagsAll[$t] = ($tagsAll[$t] ?? 0) + 1;
+}
+
+uasort($cats, fn($a, $b) => strcasecmp($a['label'], $b['label']));   // ordre alphabétique
+krsort($years);                                                      // années décroissantes
+foreach ($years as &$yd) { krsort($yd['months']); }                  // mois décroissants
+unset($yd);
+ksort($tagsAll);
 
 /* ============================== TEMPLATES =============================== */
 
@@ -529,6 +576,7 @@ function render_post(array $p, ?array $prev, ?array $next): string {
         'publisher'        => ['@type' => 'Person', 'name' => AUTHOR, 'url' => AUTHOR_URL],
         'wordCount'        => $p['words'],
     ];
+    $ld['articleSection'] = $p['cat'];
     if ($p['tags'])  $ld['keywords'] = implode(', ', $p['tags']);
     if ($p['cover']) $ld['image']    = SITE_URL . '/' . ltrim($p['cover'], '/');
 
@@ -549,12 +597,14 @@ function render_post(array $p, ?array $prev, ?array $next): string {
     $h .= topbar();
     $h .= '<main class="wrap">
   <div class="read">
-    <div class="crumb"><a href="/">~</a><span class="s">/</span><a href="/blog/">blog</a><span class="s">/</span>' . e($p['slug']) . '</div>
+' . crumb([[BLOG_TITLE, '/blog/'], [$p['cat'], '/blog/categorie/' . $p['cat_slug'] . '/'], [$p['slug'], null]]) . '
 
     <header class="art-head">
       <h1>' . e($p['title']) . '</h1>
       <div class="art-meta">
-        <time datetime="' . $p['date']->format('Y-m-d') . '">' . e(date_fr($p['date'])) . '</time>
+        <a class="cat" href="/blog/categorie/' . e($p['cat_slug']) . '/">' . e($p['cat']) . '</a>
+        <span class="s">/</span>
+        <a href="/blog/archives/' . $p['date']->format('Y') . '/' . $p['date']->format('m') . '/"><time datetime="' . $p['date']->format('Y-m-d') . '">' . e(date_fr($p['date'])) . '</time></a>
         <span class="s">/</span><span>' . $p['minutes'] . ' min de lecture</span>';
     if ($p['updated']) {
         $h .= '<span class="s">/</span><span>mis à jour le ' . e(date_fr($p['updated'])) . '</span>';
@@ -571,14 +621,12 @@ function render_post(array $p, ?array $prev, ?array $next): string {
 ' . $p['html'] . '    </article>
 
     <div class="art-foot">';
-    if ($p['tags']) {
-        $h .= '
-      <div class="art-tags">';
-        foreach ($p['tags'] as $t) {
-            $h .= '<a class="tag" href="/blog/?tag=' . e(rawurlencode($t)) . '">' . e($t) . '</a>';
-        }
-        $h .= '</div>';
+    $h .= '
+      <div class="art-tags"><a class="cat" href="/blog/categorie/' . e($p['cat_slug']) . '/">' . e($p['cat']) . '</a>';
+    foreach ($p['tags'] as $t) {
+        $h .= '<a class="tag" href="/blog/?tag=' . e(rawurlencode($t)) . '">' . e($t) . '</a>';
     }
+    $h .= '</div>';
     $h .= '
       <div class="pager">';
     $h .= $prev
@@ -603,12 +651,114 @@ function render_post(array $p, ?array $prev, ?array $next): string {
     return $h . footer_common();
 }
 
-/** L'index. */
-function render_index(array $posts): string {
+/* ---------------------- BRIQUES DE NAVIGATION -------------------------- */
+
+/** Sous-navigation commune aux pages de publications. */
+function subnav(string $on = ''): string {
+    $items = [
+        'tous'       => ['/blog/',           'Tous les articles'],
+        'archives'   => ['/blog/archives/',  'Archives'],
+        'categories' => ['/blog/categorie/', 'Catégories'],
+    ];
+    $h = '  <nav class="subnav" aria-label="Navigation des publications">' . "\n";
+    foreach ($items as $k => [$url, $lab]) {
+        $h .= '    <a href="' . $url . '"' . ($on === $k ? ' class="on"' : '') . '>' . $lab . "</a>\n";
+    }
+    return $h . '    <a href="/blog/feed.xml">RSS</a>' . "\n  </nav>\n";
+}
+
+/** Fil d'Ariane. $parts : [[libellé, url|null], …] — le dernier est la page courante. */
+function crumb(array $parts): string {
+    $h = '    <div class="crumb"><a href="/">~</a>';
+    foreach ($parts as [$lab, $url]) {
+        $h .= '<span class="s">/</span>' . ($url !== null
+            ? '<a href="' . e($url) . '">' . e($lab) . '</a>'
+            : e($lab));
+    }
+    return $h . "</div>\n";
+}
+
+/**
+ * Une rangée de la liste d'articles.
+ * Les data-* portent la catégorie, les tags, l'année et le mois : c'est ce qui
+ * permet à la barre de filtres de l'index de travailler sans recharger la page.
+ */
+function post_row(array $p): string {
+    $h = '    <li data-cat="' . e($p['cat_slug']) . '"'
+       . ' data-tags="' . e(implode(' ', $p['tags'])) . '"'
+       . ' data-y="' . $p['date']->format('Y') . '"'
+       . ' data-m="' . $p['date']->format('m') . '">
+      <a class="postrow" href="/blog/' . e($p['slug']) . '/">
+        <div class="postrow__date">' . $p['date']->format('d.m') . '<span class="yr">' . $p['date']->format('Y') . '</span></div>
+        <div>
+          <h2 class="postrow__title">' . e($p['title']) . '</h2>
+          <p class="postrow__sum">' . e($p['summary']) . '</p>
+          <div class="postrow__meta"><span class="cat">' . e($p['cat']) . '</span>';
+    foreach ($p['tags'] as $t) $h .= '<span class="tag">' . e($t) . '</span>';
+    return $h . '<span class="rt">' . $p['minutes'] . ' min</span>
+          </div>
+        </div>
+      </a>
+    </li>
+';
+}
+
+/** La liste d'articles, plus le message affiché quand un filtre ne renvoie rien. */
+function post_list(array $posts): string {
+    $h = '  <ul class="postlist" id="postlist">' . "\n";
+    foreach ($posts as $p) $h .= post_row($p);
+    return $h . '  </ul>
+  <div class="empty" id="noresult" hidden>aucun article pour ce filtre <span class="bk">_</span></div>
+';
+}
+
+/** Encart d'appel en pied de page de liste. */
+function cta_rss(): string {
+    return '  <div class="frame endcta">
+    <div>
+      <h3>Suivre les publications</h3>
+      <p>Flux RSS — aucun compte, aucun pistage.</p>
+    </div>
+    <a class="btn btn--ghost" href="/blog/feed.xml">S\'abonner au flux <span class="ar">→</span></a>
+  </div>
+';
+}
+
+/* ------------------------- PAGES DE COLLECTION ------------------------- */
+
+/**
+ * Gabarit commun aux pages qui listent des articles : catégorie, année, mois.
+ * $o : idx, kicker, h1, title, desc, canonical, crumb, posts, subnav, noindex, intro
+ */
+function render_collection(array $o): string {
+    $extra = '<meta property="og:type" content="website">' . "\n"
+        . '<meta property="og:title" content="' . e($o['title']) . '">' . "\n"
+        . '<meta property="og:description" content="' . e($o['desc']) . '">' . "\n"
+        . '<meta property="og:url" content="' . e($o['canonical']) . '">' . "\n"
+        . '<meta property="og:locale" content="fr_BE">' . "\n";
+
+    $h  = head_common($o['title'], $o['desc'], $o['canonical'], $extra, $o['noindex'] ?? false);
+    $h .= topbar('blog');
+    $h .= '<main class="wrap">' . "\n";
+    $h .= crumb($o['crumb']);
+    $h .= '  <div class="sec-head">
+    <div class="sec-meta"><span class="idx">' . e($o['idx']) . '</span><span>// ' . e($o['kicker']) . '</span><span class="ln"></span></div>
+    <h1 class="sec-title">' . $o['h1'] . '</h1>
+    <p class="sec-sub">' . e($o['desc']) . '</p>
+  </div>
+';
+    $h .= subnav($o['subnav'] ?? '');
+    $h .= $o['intro'] ?? '';
+    $h .= $o['posts'] ? post_list($o['posts'])
+                      : '  <div class="empty">aucun article ici <span class="bk">_</span></div>' . "\n";
+    $h .= cta_rss() . "</main>\n";
+    return $h . footer_common();
+}
+
+/* ------------------------------- L'INDEX ------------------------------- */
+
+function render_index(array $posts, array $cats, array $years, array $tagsAll): string {
     $url = SITE_URL . '/blog/';
-    $tags = [];
-    foreach ($posts as $p) foreach ($p['tags'] as $t) $tags[$t] = ($tags[$t] ?? 0) + 1;
-    ksort($tags);
 
     $ld = [
         '@context'    => 'https://schema.org',
@@ -623,6 +773,7 @@ function render_index(array $posts): string {
             'headline'      => $p['title'],
             'url'           => SITE_URL . '/blog/' . $p['slug'] . '/',
             'datePublished' => $p['date']->format(DateTimeInterface::ATOM),
+            'articleSection'=> $p['cat'],
         ], array_slice($posts, 0, 20)),
     ];
 
@@ -631,6 +782,8 @@ function render_index(array $posts): string {
         . '<meta property="og:description" content="' . e(BLOG_DESC) . '">' . "\n"
         . '<meta property="og:url" content="' . e($url) . '">' . "\n"
         . '<meta property="og:locale" content="fr_BE">' . "\n"
+        // sans JS la barre de filtres ne servirait à rien : on ne l'affiche pas
+        . '<noscript><style>.filterbar{display:none!important}</style></noscript>' . "\n"
         . '<script type="application/ld+json">' . "\n"
         . json_encode($ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n"
         . '</script>' . "\n";
@@ -645,78 +798,246 @@ function render_index(array $posts): string {
     <p class="sec-sub">' . e(BLOG_DESC) . '</p>
   </div>
 ';
+    $h .= subnav('tous');
 
     if (!$posts) {
-        $h .= '  <div class="empty">aucune publication pour l\'instant <span class="bk">_</span></div>
-';
-    } else {
-        if (count($tags) > 1) {
-            $h .= '  <div class="filters" id="filters">
-    <span class="filters__lab">filtrer&nbsp;:</span>
-    <button class="chip on" data-tag="">tout <span>(' . count($posts) . ')</span></button>
-';
-            foreach ($tags as $t => $c) {
-                $h .= '    <button class="chip" data-tag="' . e($t) . '">' . e($t) . ' <span>(' . $c . ')</span></button>' . "\n";
+        $h .= '  <div class="empty">aucune publication pour l\'instant <span class="bk">_</span></div>' . "\n";
+        return $h . cta_rss() . "</main>\n" . footer_common();
+    }
+
+    /* Barre de filtres : catégorie + année + mois + tag, combinables, plus le
+       sens du tri. Inutile s'il n'y a qu'un article. */
+    if (count($posts) > 1) {
+        $h .= '  <div class="filterbar" id="filterbar">
+    <div class="fgroup"><label for="fCat">Catégorie</label>
+      <select id="fCat"><option value="">toutes</option>';
+        foreach ($cats as $c) {
+            $h .= '<option value="' . e($c['slug']) . '">' . e($c['label'])
+                . ' (' . count($c['posts']) . ')</option>';
+        }
+        $h .= '</select></div>
+    <div class="fgroup"><label for="fYear">Année</label>
+      <select id="fYear"><option value="">toutes</option>';
+        foreach ($years as $y => $yd) {
+            $h .= '<option value="' . e((string)$y) . '">' . e((string)$y)
+                . ' (' . count($yd['posts']) . ')</option>';
+        }
+        $h .= '</select></div>
+    <div class="fgroup"><label for="fMonth">Mois</label>
+      <select id="fMonth"><option value="">tous les mois</option></select></div>';
+        if ($tagsAll) {
+            $h .= '
+    <div class="fgroup"><label for="fTag">Tag</label>
+      <select id="fTag"><option value="">tous</option>';
+            foreach ($tagsAll as $t => $n) {
+                $h .= '<option value="' . e((string)$t) . '">' . e((string)$t) . ' (' . $n . ')</option>';
             }
-            $h .= '  </div>
-';
+            $h .= '</select></div>';
         }
-        $h .= '  <ul class="postlist" id="postlist">
-';
-        foreach ($posts as $p) {
-            $h .= '    <li data-tags="' . e(implode(' ', $p['tags'])) . '">
-      <a class="postrow" href="/blog/' . e($p['slug']) . '/">
-        <div class="postrow__date">' . $p['date']->format('d.m') . '<span class="yr">' . $p['date']->format('Y') . '</span></div>
-        <div>
-          <h2 class="postrow__title">' . e($p['title']) . '</h2>
-          <p class="postrow__sum">' . e($p['summary']) . '</p>
-          <div class="postrow__meta">';
-            foreach ($p['tags'] as $t) $h .= '<span class="tag">' . e($t) . '</span>';
-            $h .= '<span class="rt">' . $p['minutes'] . ' min</span>
-          </div>
-        </div>
-      </a>
-    </li>
-';
-        }
-        $h .= '  </ul>
-  <div class="empty" id="noresult" hidden>aucune publication pour ce filtre <span class="bk">_</span></div>
+        $h .= '
+    <div class="fgroup"><span class="flab">Tri</span>
+      <div class="fsort">
+        <button type="button" id="fDesc" class="on">plus récent</button><button type="button" id="fAsc">plus ancien</button>
+      </div>
+    </div>
+    <button type="button" class="freset" id="fReset">réinitialiser</button>
+    <div class="fcount" id="fCount"></div>
+  </div>
 ';
     }
 
-    $h .= '  <div class="frame endcta">
-    <div>
-      <h3>Suivre les publications</h3>
-      <p>Flux RSS — aucun compte, aucun pistage.</p>
-    </div>
-    <a class="btn btn--ghost" href="/blog/feed.xml">S\'abonner au flux <span class="ar">→</span></a>
-  </div>
-</main>
+    $h .= post_list($posts);
+    $h .= cta_rss() . "</main>\n";
+
+    $h .= <<<'JS'
 <script>
-/* Filtre par tag — purement client, pilotable par ?tag=… */
+/* Filtres de l'index : catégorie / année / mois / tag + sens du tri.
+   Tout est fait sur le DOM déjà rendu — aucune requête, aucun rechargement.
+   L'état est recopié dans l'URL (?cat=&annee=&mois=&tag=&tri=) pour être
+   partageable, et relu au chargement. */
 (function(){
-  var chips=document.querySelectorAll("#filters .chip");
-  var rows=document.querySelectorAll("#postlist li");
-  var none=document.getElementById("noresult");
-  if(!chips.length||!rows.length) return;
-  function apply(tag){
-    var shown=0;
-    rows.forEach(function(li){
-      var ok=!tag||(" "+li.dataset.tags+" ").indexOf(" "+tag+" ")>-1;
-      li.hidden=!ok; if(ok) shown++;
+  var bar=document.getElementById("filterbar"), list=document.getElementById("postlist");
+  if(!bar||!list) return;
+  var rows=[].slice.call(list.querySelectorAll("li"));        // ordre d'origine : décroissant
+  var selCat=document.getElementById("fCat"), selY=document.getElementById("fYear"),
+      selM=document.getElementById("fMonth"), selT=document.getElementById("fTag"),
+      cnt=document.getElementById("fCount"), none=document.getElementById("noresult"),
+      bDesc=document.getElementById("fDesc"), bAsc=document.getElementById("fAsc"),
+      reset=document.getElementById("fReset");
+  var MOIS=["janvier","février","mars","avril","mai","juin",
+            "juillet","août","septembre","octobre","novembre","décembre"];
+  var order="desc";
+
+  /* Le sélecteur de mois ne propose que les mois réellement présents dans
+     l'année choisie — sinon on offre des filtres qui ne renvoient rien. */
+  function refreshMonths(){
+    var y=selY.value, garde=selM.value, vus={};
+    rows.forEach(function(li){ if(!y||li.dataset.y===y) vus[li.dataset.m]=1; });
+    var ms=Object.keys(vus).sort();
+    selM.innerHTML="";
+    var o=document.createElement("option"); o.value=""; o.textContent="tous les mois";
+    selM.appendChild(o);
+    ms.forEach(function(m){
+      var op=document.createElement("option");
+      op.value=m; op.textContent=MOIS[parseInt(m,10)-1]||m;
+      selM.appendChild(op);
     });
-    chips.forEach(function(c){ c.classList.toggle("on", c.dataset.tag===tag); });
-    if(none) none.hidden=shown>0;
+    selM.value = ms.indexOf(garde)>-1 ? garde : "";
+    selM.disabled = ms.length<2;
+  }
+
+  function apply(){
+    var c=selCat.value, y=selY.value, m=selM.value, t=selT?selT.value:"", n=0;
+    rows.forEach(function(li){
+      var ok=(!c||li.dataset.cat===c) && (!y||li.dataset.y===y) && (!m||li.dataset.m===m)
+          && (!t||(" "+li.dataset.tags+" ").indexOf(" "+t+" ")>-1);
+      li.hidden=!ok; if(ok) n++;
+    });
+    if(cnt) cnt.textContent=n+(n>1?" articles":" article");
+    if(none) none.hidden=n>0;
+    bDesc.classList.toggle("on",order==="desc");
+    bAsc.classList.toggle("on",order==="asc");
     var u=new URL(location.href);
-    if(tag) u.searchParams.set("tag",tag); else u.searchParams.delete("tag");
+    [["cat",c],["annee",y],["mois",m],["tag",t],["tri",order==="asc"?"asc":""]]
+      .forEach(function(kv){ if(kv[1]) u.searchParams.set(kv[0],kv[1]); else u.searchParams.delete(kv[0]); });
     history.replaceState(null,"",u);
   }
-  chips.forEach(function(c){ c.addEventListener("click",function(){ apply(c.dataset.tag); }); });
-  var q=new URLSearchParams(location.search).get("tag");
-  if(q) apply(q.toLowerCase());
+
+  function trier(o){
+    order=o;
+    (order==="asc"?rows.slice().reverse():rows).forEach(function(li){ list.appendChild(li); });
+    apply();
+  }
+
+  [selCat,selY,selT].forEach(function(sel){
+    if(sel) sel.addEventListener("change",function(){ refreshMonths(); apply(); });
+  });
+  selM.addEventListener("change",apply);
+  bDesc.addEventListener("click",function(){ trier("desc"); });
+  bAsc.addEventListener("click",function(){ trier("asc"); });
+  reset.addEventListener("click",function(){
+    selCat.value=""; selY.value=""; if(selT) selT.value="";
+    refreshMonths(); trier("desc");
+  });
+
+  var q=new URLSearchParams(location.search);
+  function poser(sel,val){
+    if(!sel||!val) return;
+    for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===val){ sel.value=val; return; } }
+  }
+  poser(selCat,(q.get("cat")||"").toLowerCase());
+  poser(selY,q.get("annee"));
+  poser(selT,(q.get("tag")||"").toLowerCase());
+  refreshMonths();
+  poser(selM,q.get("mois"));
+  if(q.get("tri")==="asc") trier("asc"); else apply();
 })();
 </script>
+
+JS;
+    return $h . footer_common();
+}
+
+/* ------------------------------ ARCHIVES ------------------------------- */
+
+/** Le sommaire chronologique : une section par année, un bloc par mois. */
+function render_archives(array $years, int $total): string {
+    $url  = SITE_URL . '/blog/archives/';
+    $desc = 'Toutes les publications de ' . SITE_NAME . ', classées par année et par mois — '
+          . $total . ' article' . ($total > 1 ? 's' : '') . ' au total.';
+
+    $extra = '<meta property="og:type" content="website">' . "\n"
+        . '<meta property="og:title" content="' . e('Archives · ' . BLOG_TITLE) . '">' . "\n"
+        . '<meta property="og:description" content="' . e($desc) . '">' . "\n"
+        . '<meta property="og:url" content="' . e($url) . '">' . "\n";
+
+    $h  = head_common('Archives · ' . BLOG_TITLE . ' — ' . SITE_NAME, $desc, $url, $extra);
+    $h .= topbar('blog');
+    $h .= '<main class="wrap">' . "\n";
+    $h .= crumb([[BLOG_TITLE, '/blog/'], ['archives', null]]);
+    $h .= '  <div class="sec-head">
+    <div class="sec-meta"><span class="idx">06.A</span><span>// ARCHIVES</span><span class="ln"></span></div>
+    <h1 class="sec-title">Par <em>date</em></h1>
+    <p class="sec-sub">' . e($desc) . '</p>
+  </div>
 ';
+    $h .= subnav('archives');
+
+    if (!$years) {
+        $h .= '  <div class="empty">aucune publication pour l\'instant <span class="bk">_</span></div>' . "\n";
+    }
+    foreach ($years as $y => $yd) {
+        $n = count($yd['posts']);
+        $h .= '  <section class="arch-year">
+    <div class="arch-year__head">
+      <span class="arch-year__n">' . e((string)$y) . '</span>
+      <span class="arch-year__c">' . $n . ' article' . ($n > 1 ? 's' : '') . '</span>
+      <a class="arch-year__link" href="/blog/archives/' . e((string)$y) . '/">voir l\'année →</a>
+    </div>
+';
+        foreach ($yd['months'] as $m => $mp) {
+            $nm = count($mp);
+            $h .= '    <div class="arch-month">
+      <h2 class="arch-month__head"><a href="/blog/archives/' . e((string)$y) . '/' . e((string)$m) . '/">'
+                . e(MOIS[(int)$m]) . '</a> · ' . $nm . ' article' . ($nm > 1 ? 's' : '') . '</h2>
+      <ul class="arch-items">
+';
+            foreach ($mp as $p) {
+                $h .= '        <li><a href="/blog/' . e($p['slug']) . '/">'
+                    . '<span class="d">' . $p['date']->format('d/m') . '</span>'
+                    . '<span class="t">' . e($p['title']) . '</span>'
+                    . '<span class="cat">' . e($p['cat']) . '</span></a></li>' . "\n";
+            }
+            $h .= '      </ul>
+    </div>
+';
+        }
+        $h .= '  </section>
+';
+    }
+    $h .= cta_rss() . "</main>\n";
+    return $h . footer_common();
+}
+
+/* ----------------------------- CATÉGORIES ------------------------------ */
+
+/** Le sommaire des catégories. */
+function render_cat_index(array $cats, int $total): string {
+    $url  = SITE_URL . '/blog/categorie/';
+    $desc = 'Les publications de ' . SITE_NAME . ' rangées par catégorie — '
+          . count($cats) . ' catégorie' . (count($cats) > 1 ? 's' : '')
+          . ', ' . $total . ' article' . ($total > 1 ? 's' : '') . '.';
+
+    $extra = '<meta property="og:type" content="website">' . "\n"
+        . '<meta property="og:title" content="' . e('Catégories · ' . BLOG_TITLE) . '">' . "\n"
+        . '<meta property="og:description" content="' . e($desc) . '">' . "\n"
+        . '<meta property="og:url" content="' . e($url) . '">' . "\n";
+
+    $h  = head_common('Catégories · ' . BLOG_TITLE . ' — ' . SITE_NAME, $desc, $url, $extra);
+    $h .= topbar('blog');
+    $h .= '<main class="wrap">' . "\n";
+    $h .= crumb([[BLOG_TITLE, '/blog/'], ['catégories', null]]);
+    $h .= '  <div class="sec-head">
+    <div class="sec-meta"><span class="idx">06.B</span><span>// CATÉGORIES</span><span class="ln"></span></div>
+    <h1 class="sec-title">Par <em>sujet</em></h1>
+    <p class="sec-sub">' . e($desc) . '</p>
+  </div>
+';
+    $h .= subnav('categories');
+
+    if (!$cats) {
+        $h .= '  <div class="empty">aucune catégorie pour l\'instant <span class="bk">_</span></div>' . "\n";
+    } else {
+        $h .= '  <div class="catgrid">' . "\n";
+        foreach ($cats as $c) {
+            $n = count($c['posts']);
+            $h .= '    <a class="catcard" href="/blog/categorie/' . e($c['slug']) . '/">'
+                . '<b>' . e($c['label']) . '</b>'
+                . '<span>' . $n . ' article' . ($n > 1 ? 's' : '') . '</span></a>' . "\n";
+        }
+        $h .= '  </div>' . "\n";
+    }
+    $h .= cta_rss() . "</main>\n";
     return $h . footer_common();
 }
 
@@ -735,6 +1056,27 @@ function put(string $path, string $content): void {
  */
 function stamp(string $path, DateTimeImmutable $d): void {
     if (!@touch($path, $d->getTimestamp())) warn("touch a échoué : {$path}");
+}
+
+/**
+ * Supprime récursivement une arborescence produite par ce script.
+ * Ne touche qu'aux fichiers portant la marque du générateur : un fichier déposé
+ * à la main survit, et son dossier avec lui (rmdir échoue s'il n'est pas vide).
+ */
+function purge_tree(string $dir): void {
+    if (!is_dir($dir)) return;
+    foreach (scandir($dir) ?: [] as $entry) {
+        if ($entry === '.' || $entry === '..') continue;
+        $path = $dir . '/' . $entry;
+        if (is_dir($path)) { purge_tree($path); continue; }
+        if (str_contains((string)@file_get_contents($path), MARKER)) {
+            @unlink($path);
+        } else {
+            warn(basename(dirname($path)) . '/' . basename($path)
+               . " n'est pas issu du générateur — laissé en place");
+        }
+    }
+    @rmdir($dir);
 }
 
 if (!is_dir($OUT_DIR) && !@mkdir($OUT_DIR, 0755, true)) fail("impossible de créer {$OUT_DIR}");
@@ -764,9 +1106,10 @@ foreach ($all as $idx => $p) {
 }
 
 // --- purge des articles supprimés/repassés en brouillon ---
+const DIRS_TAXO = ['archives', 'categorie'];
 foreach (glob($OUT_DIR . '/*', GLOB_ONLYDIR) ?: [] as $dir) {
     $slug = basename($dir);
-    if (isset($written[$slug])) continue;
+    if (isset($written[$slug]) || in_array($slug, DIRS_TAXO, true)) continue;
     $idx = $dir . '/index.html';
     // garde-fou : on ne supprime que ce que ce script a lui-même produit
     if (is_file($idx) && str_contains((string)@file_get_contents($idx), MARKER)) {
@@ -778,8 +1121,74 @@ foreach (glob($OUT_DIR . '/*', GLOB_ONLYDIR) ?: [] as $dir) {
     }
 }
 
+/* --- pages de navigation : on repart d'une ardoise propre à chaque génération.
+       Sinon une catégorie renommée, ou une année vidée de ses articles,
+       laisserait derrière elle une page orpheline toujours servie. */
+foreach (DIRS_TAXO as $d) purge_tree($OUT_DIR . '/' . $d);
+
 // --- index ---
-put($OUT_DIR . '/index.html', render_index($listed));
+put($OUT_DIR . '/index.html', render_index($listed, $cats, $years, $tagsAll));
+
+// --- archives : sommaire, puis une page par année et une par mois ---
+put($OUT_DIR . '/archives/index.html', render_archives($years, count($listed)));
+
+foreach ($years as $y => $yd) {
+    $n = count($yd['posts']);
+    $s_ = $n > 1 ? 's' : '';
+    put($OUT_DIR . "/archives/{$y}/index.html", render_collection([
+        'idx'       => '06.A',
+        'kicker'    => 'ARCHIVES ' . $y,
+        'h1'        => 'Publications de <em>' . e((string)$y) . '</em>',
+        'title'     => "Publications de {$y} · " . BLOG_TITLE . ' — ' . SITE_NAME,
+        'desc'      => "{$n} article{$s_} publié{$s_} en {$y}.",
+        'canonical' => SITE_URL . "/blog/archives/{$y}/",
+        'crumb'     => [[BLOG_TITLE, '/blog/'], ['archives', '/blog/archives/'], [(string)$y, null]],
+        'posts'     => $yd['posts'],
+        'subnav'    => 'archives',
+    ]));
+    logmsg(sprintf('  · archives/%s/                      %d article(s)', $y, $n));
+
+    foreach ($yd['months'] as $m => $mp) {
+        $nm  = count($mp);
+        $sm_ = $nm > 1 ? 's' : '';
+        $lib = MOIS[(int)$m] . ' ' . $y;
+        // noindex : une page de mois à un ou deux articles n'apporte rien à
+        // l'index des moteurs, alors qu'elle sert à la navigation.
+        put($OUT_DIR . "/archives/{$y}/{$m}/index.html", render_collection([
+            'idx'       => '06.A',
+            'kicker'    => 'ARCHIVES ' . mb_strtoupper($lib),
+            'h1'        => 'Publications de <em>' . e($lib) . '</em>',
+            'title'     => "Publications de {$lib} · " . BLOG_TITLE . ' — ' . SITE_NAME,
+            'desc'      => "{$nm} article{$sm_} publié{$sm_} en {$lib}.",
+            'canonical' => SITE_URL . "/blog/archives/{$y}/{$m}/",
+            'crumb'     => [[BLOG_TITLE, '/blog/'], ['archives', '/blog/archives/'],
+                            [(string)$y, "/blog/archives/{$y}/"], [MOIS[(int)$m], null]],
+            'posts'     => $mp,
+            'subnav'    => 'archives',
+            'noindex'   => true,
+        ]));
+    }
+}
+
+// --- catégories : sommaire, puis une page par catégorie ---
+put($OUT_DIR . '/categorie/index.html', render_cat_index($cats, count($listed)));
+
+foreach ($cats as $c) {
+    $n   = count($c['posts']);
+    $s_  = $n > 1 ? 's' : '';
+    put($OUT_DIR . '/categorie/' . $c['slug'] . '/index.html', render_collection([
+        'idx'       => '06.B',
+        'kicker'    => 'CATÉGORIE',
+        'h1'        => '<em>' . e($c['label']) . '</em>',
+        'title'     => $c['label'] . ' · ' . BLOG_TITLE . ' — ' . SITE_NAME,
+        'desc'      => "{$n} article{$s_} dans la catégorie « {$c['label']} ».",
+        'canonical' => SITE_URL . '/blog/categorie/' . $c['slug'] . '/',
+        'crumb'     => [[BLOG_TITLE, '/blog/'], ['catégories', '/blog/categorie/'], [$c['label'], null]],
+        'posts'     => $c['posts'],
+        'subnav'    => 'categories',
+    ]));
+    logmsg(sprintf('  · categorie/%-24s %d article(s)', $c['slug'] . '/', $n));
+}
 
 // --- flux RSS 2.0 ---
 $rss = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
@@ -798,7 +1207,8 @@ foreach (array_slice($listed, 0, 20) as $p) {
          . '    <guid isPermaLink="true">' . e($u) . "</guid>\n"
          // pubDate = date DÉCLARÉE, jamais la date de génération
          . '    <pubDate>' . $p['date']->format(DateTimeInterface::RSS) . "</pubDate>\n"
-         . '    <description>' . e($p['summary']) . "</description>\n";
+         . '    <description>' . e($p['summary']) . "</description>\n"
+         . '    <category>' . e($p['cat']) . "</category>\n";
     foreach ($p['tags'] as $t) $rss .= '    <category>' . e($t) . "</category>\n";
     $rss .= "  </item>\n";
 }
@@ -821,6 +1231,28 @@ foreach ($listed as $p) {
           . '    <lastmod>' . ($p['updated'] ?? $p['date'])->format('Y-m-d') . "</lastmod>\n"
           . "    <priority>0.7</priority>\n  </url>\n";
 }
+
+/* Pages de navigation. Le lastmod de chacune est la date de son article le plus
+   récent — $listed étant trié décroissant, c'est toujours le premier élément.
+   Les pages de mois en sont absentes : elles sont en noindex (contenu trop
+   mince pour l'index des moteurs, utile seulement pour naviguer). */
+if ($listed) {
+    $navPages = [
+        ['/blog/archives/',  $listed[0]['date'], '0.6'],
+        ['/blog/categorie/', $listed[0]['date'], '0.6'],
+    ];
+    foreach ($cats as $c) {
+        $navPages[] = ['/blog/categorie/' . $c['slug'] . '/', $c['posts'][0]['date'], '0.6'];
+    }
+    foreach ($years as $y => $yd) {
+        $navPages[] = ["/blog/archives/{$y}/", $yd['posts'][0]['date'], '0.5'];
+    }
+    foreach ($navPages as [$loc, $d, $prio]) {
+        $map .= "  <url>\n    <loc>" . e(SITE_URL . $loc) . "</loc>\n"
+              . '    <lastmod>' . $d->format('Y-m-d') . "</lastmod>\n"
+              . "    <priority>{$prio}</priority>\n  </url>\n";
+    }
+}
 $map .= "</urlset>\n";
 put($MAP_OUT, $map);
 
@@ -830,19 +1262,34 @@ $json = [
     'blog_url'     => SITE_URL . '/blog/',
     'feed_url'     => SITE_URL . '/blog/feed.xml',
     'count'        => count($listed),
+    'archives_url' => SITE_URL . '/blog/archives/',
+    // sommaires, pour la page d'accueil et la commande `blog` du terminal
+    'categories'   => array_values(array_map(fn($c) => [
+        'label' => $c['label'],
+        'slug'  => $c['slug'],
+        'url'   => '/blog/categorie/' . $c['slug'] . '/',
+        'count' => count($c['posts']),
+    ], $cats)),
+    'years'        => array_map(fn($y, $yd) => [
+        'year'  => (string)$y,
+        'url'   => "/blog/archives/{$y}/",
+        'count' => count($yd['posts']),
+    ], array_keys($years), array_values($years)),
     // on n'expose que ce dont la page d'accueil et le terminal ont besoin
     'posts'        => array_map(fn($p) => [
-        'title'   => $p['title'],
-        'slug'    => $p['slug'],
-        'url'     => '/blog/' . $p['slug'] . '/',
-        'date'    => $p['date']->format('Y-m-d'),
-        'date_fr' => date_fr($p['date']),
-        'tags'    => $p['tags'],
-        'summary' => $p['summary'],
-        'minutes' => $p['minutes'],
+        'title'    => $p['title'],
+        'slug'     => $p['slug'],
+        'url'      => '/blog/' . $p['slug'] . '/',
+        'date'     => $p['date']->format('Y-m-d'),
+        'date_fr'  => date_fr($p['date']),
+        'category' => $p['cat'],
+        'cat_url'  => '/blog/categorie/' . $p['cat_slug'] . '/',
+        'tags'     => $p['tags'],
+        'summary'  => $p['summary'],
+        'minutes'  => $p['minutes'],
     ], array_slice($listed, 0, TEASER_N)),
 ];
 put($JSON_OUT, json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n");
 
-logmsg(sprintf('terminé : %d publiée(s) · %d non listée(s) · %d brouillon(s)',
-    count($listed), count($all) - count($listed), $drafts));
+logmsg(sprintf('terminé : %d publiée(s) · %d non listée(s) · %d brouillon(s) · %d catégorie(s) · %d année(s)',
+    count($listed), count($all) - count($listed), $drafts, count($cats), count($years)));

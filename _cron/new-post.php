@@ -85,13 +85,17 @@ $ref = make_ref();
 
 $fm = <<<MD
 ---
-title:   "{$title}"
-date:    {$dateLigne}
-slug:    {$slug}
-ref:     {$ref}
-tags:    []
-summary: ""
-status:  draft
+title:    "{$title}"
+date:     {$dateLigne}
+slug:     {$slug}
+ref:      {$ref}
+category: ""
+tags:     []
+summary:  ""
+status:   draft
+# category : UNE rubrique (Infrastructure, Sûreté, Forensic…) ; vide -> « Divers »
+# tags     : autant qu'on veut, en minuscules — ex. tags: [nginx, tls]
+# status   : draft (invisible) | published (public) | unlisted (hors listes)
 ---
 
 Premier paragraphe : il sert de résumé si `summary` reste vide.
