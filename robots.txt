@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sources et outillage : rien à indexer (le vhost les bloque déjà).
+Disallow: /_cron/
+Disallow: /_posts/
+Disallow: /deploy/
+
+Sitemap: https://www.fafchamps.be/sitemap.xml

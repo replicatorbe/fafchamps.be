@@ -44,6 +44,23 @@ secrets*.y*ml
 data/*.json
 !data/.gitkeep
 
+# ----- Publications : contenu rédactionnel et sortie générée -----
+# Ce dépôt porte le CODE du site. Le texte des articles et le HTML généré n'y
+# ont pas leur place : ils vivent sur le serveur et se sauvegardent séparément
+# (dépôt privé, rsync, backup) — git ne les protège pas ici.
+/_posts/
+/blog/
+/sitemap.xml
+# Visuels des articles. Ceux du site lui-même restent dans img/, versionnés.
+/media/
+# Notes de travail, non publiques.
+/DATATION.md
+
+# ----- Images de vidéosurveillance -----
+# 18 Go de captures CCTV dans la racine du site : jamais dans un dépôt PUBLIC.
+# (Elles sont aussi téléchargeables via le web pour l'instant — à traiter.)
+/cctv/
+
 # ----- Dumps, bases, archives -----
 *.sql
 *.sqlite*
