@@ -525,7 +525,9 @@ function head_common(string $title, string $desc, string $canonical, string $ext
 <meta name="theme-color" content="#0a0c10">
 ' . ($noindex ? '<meta name="robots" content="noindex, follow">' . "\n" : '') . '<link rel="canonical" href="' . e($canonical) . '">
 <link rel="alternate" type="application/rss+xml" title="' . e(SITE_NAME . ' — ' . BLOG_TITLE) . '" href="' . SITE_URL . '/blog/feed.xml">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=\'http://www.w3.org/2000/svg\'%20viewBox=\'0%200%2064%2064\'%3E%3Crect%20width=\'64\'%20height=\'64\'%20rx=\'7\'%20fill=\'%230d1016\'/%3E%3Cpath%20d=\'M9%209H55V43L43%2055H9Z\'%20fill=\'%23ffb13d\'/%3E%3Ctext%20x=\'32\'%20y=\'42\'%20font-family=\'monospace\'%20font-size=\'26\'%20font-weight=\'700\'%20text-anchor=\'middle\'%20fill=\'%230a0c10\'%3EJF%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/favicon-192.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
