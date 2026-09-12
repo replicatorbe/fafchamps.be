@@ -314,6 +314,13 @@
   const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
   const fs=16, chars='アカサタナハマヤラ0123456789ABCDEF#$%&@/<>'.split('');
   function resize(){ cv.width=innerWidth; cv.height=innerHeight; cols=Math.ceil(cv.width/fs); drops=Array(cols).fill(0).map(()=>Math.random()*-40); }
+  /* Couleurs volontairement laissées en dur : cet overlay est un œuf de Pâques
+     plein écran, pas un morceau de la page. Il pose son propre fond opaque en
+     CSS (.konami) par-dessus toute la fenêtre, donc la « pluie » verte reste
+     lisible et cohérente quel que soit le thème du site derrière. La rendre
+     claire n'aurait aucun sens : une Matrix sur fond blanc n'est plus Matrix.
+     Le voile de traînée ci-dessous recouvre bien cv.width × cv.height, soit la
+     fenêtre entière (cf. resize()), donc rien de la page ne transparaît. */
   function draw(){
     ctx.fillStyle='rgba(8,10,13,0.10)'; ctx.fillRect(0,0,cv.width,cv.height);
     ctx.font=fs+'px monospace';
@@ -392,8 +399,54 @@
 /* ---------- MOBILE NAV ---------- */
 (function(){
   const b=document.getElementById('burger'), m=document.getElementById('mnav');
-  b.addEventListener('click',()=>{ b.classList.toggle('open'); m.classList.toggle('open'); });
-  m.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{ b.classList.remove('open'); m.classList.remove('open'); }));
+  if(!b||!m) return;
+  const links=[...m.querySelectorAll('a')];
+  const large=matchMedia('(min-width:1141px)');   /* au-delà, le burger n'est plus affiché */
+  let open=false;
+
+  /* back : ne ramener le focus au bouton que lorsque la fermeture vient du
+     clavier ou du bouton. Au clic sur un lien, le focus doit suivre l'ancre ;
+     au passage en grand format, le bouton n'est plus affiché. */
+  function set(v,back){
+    if(v===open) return;
+    open=v;
+    b.classList.toggle('open',open);
+    m.classList.toggle('open',open);
+    b.setAttribute('aria-expanded',open?'true':'false');
+    /* même verrou de défilement que la séquence de boot */
+    document.body.style.overflow=open?'hidden':'';
+    if(open){ if(links[0]) links[0].focus(); }
+    else if(back) b.focus();
+  }
+
+  b.addEventListener('click',()=>set(!open,true));
+  /* clic sur le fond (hors lien) : on referme */
+  m.addEventListener('click',(e)=>{ if(e.target===m) set(false); });
+  links.forEach(a=>a.addEventListener('click',()=>set(false)));
+  /* le logo reste au-dessus de l'overlay : un clic dessus referme aussi */
+  const brand=document.querySelector('.topbar .brand');
+  if(brand) brand.addEventListener('click',()=>set(false));
+
+  addEventListener('keydown',(e)=>{
+    if(!open) return;
+    if(e.key==='Escape'){ set(false,true); return; }
+    if(e.key!=='Tab') return;
+    /* piège à focus : la tabulation tourne entre le bouton et les liens,
+       elle ne part pas dans la page restée derrière l'overlay. */
+    /* la bascule de thème flotte au-dessus de l'overlay : elle fait partie du
+       cycle, sinon elle est cliquable à la souris mais pas au clavier */
+    const rt=document.getElementById('readToggle');
+    const f=(rt?[b,rt]:[b]).concat(links), i=f.indexOf(document.activeElement);
+    let n;
+    if(i<0) n = e.shiftKey ? f.length-1 : 0;
+    else { n = i + (e.shiftKey?-1:1); if(n<0) n=f.length-1; else if(n>=f.length) n=0; }
+    e.preventDefault(); f[n].focus();
+  });
+
+  /* retour au format large : l'overlay n'a plus de raison d'être ouvert */
+  const reset=()=>{ if(large.matches) set(false); };
+  if(large.addEventListener) large.addEventListener('change',reset);
+  else large.addListener(reset);   /* Safari < 14 */
 })();
 
 /* ---------- PUBLICATIONS (data/blog.json) ---------- */
@@ -428,7 +481,14 @@
 
 /* ---------- ACTIVITÉ GITHUB (data/github.json) ---------- */
 (function(){
-  const LV=['#161b25','rgba(98,224,138,.28)','rgba(98,224,138,.48)','rgba(98,224,138,.72)','#62e08a'];
+  /* Les 5 niveaux du mur de contributions ne sont plus peints ici : chaque case
+     reçoit un attribut data-lv="0".."4" et la feuille de style choisit la teinte
+     via les jetons --gh-0 … --gh-4. Un style inline l'emporterait sur toute règle
+     CSS et figerait le mur en sombre ; l'attribut, lui, suit le thème tout seul,
+     y compris si le visiteur bascule après le chargement du flux.
+     Référence des valeurs sombres (identiques à l'ancien tableau LV) :
+       --gh-0 #161b25 · --gh-1 rgba(98,224,138,.28) · --gh-2 rgba(98,224,138,.48)
+       --gh-3 rgba(98,224,138,.72) · --gh-4 #62e08a */
   const MOIS=['jan','fév','mar','avr','mai','jun','jui','aoû','sep','oct','nov','déc'];
   const LANGC={Python:'#3572A5',PHP:'#4F5D95',JavaScript:'#f1e05a',TypeScript:'#3178c6',PowerShell:'#012456',
     Shell:'#89e051',Tcl:'#e4cc98',Dockerfile:'#384d54','C++':'#f34b7d',C:'#555555','C#':'#178600',
@@ -437,6 +497,17 @@
   const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const fmt=n=>Number(n).toLocaleString('fr-FR');
+
+  /* Couleur de repli des pastilles de langage : les 18 teintes officielles de
+     LANGC restent en dur (elles tiennent sur fond clair comme sur fond sombre),
+     mais le gris neutre utilisé pour un langage inconnu, lui, doit suivre le
+     thème. On le lit donc dans --lang-fallback ; si le jeton est absent, on
+     retombe sur l'ancienne valeur en dur pour ne rien casser. */
+  function langFallback(){
+    let v='';
+    try{ v=getComputedStyle(document.documentElement).getPropertyValue('--lang-fallback').trim(); }catch(e){}
+    return v||'#7e94b2';
+  }
 
   function pseudoHash(s){ let h=0; for(let i=0;i<s.length;i++){ h=(h*33+s.charCodeAt(i))>>>0; } return ('0000000'+h.toString(16)).slice(-7); }
 
@@ -476,7 +547,7 @@
       col.forEach(d=>{
         const c=document.createElement('div'); c.className='gh-d';
         if(!d){ c.style.visibility='hidden'; }
-        else { const L=lvl(d.count); c.style.background=LV[L]; if(L===4) c.classList.add('lv4');
+        else { const L=lvl(d.count); c.setAttribute('data-lv',String(L)); if(L===4) c.classList.add('lv4');
           c.title=d.count+' contribution'+(d.count>1?'s':'')+' · '+d.date; }
         wk.appendChild(c);
       });
@@ -485,12 +556,14 @@
     cal.innerHTML=''; cal.appendChild(months); cal.appendChild(weeks);
 
     const leg=el('ghLegend');
-    if(leg){ leg.hidden=false; leg.querySelectorAll('i').forEach((i,k)=>i.style.background=LV[k]); }
+    /* même principe pour la légende « Moins … Plus » : 5 puces, 5 niveaux */
+    if(leg){ leg.hidden=false; leg.querySelectorAll('i').forEach((i,k)=>i.setAttribute('data-lv',String(k))); }
   }
 
   function renderRepos(repos){
     const log=el('ghLog'); if(!log) return;
     log.innerHTML='';
+    const fb=langFallback();   /* lu une fois par rendu, pas une fois par dépôt */
     repos.forEach(r=>{
       const row=document.createElement('div'); row.className='gh-log__row';
       const hash=document.createElement('span'); hash.className='gh-hash'; hash.textContent=pseudoHash(r.name);
@@ -498,7 +571,7 @@
       const a=document.createElement('a'); a.className='gh-name'; a.href=r.url; a.target='_blank'; a.rel='noopener'; a.textContent=r.name;
       main.appendChild(a);
       if(r.lang){ const lg=document.createElement('span'); lg.className='gh-lang';
-        const dot=document.createElement('span'); dot.className='ld'; dot.style.background=LANGC[r.lang]||'#7e94b2';
+        const dot=document.createElement('span'); dot.className='ld'; dot.style.background=LANGC[r.lang]||fb;
         lg.appendChild(dot); lg.appendChild(document.createTextNode(r.lang)); main.appendChild(lg); }
       if(r.stars>0){ const st=document.createElement('span'); st.className='gh-stars'; st.textContent='★ '+r.stars; main.appendChild(st); }
       const date=document.createElement('span'); date.className='gh-date'; date.textContent=r.updated;
