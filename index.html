@@ -860,12 +860,12 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
     <div class="sec-head reveal">
       <div class="sec-meta"><span class="idx">02</span><span>// TRAJECTOIRE</span><span class="ln"></span></div>
       <h2 class="sec-title">Vingt ans <em>sans décrocher</em></h2>
-      <p class="sec-sub">Les technologies changent tous les trois ou quatre ans. Ce qui ne change pas, c'est la méthode : comprendre le système en entier, puis le construire. Voici les piles que j'ai traversées, et ce que j'en ai fait.</p>
+      <p class="sec-sub">Les technologies changent tous les trois ou quatre ans. Ce qui ne change pas, c'est la méthode : comprendre le système en entier, puis le construire. Et parfois ce n'est pas le langage qui change, c'est la façon de travailler : la virtualisation, les conteneurs, l'IA. Voici les piles que j'ai traversées, et ce que j'en ai fait.</p>
     </div>
 
     <div class="tl__meta reveal">
       <span><b>2002 → 2026</b> · première ligne de code publiée</span>
-      <span><b>8</b> générations de technologies</span>
+      <span><b>12</b> virages technologiques</span>
       <span><b>0</b> année sans écrire de code</span>
     </div>
 
@@ -911,6 +911,14 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
         </div>
       </li>
       <li class="tl__item reveal">
+        <div class="tl__year">2010</div>
+        <div class="tl__body">
+          <div class="tl__stack">Virtualisation · VMware · Proxmox · KVM</div>
+          <p class="tl__txt">Fin du serveur physique unique : chaque service dans sa propre machine virtuelle. On isole, on clone, on restaure un instantané au lieu de réinstaller tout un week-end. <b>Le premier vrai changement de méthode</b>, pas seulement de langage.</p>
+          <div class="tl__tags"><span>VMware</span><span>Proxmox</span><span>KVM</span></div>
+        </div>
+      </li>
+      <li class="tl__item reveal">
         <div class="tl__year">2013</div>
         <div class="tl__body">
           <div class="tl__stack">C# · PHP/JS · API · sûreté</div>
@@ -927,11 +935,27 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
         </div>
       </li>
       <li class="tl__item reveal">
+        <div class="tl__year">2018</div>
+        <div class="tl__body">
+          <div class="tl__stack">Conteneurs · Docker · Compose · reverse proxy</div>
+          <p class="tl__txt">Le conteneur ne remplace pas la machine virtuelle, il s'y ajoute. La VM pour cloisonner et pour ce qui doit survivre ; le conteneur pour déployer, reconstruire et jeter. <b>Aujourd'hui je fais tourner les deux</b>, chacun pour ce qu'il fait le mieux — et ce site en est un exemple.</p>
+          <div class="tl__tags"><span>Docker</span><span>Compose</span><span>nginx</span></div>
+        </div>
+      </li>
+      <li class="tl__item reveal">
         <div class="tl__year">2020</div>
         <div class="tl__body">
-          <div class="tl__stack">Flutter/Dart · Docker · LLM</div>
-          <p class="tl__txt"><b>Baboon.fr</b> — application mobile iOS et Android, conteneurs, visioconférence, et modération de chat assistée par IA en production. Vingt ans après l'IRC, le même service, une pile entièrement neuve.</p>
-          <div class="tl__tags"><span>Flutter</span><span>Docker</span><span>IA</span></div>
+          <div class="tl__stack">Flutter/Dart · mobile · visioconférence</div>
+          <p class="tl__txt"><b>Baboon.fr</b> — application mobile iOS et Android, client web repensé, visioconférence intégrée. Vingt ans après l'IRC, le même service rendu, une pile entièrement neuve et deux magasins d'applications à satisfaire.</p>
+          <div class="tl__tags"><span>Flutter</span><span>Dart</span><span>Jitsi</span></div>
+        </div>
+      </li>
+      <li class="tl__item reveal">
+        <div class="tl__year">2023</div>
+        <div class="tl__body">
+          <div class="tl__stack">IA · LLM · modération assistée · assistants de code</div>
+          <p class="tl__txt"><b>Le vecteur de changement le plus rapide que j'aie vu en vingt ans.</b> En production : la modération de chat assistée par LLM sur Baboon, avec ce qu'elle attrape et ce qu'elle rate. Au quotidien : lecture de code, scripts, documentation. Un outil de plus — à condition de savoir vérifier ce qu'il produit.</p>
+          <div class="tl__tags"><span>LLM</span><span>Modération IA</span><span>Assistants</span></div>
         </div>
       </li>
       <li class="tl__item tl__item--now reveal">
@@ -944,7 +968,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       </li>
     </ol>
 
-    <p class="tl__foot reveal">Six changements complets de pile technologique. <b>Aucune année sans écrire de code.</b></p>
+    <p class="tl__foot reveal">Du serveur physique au conteneur, de l'IRC au LLM. <b>Aucune année sans écrire de code.</b></p>
   </div>
 </section>
 
@@ -1507,17 +1531,21 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       'de cybersécurité et de réseau. Basé en Belgique.',
       'Membre du hackerspace Wolfplex (Charleroi).'].join('\n')},
     'parcours.txt':{type:'file',content:[
-        '2002  IRC, ActionScript, Red5 .... Chat.fr, 700+ connectes',
-        '2004  PHP, Linux, LAMP .......... fafchamps.be, debut sysadmin',
-        '2006  PHP a l\'echelle, infra .... Adosbox, de bout en bout',
-        '2007  Flex, AS3, streaming ...... Espace-IRC',
-        '2009  Java, Spring, Hibernate ... developpement objet structure',
-        '2013  C#, PHP/JS, API, surete ... le code pilote du materiel',
-        '2015  ESP32, Home Assistant ..... domotique auto-hebergee',
-        '2020  Flutter, Docker, LLM ...... Baboon mobile, moderation IA',
-        '2026  PHP CLI, statique ......... ce site',
-        '',
-        'Six changements de pile. Aucune annee sans ecrire de code.'].join('\n')},
+      '2002  IRC, ActionScript, Red5 ..... Chat.fr, 700+ connectes',
+      '2004  PHP, Linux, LAMP ............ fafchamps.be, debut sysadmin',
+      '2006  PHP a l\'echelle, infra ...... Adosbox, de bout en bout',
+      '2007  Flex, AS3, streaming ........ Espace-IRC',
+      '2009  Java, Spring, Hibernate ..... developpement objet structure',
+      '2010  VMware, Proxmox, KVM ........ fin du serveur physique unique',
+      '2013  C#, PHP/JS, API, surete ..... le code pilote du materiel',
+      '2015  ESP32, Home Assistant ....... domotique auto-hebergee',
+      '2018  Docker, Compose ............. la VM et le conteneur, les deux',
+      '2020  Flutter/Dart, mobile ........ Baboon iOS + Android',
+      '2023  LLM, moderation assistee .... le changement le plus rapide',
+      '2026  PHP CLI, statique ........... ce site',
+      '',
+      'Du serveur physique au conteneur, de l\'IRC au LLM.',
+      'Aucune annee sans ecrire de code.'].join('\n')},
     'skills.txt':{type:'file',content:[
       'Développement .......... 96%','Réseau ................. 90%',
       'DevOps & automatisation  90%','Administration système . 84%',
