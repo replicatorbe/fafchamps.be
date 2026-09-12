@@ -153,23 +153,8 @@ a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
 /* ============================================================= *
  *  HUD CHROME (top status bar + side rail)                      *
  * ============================================================= */
-.statusbar{
-  position:fixed;top:0;left:0;right:0;z-index:900;height:34px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 16px;font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.14em;
-  color:var(--text-dim);background:rgba(10,12,16,.72);
-  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
-}
-.statusbar .seg{display:flex;align-items:center;gap:8px}
-.statusbar .sep{color:var(--text-faint);margin:0 6px}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--green);
-  box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
-@keyframes pulse{50%{opacity:.35}}
-.statusbar .hide-s{display:none}
-@media(min-width:720px){.statusbar .hide-s{display:flex}}
-
 /* logo */
-.brand{position:fixed;top:46px;left:24px;z-index:901;display:flex;align-items:center;gap:11px}
+.brand{position:fixed;top:18px;left:24px;z-index:901;display:flex;align-items:center;gap:11px}
 .brand__mono{
   width:38px;height:38px;display:grid;place-items:center;flex:0 0 auto;
   overflow:hidden;background:var(--amber);position:relative;
@@ -180,7 +165,7 @@ a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
 .brand__txt{font-family:var(--ff-mono);font-size:11px;line-height:1.3;letter-spacing:.05em}
 .brand__txt b{color:var(--text);display:block;letter-spacing:.12em}
 .brand__txt span{color:var(--text-dim)}
-@media(max-width:980px){.brand{top:42px;left:16px}.brand__txt{display:none}}
+@media(max-width:980px){.brand{top:14px;left:16px}.brand__txt{display:none}}
 
 /* side nav rail */
 .rail{
@@ -202,7 +187,7 @@ a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
 @media(max-width:980px){.rail{display:none}}
 
 /* mobile nav */
-.burger{position:fixed;top:42px;right:16px;z-index:903;width:46px;height:46px;
+.burger{position:fixed;top:14px;right:16px;z-index:903;width:46px;height:46px;
   display:none;align-items:center;justify-content:center;flex-direction:column;gap:5px;
   background:var(--panel);border:1px solid var(--line-bright);cursor:pointer}
 .burger span{width:20px;height:2px;background:var(--amber);transition:.3s}
@@ -779,12 +764,6 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 </div>
 
 <!-- ===================== HUD CHROME ===================== -->
-<div class="statusbar">
-  <div class="seg"><span class="dot"></span> SYS:ONLINE<span class="sep">/</span>SESSION SÉCURISÉE</div>
-  <div class="seg hide-s">BELGIQUE 🇧🇪<span class="sep">/</span>SESSION CHIFFRÉE<span class="sep">/</span>CLEARANCE:PUBLIC</div>
-  <div class="seg"><span id="clock">--:--:--</span><span class="sep">/</span>CET</div>
-</div>
-
 <a class="brand" href="#accueil" aria-label="Accueil">
   <span class="brand__mono"><img src="img/avatar-smug.png" alt="" width="128" height="128" decoding="async"></span>
   <span class="brand__txt"><b>FAFCHAMPS</b><span>sMug@replicatorbe</span></span>
@@ -1481,7 +1460,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   </div>
 </footer>
 
-<script src="assets/site.js?v=1"></script>
+<script src="assets/site.js?v=2"></script>
 
 </body>
 </html>

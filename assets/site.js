@@ -31,15 +31,9 @@
   window.addEventListener('touchmove',skip,{once:true,passive:true});
 })();
 
-/* ---------- CLOCK (Europe/Brussels) ---------- */
+/* ---------- ANNÉE + UPTIME ---------- */
 (function(){
-  const el=document.getElementById('clock');
-  function tick(){
-    try{ el.textContent=new Date().toLocaleTimeString('fr-BE',{timeZone:'Europe/Brussels',hour12:false}); }
-    catch(e){ el.textContent=new Date().toLocaleTimeString('fr-FR',{hour12:false}); }
-  }
-  tick(); setInterval(tick,1000);
-  document.getElementById('year').textContent=new Date().getFullYear();
+  const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();
   const start=new Date('2004-01-01');
   const yrs=((Date.now()-start)/(365.25*24*3600*1000)).toFixed(1);
   const u=document.getElementById('uptime'); if(u) u.textContent=yrs+' ans';
