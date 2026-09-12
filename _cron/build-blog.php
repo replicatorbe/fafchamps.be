@@ -562,7 +562,7 @@ function topbar(string $on = ''): string {
 function footer_common(): string {
     return '<footer>
   <div class="wrap foot">
-    <div>© ' . date('Y') . ' JÉRÔME FAFCHAMPS <span class="amber">//</span> sMug@replicatorbe <span class="amber">//</span> BELGIQUE 🇧🇪</div>
+    <div>© ' . date('Y') . ' JÉRÔME FAFCHAMPS <span class="amber">//</span> sMug@replicatorbe <span class="amber">//</span> 🇧🇪</div>
     <div><a href="/blog/feed.xml">RSS</a> <span class="amber">//</span> <a href="/">retour au site</a></div>
   </div>
 </footer>
