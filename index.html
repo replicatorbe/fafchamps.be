@@ -865,7 +865,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
     <div class="tl__meta reveal">
       <span><b>2002 → 2026</b> · première ligne de code publiée</span>
-      <span><b>13</b> virages technologiques</span>
+      <span><b>14</b> virages technologiques</span>
       <span><b>0</b> année sans écrire de code</span>
     </div>
 
@@ -936,9 +936,9 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       <li class="tl__item reveal">
         <div class="tl__year">2015 →</div>
         <div class="tl__body">
-          <div class="tl__stack">Domotique · Home Assistant · auto-hébergement</div>
-          <p class="tl__txt">Tout ce qui pilote la maison tourne chez moi, pas chez un fabricant : automatisations sur mesure, capteurs en réseau, aucune dépendance au nuage d'un tiers. La même chose qu'au travail, mais à l'échelle d'une maison — et sans budget.</p>
-          <div class="tl__tags"><span>Home Assistant</span><span>Automatisation</span><span>Auto-hébergé</span></div>
+          <div class="tl__stack">Domotique · Jeedom · RFXCOM · 433 MHz</div>
+          <p class="tl__txt">Tout ce qui pilote la maison tourne chez moi, pas chez un fabricant : une box Jeedom auto-hébergée, un RFXCOM pour écouter les capteurs sans fil, des automatisations sur mesure. La même chose qu'au travail, mais à l'échelle d'une maison — et sans budget.</p>
+          <div class="tl__tags"><span>Jeedom</span><span>RFXCOM</span><span>Auto-hébergé</span></div>
         </div>
       </li>
 
@@ -975,6 +975,15 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
           <div class="tl__stack">IA · LLM · modération assistée · assistants de code</div>
           <p class="tl__txt"><b>Le vecteur de changement le plus rapide que j'aie vu en vingt ans.</b> Quelques mois après l'ouverture publique de ChatGPT. En production : la modération de chat assistée par LLM sur Baboon, avec ce qu'elle attrape et ce qu'elle rate. Au quotidien : lecture de code, scripts, documentation. Un outil de plus — à condition de savoir vérifier ce qu'il produit.</p>
           <div class="tl__tags"><span>LLM</span><span>Modération IA</span><span>Assistants</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2025</div>
+        <div class="tl__body">
+          <div class="tl__stack">Home Assistant · migration · ESPHome</div>
+          <p class="tl__txt">Bascule de Jeedom vers <b>Home Assistant</b> après dix ans : tout reprendre — capteurs, automatisations, intégrations — pour une plateforme plus ouverte et mieux entretenue. Déménager une domotique en service, c'est la refaire sans éteindre la maison.</p>
+          <div class="tl__tags"><span>Home Assistant</span><span>ESPHome</span><span>Migration</span></div>
         </div>
       </li>
 
@@ -1330,7 +1339,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       <div class="frame proj reveal">
         <div class="proj__thumb"><span class="yr">2015 → ∞</span><span class="glyph">⌂</span></div>
         <div class="proj__body"><h4>Domotique maison <span class="st">PERSO</span></h4>
-          <p>Maison connectée auto-hébergée sous Home Assistant : modules Shelly, microcontrôleurs ESP32, capteurs en réseau et automatisations sur mesure.</p>
+          <p>Maison connectée auto-hébergée sous Home Assistant : modules Shelly, microcontrôleurs ESP32, capteurs en réseau et automatisations sur mesure. <a href="/blog/sonde-de-temperature-banggood-433-mhz-station-meteo-sans-fil-et-capteur-d-humidite/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Les débuts, en 433 MHz →</a></p>
           <div class="proj__tags"><span>Home Assistant</span><span>Shelly</span><span>ESP32</span></div></div>
       </div>
       <div class="frame proj reveal d1">
@@ -1558,11 +1567,12 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       '2008   Xen, VMware, Proxmox ........ fin du serveur physique unique',
       '2009   Java, Spring, Hibernate ..... developpement objet structure',
       '2015   Docker, Compose ............. la VM et le conteneur, les deux',
-      '2015 → Home Assistant .............. domotique auto-hebergee',
+      '2015 → Jeedom, RFXCOM .............. domotique auto-hebergee',
       '2016   C#, PHP/JS, API, surete ..... le code pilote du materiel',
       '2018   ESP32, Shelly, Zigbee ....... fabriquer, pas juste configurer',
       '2020   Flutter/Dart, mobile ........ Baboon iOS + Android',
       '2023   LLM, moderation assistee .... le changement le plus rapide',
+      '2025   Home Assistant, ESPHome .... migration depuis Jeedom',
       '2026   PHP CLI, statique ........... ce site',
       '',
       'Du serveur physique au conteneur, de l\'IRC au LLM.',
