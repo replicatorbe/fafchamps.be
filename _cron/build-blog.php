@@ -543,7 +543,7 @@ function topbar(string $on = ''): string {
     return '<div class="wrap">
   <div class="topbar">
     <a class="blogbrand" href="/" aria-label="Accueil">
-      <span class="blogbrand__mono">JF</span>
+      <span class="blogbrand__mono"><img src="/img/avatar-smug.png" alt="" width="128" height="128" decoding="async"></span>
       <span class="blogbrand__txt">sMug@replicatorbe</span>
     </a>
     <nav class="topnav" aria-label="Navigation">
