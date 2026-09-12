@@ -603,7 +603,8 @@ function render_post(array $p, ?array $prev, ?array $next): string {
         . '<meta property="og:locale" content="fr_BE">' . "\n"
         . '<meta property="article:published_time" content="' . $p['date']->format(DateTimeInterface::ATOM) . '">' . "\n"
         . ($p['updated'] ? '<meta property="article:modified_time" content="' . $mod->format(DateTimeInterface::ATOM) . '">' . "\n" : '')
-        . ($p['cover'] ? '<meta property="og:image" content="' . e(SITE_URL . '/' . ltrim($p['cover'], '/')) . '">' . "\n" : '')
+        . '<meta property="og:image" content="' . e($p['cover'] ? SITE_URL . '/' . ltrim($p['cover'], '/') : SITE_URL . '/img/og-fafchamps.png') . '">' . "\n"
+        . '<meta name="twitter:card" content="summary_large_image">' . "\n" 
         . '<script type="application/ld+json">' . "\n"
         . json_encode($ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n"
         . '</script>' . "\n";

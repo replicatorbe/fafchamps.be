@@ -19,6 +19,11 @@
 <meta property="og:description" content="20 ans à l'intersection de l'IT et de la sûreté : infrastructure, réseau, développement et systèmes de sécurité (salles de contrôle, vidéosurveillance, contrôle d'accès). Belgique.">
 <meta property="og:url" content="https://www.fafchamps.be/">
 <meta property="og:locale" content="fr_BE">
+<meta property="og:image" content="https://www.fafchamps.be/img/og-fafchamps.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Jérôme Fafchamps — sMug @ replicatorbe — IT &amp; Sûreté">
+<meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -167,11 +172,11 @@ a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
 .brand{position:fixed;top:46px;left:24px;z-index:901;display:flex;align-items:center;gap:11px}
 .brand__mono{
   width:38px;height:38px;display:grid;place-items:center;flex:0 0 auto;
-  font-family:var(--ff-display);font-weight:700;font-size:16px;color:var(--bg);
-  background:var(--amber);position:relative;
+  overflow:hidden;background:var(--amber);position:relative;
   clip-path:polygon(0 0,100% 0,100% 72%,72% 100%,0 100%);
   box-shadow:0 0 18px rgba(255,177,61,.4);
 }
+.brand__mono img{width:100%;height:100%;object-fit:cover;display:block}
 .brand__txt{font-family:var(--ff-mono);font-size:11px;line-height:1.3;letter-spacing:.05em}
 .brand__txt b{color:var(--text);display:block;letter-spacing:.12em}
 .brand__txt span{color:var(--text-dim)}
@@ -380,10 +385,10 @@ section{position:relative;padding:120px 0;scroll-margin-top:44px}
 .profil p strong{color:var(--text);font-weight:500}
 .idcard{padding:0}
 .idcard__hd{display:flex;align-items:center;gap:16px;padding:22px 24px;border-bottom:1px solid var(--line)}
-.idcard__ph{width:64px;height:64px;flex:0 0 auto;background:
-  repeating-linear-gradient(45deg,#161b25,#161b25 6px,#11151d 6px,#11151d 12px);
-  border:1px solid var(--line-bright);display:grid;place-items:center;
-  font-family:var(--ff-display);font-weight:700;font-size:24px;color:var(--amber)}
+.idcard__ph{width:64px;height:64px;flex:0 0 auto;overflow:hidden;
+  border:1px solid var(--line-bright);background:#11151d;
+  display:grid;place-items:center}
+.idcard__ph img{width:100%;height:100%;object-fit:cover;display:block}
 .idcard__hd h3{font-family:var(--ff-display);font-size:20px;color:#eef1f6;letter-spacing:.01em}
 .idcard__hd .alias{font-family:var(--ff-mono);font-size:11px;color:var(--cyan);letter-spacing:.08em}
 .idcard__body{padding:8px 24px 22px}
@@ -781,7 +786,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 </div>
 
 <a class="brand" href="#accueil" aria-label="Accueil">
-  <span class="brand__mono">JF</span>
+  <span class="brand__mono"><img src="img/avatar-smug.png" alt="" width="128" height="128" decoding="async"></span>
   <span class="brand__txt"><b>FAFCHAMPS</b><span>sMug@replicatorbe</span></span>
 </a>
 
@@ -1230,7 +1235,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       </div>
       <div class="frame idcard reveal d1">
         <div class="idcard__hd">
-          <div class="idcard__ph">JF</div>
+          <div class="idcard__ph"><img src="img/avatar-smug.png" alt="Avatar de sMug : un lion de feu" width="128" height="128" loading="lazy" decoding="async"></div>
           <div>
             <h3>Jérôme Fafchamps</h3>
             <span class="alias">// sMug @ replicatorbe</span>
