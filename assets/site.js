@@ -376,7 +376,7 @@
 
 /* ---------- ACTIVE NAV ---------- */
 (function(){
-  const links=[...document.querySelectorAll('.rail a')];
+  const links=[...document.querySelectorAll('.topnav a')];
   const map={}; links.forEach(l=>map[l.dataset.sec]=l);
   const io=new IntersectionObserver((es)=>{
     es.forEach(e=>{ if(e.isIntersecting){
