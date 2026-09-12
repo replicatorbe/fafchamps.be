@@ -442,19 +442,64 @@ section{position:relative;padding:120px 0;scroll-margin-top:44px}
 .stack-col li:hover::before{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
 
 /* ============================================================= *
- *  PARCOURS (timeline)                                           *
+ *  PARCOURS (frise chronologique)                                *
  * ============================================================= */
-.timeline{position:relative;padding-left:34px;margin-top:10px}
-.timeline::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:1px;
-  background:linear-gradient(180deg,var(--amber),var(--line),transparent)}
-.tl-item{position:relative;padding:0 0 38px 18px}
-.tl-item:last-child{padding-bottom:0}
-.tl-item::before{content:"";position:absolute;left:-32px;top:5px;width:13px;height:13px;
-  background:var(--bg);border:2px solid var(--amber);border-radius:50%;
-  transform:rotate(45deg)}
-.tl-item .yr{font-family:var(--ff-mono);font-size:11px;letter-spacing:.14em;color:var(--cyan)}
-.tl-item h4{font-family:var(--ff-display);font-size:18px;color:#eef1f6;margin:5px 0 6px}
-.tl-item p{color:var(--text-dim);font-size:14px;max-width:560px}
+.tl__meta{display:flex;flex-wrap:wrap;gap:9px 30px;margin-bottom:40px;
+  font-family:var(--ff-mono);font-size:11px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--text-dim)}
+.tl__meta b{color:var(--amber);font-weight:700}
+.tl{position:relative;list-style:none}
+.tl::before{content:"";position:absolute;left:76px;top:9px;bottom:9px;width:1px;
+  background:linear-gradient(180deg,transparent,var(--line-bright) 6%,var(--line-bright) 94%,transparent)}
+.tl__item{position:relative;display:grid;grid-template-columns:76px 1fr;gap:0 30px;padding-bottom:32px}
+.tl__item:last-child{padding-bottom:0}
+.tl__year{font-family:var(--ff-mono);font-size:15px;font-weight:700;color:var(--amber);
+  line-height:1.25;text-align:right;padding-top:1px}
+.tl__body{position:relative}
+.tl__body::before{content:"";position:absolute;left:-34px;top:6px;width:9px;height:9px;
+  background:var(--bg);border:1px solid var(--amber);
+  clip-path:polygon(0 0,100% 0,100% 66%,66% 100%,0 100%)}
+.tl__item--now .tl__body::before{background:var(--amber);box-shadow:0 0 12px rgba(255,177,61,.55)}
+.tl__stack{font-family:var(--ff-mono);font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+.tl__txt{font-size:14.5px;color:var(--text-dim);line-height:1.6;max-width:64ch;margin-bottom:10px}
+.tl__txt b{color:var(--text);font-weight:600}
+.tl__tags{display:flex;flex-wrap:wrap;gap:6px}
+.tl__tags span{font-family:var(--ff-mono);font-size:10px;color:var(--text-dim);
+  border:1px solid var(--line-bright);padding:3px 8px;letter-spacing:.05em}
+.tl__foot{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);
+  font-family:var(--ff-mono);font-size:12.5px;color:var(--text-dim);letter-spacing:.03em}
+.tl__foot b{color:var(--amber-soft);font-weight:600}
+@media(max-width:680px){
+  .tl::before{left:5px}
+  .tl__item{grid-template-columns:1fr;gap:0;padding-left:30px}
+  .tl__year{text-align:left;margin-bottom:4px}
+  .tl__body::before{left:-30px;top:7px}
+}
+
+/* ============================================================= *
+ *  DOSSIERS PHARES (cartes mises en avant)                       *
+ * ============================================================= */
+.flag-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:20px}
+@media(max-width:900px){.flag-grid{grid-template-columns:1fr}}
+.dossier--flag{padding:26px 26px 22px}
+.dossier--flag::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,var(--amber),rgba(255,177,61,0))}
+.flag-fig{display:flex;align-items:baseline;gap:14px;margin:2px 0 17px;
+  padding-bottom:16px;border-bottom:1px solid var(--line)}
+.flag-fig b{font-family:var(--ff-display);font-weight:700;line-height:.95;
+  font-size:clamp(34px,4.6vw,46px);color:var(--amber);white-space:nowrap}
+.flag-fig small{font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--text-dim);line-height:1.55}
+.dossier--flag h4{font-size:21px;margin-bottom:8px}
+.dossier--flag p{font-size:14px}
+.flag-proof{margin-top:16px;padding-top:13px;border-top:1px dashed var(--line);
+  font-size:12.5px;color:var(--text-dim);line-height:1.55}
+.flag-proof .mono-tag{display:block;margin-bottom:5px}
+.real-more{font-family:var(--ff-mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--text-faint);margin:34px 0 18px;
+  display:flex;align-items:center;gap:12px}
+.real-more::after{content:"";flex:1;height:1px;background:var(--line)}
 
 /* ============================================================= *
  *  PROJETS                                                       *
@@ -741,24 +786,28 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 </a>
 
 <nav class="rail" aria-label="Navigation">
-  <a href="#accueil"  data-sec="accueil"><span class="label">Accueil</span><span class="num">01</span><span class="tick"></span></a>
-  <a href="#profil"   data-sec="profil"><span class="label">Profil</span><span class="num">02</span><span class="tick"></span></a>
-  <a href="#competences" data-sec="competences"><span class="label">Compétences</span><span class="num">03</span><span class="tick"></span></a>
-  <a href="#realisations" data-sec="realisations"><span class="label">Réalisations</span><span class="num">04</span><span class="tick"></span></a>
-  <a href="#projets"  data-sec="projets"><span class="label">Projets</span><span class="num">05</span><span class="tick"></span></a>
-  <a href="#publications" data-sec="publications"><span class="label">Publications</span><span class="num">06</span><span class="tick"></span></a>
-  <a href="#contact"  data-sec="contact"><span class="label">Contact</span><span class="num">07</span><span class="tick"></span></a>
+  <a href="#accueil" data-sec="accueil"><span class="label">Accueil</span><span class="num">01</span><span class="tick"></span></a>
+  <a href="#parcours" data-sec="parcours"><span class="label">Parcours</span><span class="num">02</span><span class="tick"></span></a>
+  <a href="#realisations" data-sec="realisations"><span class="label">Réalisations</span><span class="num">03</span><span class="tick"></span></a>
+  <a href="#code" data-sec="code"><span class="label">Le code</span><span class="num">04</span><span class="tick"></span></a>
+  <a href="#profil" data-sec="profil"><span class="label">Profil</span><span class="num">05</span><span class="tick"></span></a>
+  <a href="#competences" data-sec="competences"><span class="label">Compétences</span><span class="num">06</span><span class="tick"></span></a>
+  <a href="#projets" data-sec="projets"><span class="label">Projets</span><span class="num">07</span><span class="tick"></span></a>
+  <a href="#publications" data-sec="publications"><span class="label">Publications</span><span class="num">08</span><span class="tick"></span></a>
+  <a href="#contact" data-sec="contact"><span class="label">Contact</span><span class="num">09</span><span class="tick"></span></a>
 </nav>
 
 <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
 <div class="mobile-nav" id="mnav">
   <a href="#accueil"><span class="num">01</span>Accueil</a>
-  <a href="#profil"><span class="num">02</span>Profil</a>
-  <a href="#competences"><span class="num">03</span>Compétences</a>
-  <a href="#realisations"><span class="num">04</span>Réalisations</a>
-  <a href="#projets"><span class="num">05</span>Projets</a>
-  <a href="#publications"><span class="num">06</span>Publications</a>
-  <a href="#contact"><span class="num">07</span>Contact</a>
+  <a href="#parcours"><span class="num">02</span>Parcours</a>
+  <a href="#realisations"><span class="num">03</span>Réalisations</a>
+  <a href="#code"><span class="num">04</span>Le code</a>
+  <a href="#profil"><span class="num">05</span>Profil</a>
+  <a href="#competences"><span class="num">06</span>Compétences</a>
+  <a href="#projets"><span class="num">07</span>Projets</a>
+  <a href="#publications"><span class="num">08</span>Publications</a>
+  <a href="#contact"><span class="num">09</span>Contact</a>
 </div>
 
 <main>
@@ -778,8 +827,8 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
           de la technique au pilotage — avec la cybersécurité en fil rouge.
         </p>
         <div class="hero__cta reveal d4">
-          <a href="#profil" class="btn">À propos de moi <span class="ar">→</span></a>
-          <a href="#projets" class="btn btn--ghost">Explorer les projets</a>
+          <a href="#parcours" class="btn">Mon parcours <span class="ar">→</span></a>
+          <a href="#realisations" class="btn btn--ghost">Ce que j'ai livré</a>
         </div>
       </div>
 
@@ -805,11 +854,297 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   </div>
 </section>
 
+<!-- ===== 02 · PARCOURS (frise chronologique) ===== -->
+<section id="parcours">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-meta"><span class="idx">02</span><span>// TRAJECTOIRE</span><span class="ln"></span></div>
+      <h2 class="sec-title">Vingt ans <em>sans décrocher</em></h2>
+      <p class="sec-sub">Les technologies changent tous les trois ou quatre ans. Ce qui ne change pas, c'est la méthode : comprendre le système en entier, puis le construire. Voici les piles que j'ai traversées, et ce que j'en ai fait.</p>
+    </div>
+
+    <div class="tl__meta reveal">
+      <span><b>2002 → 2026</b> · première ligne de code publiée</span>
+      <span><b>8</b> générations de technologies</span>
+      <span><b>0</b> année sans écrire de code</span>
+    </div>
+
+    <ol class="tl">
+      <li class="tl__item reveal">
+        <div class="tl__year">2002</div>
+        <div class="tl__body">
+          <div class="tl__stack">IRC · ActionScript · Red5</div>
+          <p class="tl__txt"><b>Chat.fr</b> — développement et gestion d'un des plus gros chats francophones, jusqu'à 700 connectés en soirée. Premier contact avec l'échelle : modération, charge serveur, abus.</p>
+          <div class="tl__tags"><span>IRC</span><span>AS3</span><span>Red5</span></div>
+        </div>
+      </li>
+      <li class="tl__item reveal">
+        <div class="tl__year">2004</div>
+        <div class="tl__body">
+          <div class="tl__stack">PHP · Linux · LAMP</div>
+          <p class="tl__txt"><b>fafchamps.be</b> — mon premier espace à moi, et le début de l'administration système pour de bon : serveur, DNS, messagerie, sauvegardes. Tout apprendre en cassant, tout réparer soi-même.</p>
+          <div class="tl__tags"><span>PHP</span><span>Linux</span><span>LAMP</span></div>
+        </div>
+      </li>
+      <li class="tl__item reveal">
+        <div class="tl__year">2006</div>
+        <div class="tl__body">
+          <div class="tl__stack">PHP à l'échelle · MySQL · infrastructure</div>
+          <p class="tl__txt"><b>Adosbox</b> — communauté et chat pour ados, développée et administrée de bout en bout : code, serveurs, réseau, modération. Des milliers d'utilisateurs, et la responsabilité qui va avec.</p>
+          <div class="tl__tags"><span>PHP</span><span>MySQL</span><span>Infra</span></div>
+        </div>
+      </li>
+      <li class="tl__item reveal">
+        <div class="tl__year">2007</div>
+        <div class="tl__body">
+          <div class="tl__stack">Flex · ActionScript 3 · streaming</div>
+          <p class="tl__txt"><b>Espace-IRC</b> — client riche en Flash/Flex, serveur Red5 pour la webcam, bots et sécurité du chan. Une pile entière rendue obsolète par la fin de Flash : la première leçon sur la durée de vie d'une technologie.</p>
+          <div class="tl__tags"><span>Flex</span><span>AS3</span><span>Red5</span></div>
+        </div>
+      </li>
+      <li class="tl__item reveal">
+        <div class="tl__year">2009</div>
+        <div class="tl__body">
+          <div class="tl__stack">Java · Spring · Hibernate</div>
+          <p class="tl__txt">Passage au développement objet structuré : architecture MVC, persistance, tests. Sortir de l'autodidaxie pure pour apprendre les conventions des autres.</p>
+          <div class="tl__tags"><span>Java</span><span>Spring</span><span>Hibernate</span></div>
+        </div>
+      </li>
+      <li class="tl__item reveal">
+        <div class="tl__year">2013</div>
+        <div class="tl__body">
+          <div class="tl__stack">C# · PHP/JS · API · sûreté</div>
+          <p class="tl__txt">Changement d'échelle : conception et pilotage de systèmes de sûreté pour un opérateur d'infrastructure ferroviaire. Le code cesse d'afficher des pages — il pilote des caméras, des alarmes et des véhicules.</p>
+          <div class="tl__tags"><span>C#</span><span>API</span><span>CCTV</span></div>
+        </div>
+      </li>
+      <li class="tl__item reveal">
+        <div class="tl__year">2015</div>
+        <div class="tl__body">
+          <div class="tl__stack">ESP32 · Home Assistant · Zigbee</div>
+          <p class="tl__txt">Descente jusqu'à l'électronique : domotique entièrement auto-hébergée, microcontrôleurs, capteurs en réseau, lecteur de badge fait maison. La même chose qu'au travail, mais à l'échelle d'une maison — et sans budget.</p>
+          <div class="tl__tags"><span>ESP32</span><span>Home Assistant</span><span>Shelly</span></div>
+        </div>
+      </li>
+      <li class="tl__item reveal">
+        <div class="tl__year">2020</div>
+        <div class="tl__body">
+          <div class="tl__stack">Flutter/Dart · Docker · LLM</div>
+          <p class="tl__txt"><b>Baboon.fr</b> — application mobile iOS et Android, conteneurs, visioconférence, et modération de chat assistée par IA en production. Vingt ans après l'IRC, le même service, une pile entièrement neuve.</p>
+          <div class="tl__tags"><span>Flutter</span><span>Docker</span><span>IA</span></div>
+        </div>
+      </li>
+      <li class="tl__item tl__item--now reveal">
+        <div class="tl__year">2026</div>
+        <div class="tl__body">
+          <div class="tl__stack">PHP CLI · statique · durcissement</div>
+          <p class="tl__txt">Retour au minimalisme : ce site est généré en ligne de commande et servi en HTML statique. Pas de base de données, pas d'administration, rien de dynamique exposé. La sécurité par la soustraction.</p>
+          <div class="tl__tags"><span>Statique</span><span>nginx</span><span>Hardening</span></div>
+        </div>
+      </li>
+    </ol>
+
+    <p class="tl__foot reveal">Six changements complets de pile technologique. <b>Aucune année sans écrire de code.</b></p>
+  </div>
+</section>
+
+<!-- ===================== RÉALISATIONS (PRO) ===================== -->
+<section id="realisations">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-meta"><span class="idx">03</span><span>// DOSSIERS OPÉRATIONNELS</span><span class="ln"></span></div>
+      <h2 class="sec-title">Réalisations <em>professionnelles</em></h2>
+      <p class="sec-sub">Plus de dix ans à concevoir, piloter et déployer des systèmes de sûreté et de supervision pour un opérateur d'infrastructure ferroviaire majeur en Belgique. De l'analyse du besoin à la réception : cahiers des charges, marchés publics, pilotage de sous-traitants et formation des équipes. <span style="color:var(--text-faint)">// détails anonymisés</span></p>
+    </div>
+
+    <div class="frame role-block reveal">
+      <div class="role-block__hd">
+        <span class="mono-tag">// FONCTION</span>
+        <span class="ttl">Le pont entre les opérations de sûreté et l'IT</span>
+      </div>
+      <p>Au sein du service de sécurité corporate d'un opérateur ferroviaire majeur, je conçois et je supporte les <strong>salles de contrôle</strong> (centre d'opérations, salles régionales et leurs back-ups) ainsi que la <strong>gestion des accès & badges</strong> sur des dizaines de sites. Je traduis les besoins opérationnels en <strong>analyses fonctionnelles</strong> exploitables par l'IT, je définis l'existant et la cible, j'établis les <strong>roadmaps</strong> et j'accompagne les arbitrages budgétaires — en pilotant les contrats-cadres, les équipes IT et les sous-traitants.</p>
+      <div class="role-block__resp">
+        <span>Analyses fonctionnelles</span>
+        <span>Roadmap & budget</span>
+        <span>Contrats-cadres</span>
+        <span>Mise en service & conformité</span>
+        <span>Vidéo · intrusion · incendie · accès</span>
+        <span>Formation des opérateurs</span>
+        <span>Haute disponibilité</span>
+        <span>Veille & benchmarking</span>
+      </div>
+    </div>
+
+    <div class="real-more reveal">Dossiers phares</div>
+
+    <div class="flag-grid">
+
+      <article class="frame dossier dossier--flag reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // RÉSEAU</span><span class="dossier__st">LIVRÉ</span></div>
+        <div class="flag-fig"><b>72&nbsp;h</b><small>d'autonomie en intervention,<br>en lien temps réel avec le SOC</small></div>
+        <h4>CommandCar — poste de commandement mobile</h4>
+        <div class="role">RÔLE // Conception intégrale · CSC · réception · formation</div>
+        <p>Poste de commandement mobile conçu de A à Z, communiquant en temps réel avec le centre fixe : module de communication sur-mesure (4G/APN dédié, 802.1x/Radius), accès vidéo complet, alarmes intrusion/CO/incendie, le tout pilotable à distance. Cahier des charges, tests et réception du véhicule, procédures et formation des intervenants pour les scénarios de crise.</p>
+        <div class="flag-proof"><span class="mono-tag">// CE QUE ÇA A DEMANDÉ</span>Du réseau opérateur (APN dédié, authentification 802.1x/Radius), un marché public, la réception d'un véhicule, et la formation d'équipes à des scénarios de crise. Quatre métiers, un seul projet.</div>
+        <div class="dossier__tags"><span>Réseau</span><span>802.1x</span><span>CSC</span><span>Terrain</span></div>
+      </article>
+
+      <article class="frame dossier dossier--flag reveal d1">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
+        <div class="flag-fig"><b>14&nbsp;j</b><small>sans alimentation secteur —<br>le marché plafonnait à 3-5 jours</small></div>
+        <h4>Valise de surveillance autonome</h4>
+        <div class="role">RÔLE // Conception sur-mesure · CSC · attribution de marché</div>
+        <p>Aucune solution du marché ne dépassait 3 à 5 jours d'autonomie sans secteur. En optimisant la consommation de chaque composant, conception d'une valise atteignant 14 jours — GPS, 3G/4G, analyse intelligente et zoom. Rédaction du cahier des charges et attribution du marché au fournisseur.</p>
+        <div class="flag-proof"><span class="mono-tag">// CE QUE ÇA A DEMANDÉ</span>Mesurer la consommation de chaque composant, puis réécrire le cahier des charges autour de cette contrainte — au lieu d'accepter ce que proposaient les catalogues.</div>
+        <div class="dossier__tags"><span>Autonomie</span><span>Sur-mesure</span><span>CSC</span></div>
+      </article>
+
+      <article class="frame dossier dossier--flag reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // DEV</span><span class="dossier__st">LIVRÉ</span></div>
+        <div class="flag-fig"><b>21</b><small>unités pilotées par<br>une application que j'ai écrite</small></div>
+        <h4>Flotte de surveillance mobile — 21 unités</h4>
+        <div class="role">RÔLE // Dev applicatif · marché d'acquisition · sous-traitance</div>
+        <p>Mise en service d'un parc de 21 caméras mobiles autonomes sur remorque (PTZ 360°, zoom 36x, infrarouge). Développement de l'application PHP/JS qui pilote toute la flotte via API. Côté gestion : marché d'acquisition, encadrement du sous-traitant, stocks, formation des chauffeurs et procédures d'exploitation.</p>
+        <div class="flag-proof"><span class="mono-tag">// CE QUE ÇA A DEMANDÉ</span>Écrire le code, passer le marché, encadrer le sous-traitant, tenir les stocks et former les chauffeurs. Sur le même projet, dans la même année.</div>
+        <div class="dossier__tags"><span>PHP</span><span>JS</span><span>API</span><span>Flotte</span></div>
+      </article>
+
+      <article class="frame dossier dossier--flag reveal d1">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // PLATEFORME</span><span class="dossier__st prog">EN PRODUCTION</span></div>
+        <div class="flag-fig"><b>50 → 1</b><small>logiciels métiers remplacés<br>par une interface unique</small></div>
+        <h4>Hypervisor — supervision unifiée des alarmes</h4>
+        <div class="role">RÔLE // Intégration &amp; déploiement transverse</div>
+        <p>Déploiement d'une plateforme unifiant la gestion des alarmes, toutes technologies confondues — intrusion, incendie, ascenseurs, tunnels, ventilation… Une seule interface en remplacement d'une cinquantaine de logiciels métiers : moins d'erreurs, formation simplifiée, supervision homogène.</p>
+        <div class="flag-proof"><span class="mono-tag">// CE QUE ÇA A DEMANDÉ</span>Faire coexister des technologies qui ne se parlaient pas, puis convaincre des opérateurs de renoncer aux outils qu'ils connaissaient par cœur.</div>
+        <div class="dossier__tags"><span>Plateforme</span><span>Intégration</span><span>Alarmes</span></div>
+      </article>
+
+    </div>
+
+    <div class="real-more reveal">Autres dossiers</div>
+
+    <div class="real-grid">
+
+      <div class="frame dossier reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // INFRA</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>Security Operation Center — nouvelle génération</h4>
+        <div class="role">RÔLE // Pilotage de A à Z · marché public · principal + repli</div>
+        <p>Conception et déploiement d'un nouveau centre d'opérations de sûreté et de son site de repli. De l'analyse du besoin à la réception : cahier des charges, ergonomie des postes opérateurs, continuité d'activité — chaque choix validé sur le terrain avec les agents.</p>
+        <div class="dossier__tags"><span>SOC</span><span>Continuité</span><span>Ergonomie</span></div>
+      </div>
+
+      <div class="frame dossier reveal d1">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // SUPERVISION</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>Refonte des Control Rooms techniques</h4>
+        <div class="role">RÔLE // Architecture & conduite du changement</div>
+        <p>Centralisation de la supervision — vidéo, intrusion, incendie, contrôle d'accès — sur des postes opérateurs unifiés répartis sur plusieurs positions. Une refonte pensée pour réduire la charge cognitive des opérateurs et fiabiliser la prise de décision.</p>
+        <div class="dossier__tags"><span>Supervision</span><span>CCTV</span><span>Multi-postes</span></div>
+      </div>
+
+      <div class="frame dossier reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>Surveillance mobile — nouvelle génération</h4>
+        <div class="role">RÔLE // Analyse · CSC complet · nouvelles méthodes</div>
+        <p>Refonte complète de la flotte sur la base d'une analyse des défauts de la génération précédente : passage à une batterie lithium-ion, caméras 4K, GPS et lien 3G/4G. Rédaction du cahier des charges de transformation et définition des nouvelles méthodes de travail des équipes. « Exit l'analogique. »</p>
+        <div class="kpis">
+          <div class="kpi"><b>4K</b><small>Zoom 32x</small></div>
+          <div class="kpi"><b>Li-ion</b><small>Alimentation</small></div>
+          <div class="kpi"><b>GPS</b><small>3G / 4G</small></div>
+        </div>
+        <div class="dossier__tags"><span>4K</span><span>Lithium</span><span>GPS</span><span>CSC</span></div>
+      </div>
+
+      <div class="frame dossier reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // DEV</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>CCTV embarquée — nouvelles rames</h4>
+        <div class="role">RÔLE // Définition technique & développement logiciel</div>
+        <p>Définition du parc de caméras pour les nouvelles voitures, puis développement du logiciel de récupération des images à distance (réseau cellulaire ou borne WiFi). Rédaction du manuel, formation des utilisateurs et suivi du sous-traitant.</p>
+        <div class="dossier__tags"><span>CCTV</span><span>Cellulaire</span><span>Logiciel</span></div>
+      </div>
+
+      <div class="frame dossier reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
+        <h4>Traçage anti-vol de câbles</h4>
+        <div class="role">RÔLE // Tests, déploiement & formation</div>
+        <p>Mise en place d'un système de traçage pour prévenir les vols de câbles. Validation en laboratoire puis en conditions réelles pour minimiser les fausses alarmes, formation des opérateurs des Control Rooms et rédaction des consignes.</p>
+        <div class="dossier__tags"><span>Traçage</span><span>Tests</span><span>Anti-vol</span></div>
+      </div>
+
+      <div class="frame dossier reveal d1">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // PRODUCT</span><span class="dossier__st prog">EN COURS</span></div>
+        <h4>Product Owner — applications terrain</h4>
+        <div class="role">RÔLE // Product Owner · méthode agile</div>
+        <p>Pilotage produit des applications smartphone des agents de terrain : analyse du besoin, backlog et priorisation, testing. Animation de groupes de référence d'agents (méthode agile) et formation des coachs au déploiement.</p>
+        <div class="dossier__tags"><span>Product Owner</span><span>Agile</span><span>Mobile</span></div>
+      </div>
+
+      <div class="frame dossier dossier--wide reveal">
+        <div class="dossier__top"><span class="dossier__cls">DOSSIER // DIVERS</span><span class="dossier__st arch">+ ARCHIVE</span></div>
+        <h4>Et encore…</h4>
+        <p>Un échantillon parmi d'autres chantiers menés sur la même période :</p>
+        <div class="dossier__tags more">
+          <span>Interface PHP de pilotage de flotte (API)</span>
+          <span>Outil web interne de gestion d'incidents (opérateurs)</span>
+          <span>Contrôle qualité trimestriel des caméras</span>
+          <span>Migration base Access → Azure / Power-BI</span>
+          <span>Signature digitale & lecteurs e-ID</span>
+          <span>Radio « trunking » & dispositif man-down</span>
+          <span>Caméras thermiques</span>
+          <span>Bodycam agents</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;margin-top:44px" class="reveal">
+      <a href="mailto:jerome@fafchamps.be?subject=Demande%20de%20dossier%20d%C3%A9taill%C3%A9" class="btn">Dossier détaillé sur demande <span class="ar">→</span></a>
+      <p style="margin-top:16px;font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;color:var(--text-faint)">Réalisations présentées de façon anonymisée · dossier complet communiqué sur demande, sous accord de confidentialité.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LE CODE (activité GitHub) ===================== -->
+<section id="code">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-meta"><span class="idx">04</span><span>// ACTIVITÉ GITHUB</span><span class="ln"></span></div>
+      <h2 class="sec-title">Le code <em>parle</em></h2>
+      <p class="sec-sub">Vingt ans plus tard, j'écris toujours du code presque tous les jours — en dehors des heures de bureau. Flux synchronisé chaque jour depuis <a href="https://github.com/replicatorbe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">@replicatorbe</a> : contributions des 12 derniers mois et dépôts publics récents.</p>
+    </div>
+
+    <div class="gh-panels">
+      <!-- mur de contributions -->
+      <div class="frame gh-panel reveal">
+        <div class="gh-panel__bar"><span class="dots"><i></i><i></i><i></i></span> contributions — github.com/replicatorbe<span class="grow"></span><a href="https://github.com/replicatorbe" target="_blank" rel="noopener">voir le profil →</a></div>
+        <div class="gh-panel__body">
+          <div class="gh-contrib__top">
+            <div class="gh-num"><span id="ghTotal">2&thinsp;601</span> <span class="u">contrib.</span></div>
+            <div class="gh-num__lab">sur les <b>12 derniers mois</b> — une pratique quotidienne du code.</div>
+          </div>
+          <div class="gh-cal-wrap"><div class="gh-cal" id="ghCal">
+            <div class="gh-loading">chargement du mur de contributions <span class="bk">_</span></div>
+          </div></div>
+          <div class="gh-legend" id="ghLegend" hidden>Moins <i></i><i></i><i></i><i></i><i></i> Plus</div>
+          <div class="gh-foot"><span><span class="live">●</span> synchronisation quotidienne</span><span id="ghGen"></span></div>
+        </div>
+      </div>
+
+      <!-- git log : dépôts publics -->
+      <div class="frame gh-panel reveal d1">
+        <div class="gh-panel__bar"><span class="dots"><i></i><i></i><i></i></span> git log --oneline · dépôts publics<span class="grow"></span><span id="ghRepoCount"></span></div>
+        <div class="gh-panel__body">
+          <div class="gh-log" id="ghLog"><div class="gh-loading">git log <span class="bk">_</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== PROFIL ===================== -->
 <section id="profil">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">02</span><span>// DOSSIER</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">05</span><span>// DOSSIER</span><span class="ln"></span></div>
       <h2 class="sec-title">À propos du <em>sujet</em></h2>
       <p class="sec-sub">Passionné d'informatique depuis l'enfance, autodidacte revendiqué, bâtisseur de communautés en ligne — devenu concepteur et pilote de systèmes de sûreté, à la croisée de l'IT et de la sécurité.</p>
     </div>
@@ -865,7 +1200,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <section id="competences">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">03</span><span>// CAPACITÉS</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">06</span><span>// CAPACITÉS</span><span class="ln"></span></div>
       <h2 class="sec-title">Matrice de <em>compétences</em></h2>
       <p class="sec-sub">Un socle IT généraliste très large, affûté sur 20 ans — du code à l'infra. Et des domaines plus spécialisés, comme l'investigation numérique, en développement actif : prêts à être approfondis en contexte professionnel.</p>
     </div>
@@ -897,7 +1232,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
     <!-- STACK -->
     <div class="sec-head reveal" style="margin-top:84px;margin-bottom:32px">
-      <div class="sec-meta"><span class="idx">03.B</span><span>// ARSENAL TECHNIQUE</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">06.B</span><span>// ARSENAL TECHNIQUE</span><span class="ln"></span></div>
     </div>
     <div class="stack-cols reveal">
       <div class="stack-col">
@@ -920,168 +1255,11 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   </div>
 </section>
 
-<!-- ===================== RÉALISATIONS (PRO) ===================== -->
-<section id="realisations">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">04</span><span>// DOSSIERS OPÉRATIONNELS</span><span class="ln"></span></div>
-      <h2 class="sec-title">Réalisations <em>professionnelles</em></h2>
-      <p class="sec-sub">Plus de dix ans à concevoir, piloter et déployer des systèmes de sûreté et de supervision pour un opérateur d'infrastructure ferroviaire majeur en Belgique. De l'analyse du besoin à la réception : cahiers des charges, marchés publics, pilotage de sous-traitants et formation des équipes. <span style="color:var(--text-faint)">// détails anonymisés</span></p>
-    </div>
-
-    <div class="frame role-block reveal">
-      <div class="role-block__hd">
-        <span class="mono-tag">// FONCTION</span>
-        <span class="ttl">Le pont entre les opérations de sûreté et l'IT</span>
-      </div>
-      <p>Au sein du service de sécurité corporate d'un opérateur ferroviaire majeur, je conçois et je supporte les <strong>salles de contrôle</strong> (centre d'opérations, salles régionales et leurs back-ups) ainsi que la <strong>gestion des accès & badges</strong> sur des dizaines de sites. Je traduis les besoins opérationnels en <strong>analyses fonctionnelles</strong> exploitables par l'IT, je définis l'existant et la cible, j'établis les <strong>roadmaps</strong> et j'accompagne les arbitrages budgétaires — en pilotant les contrats-cadres, les équipes IT et les sous-traitants.</p>
-      <div class="role-block__resp">
-        <span>Analyses fonctionnelles</span>
-        <span>Roadmap & budget</span>
-        <span>Contrats-cadres</span>
-        <span>Mise en service & conformité</span>
-        <span>Vidéo · intrusion · incendie · accès</span>
-        <span>Formation des opérateurs</span>
-        <span>Haute disponibilité</span>
-        <span>Veille & benchmarking</span>
-      </div>
-    </div>
-
-    <div class="real-grid">
-
-      <div class="frame dossier reveal">
-        <div class="dossier__top"><span class="dossier__cls">DOSSIER // INFRA</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>Security Operation Center — nouvelle génération</h4>
-        <div class="role">RÔLE // Pilotage de A à Z · marché public · principal + repli</div>
-        <p>Conception et déploiement d'un nouveau centre d'opérations de sûreté et de son site de repli. De l'analyse du besoin à la réception : cahier des charges, ergonomie des postes opérateurs, continuité d'activité — chaque choix validé sur le terrain avec les agents.</p>
-        <div class="dossier__tags"><span>SOC</span><span>Continuité</span><span>Ergonomie</span></div>
-      </div>
-
-      <div class="frame dossier reveal d1">
-        <div class="dossier__top"><span class="dossier__cls">DOSSIER // SUPERVISION</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>Refonte des Control Rooms techniques</h4>
-        <div class="role">RÔLE // Architecture & conduite du changement</div>
-        <p>Centralisation de la supervision — vidéo, intrusion, incendie, contrôle d'accès — sur des postes opérateurs unifiés répartis sur plusieurs positions. Une refonte pensée pour réduire la charge cognitive des opérateurs et fiabiliser la prise de décision.</p>
-        <div class="dossier__tags"><span>Supervision</span><span>CCTV</span><span>Multi-postes</span></div>
-      </div>
-
-      <div class="frame dossier reveal">
-        <div class="dossier__top"><span class="dossier__cls">DOSSIER // RÉSEAU</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>CommandCar — poste de commandement mobile</h4>
-        <div class="role">RÔLE // Conception intégrale · CSC · réception · formation</div>
-        <p>Poste de commandement mobile conçu de A à Z, communiquant en temps réel avec le centre fixe : module de communication sur-mesure (4G/APN dédié, 802.1x/Radius), accès vidéo complet, alarmes intrusion/CO/incendie, le tout pilotable à distance. Cahier des charges, tests et réception du véhicule, procédures et formation des intervenants pour les scénarios de crise.</p>
-        <div class="kpis">
-          <div class="kpi"><b>72&nbsp;h</b><small>Autonomie</small></div>
-          <div class="kpi"><b>4G</b><small>802.1x / Radius</small></div>
-          <div class="kpi"><b>Temps réel</b><small>Lien au SOC</small></div>
-        </div>
-        <div class="dossier__tags"><span>Réseau</span><span>802.1x</span><span>CSC</span><span>Terrain</span></div>
-      </div>
-
-      <div class="frame dossier reveal d1">
-        <div class="dossier__top"><span class="dossier__cls">DOSSIER // DEV</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>Flotte de surveillance mobile — 21 unités</h4>
-        <div class="role">RÔLE // Dev applicatif · marché d'acquisition · sous-traitance</div>
-        <p>Mise en service d'un parc de 21 caméras mobiles autonomes sur remorque (PTZ 360°, zoom 36x, infrarouge). <strong style="color:var(--text)">Développement de l'application PHP/JS</strong> qui pilote toute la flotte via API. Côté gestion : marché d'acquisition, encadrement du sous-traitant, stocks, formation des chauffeurs et procédures d'exploitation.</p>
-        <div class="kpis">
-          <div class="kpi"><b>21</b><small>Unités</small></div>
-          <div class="kpi"><b>~28 j</b><small>Autonomie</small></div>
-          <div class="kpi"><b>PHP/JS</b><small>Pilotage API</small></div>
-        </div>
-        <div class="dossier__tags"><span>PHP</span><span>JS</span><span>API</span><span>Flotte</span></div>
-      </div>
-
-      <div class="frame dossier reveal">
-        <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>Surveillance mobile — nouvelle génération</h4>
-        <div class="role">RÔLE // Analyse · CSC complet · nouvelles méthodes</div>
-        <p>Refonte complète de la flotte sur la base d'une analyse des défauts de la génération précédente : passage à une batterie lithium-ion, caméras 4K, GPS et lien 3G/4G. Rédaction du cahier des charges de transformation et définition des nouvelles méthodes de travail des équipes. « Exit l'analogique. »</p>
-        <div class="kpis">
-          <div class="kpi"><b>4K</b><small>Zoom 32x</small></div>
-          <div class="kpi"><b>Li-ion</b><small>Alimentation</small></div>
-          <div class="kpi"><b>GPS</b><small>3G / 4G</small></div>
-        </div>
-        <div class="dossier__tags"><span>4K</span><span>Lithium</span><span>GPS</span><span>CSC</span></div>
-      </div>
-
-      <div class="frame dossier reveal d1">
-        <div class="dossier__top"><span class="dossier__cls">DOSSIER // PLATEFORME</span><span class="dossier__st prog">EN PRODUCTION</span></div>
-        <h4>Hypervisor — supervision unifiée des alarmes</h4>
-        <div class="role">RÔLE // Intégration & déploiement transverse</div>
-        <p>Déploiement d'une plateforme unifiant la gestion des alarmes, toutes technologies confondues — intrusion, incendie, ascenseurs, tunnels, ventilation… Une seule interface en remplacement d'une cinquantaine de logiciels métiers : moins d'erreurs, formation simplifiée, supervision homogène.</p>
-        <div class="kpis">
-          <div class="kpi"><b>~50 → 1</b><small>Logiciels unifiés</small></div>
-          <div class="kpi"><b>Multi-tech</b><small>Toutes alarmes</small></div>
-        </div>
-        <div class="dossier__tags"><span>Plateforme</span><span>Intégration</span><span>Alarmes</span></div>
-      </div>
-
-      <div class="frame dossier reveal">
-        <div class="dossier__top"><span class="dossier__cls">DOSSIER // DEV</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>CCTV embarquée — nouvelles rames</h4>
-        <div class="role">RÔLE // Définition technique & développement logiciel</div>
-        <p>Définition du parc de caméras pour les nouvelles voitures, puis développement du logiciel de récupération des images à distance (réseau cellulaire ou borne WiFi). Rédaction du manuel, formation des utilisateurs et suivi du sous-traitant.</p>
-        <div class="dossier__tags"><span>CCTV</span><span>Cellulaire</span><span>Logiciel</span></div>
-      </div>
-
-      <div class="frame dossier reveal d1">
-        <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>Valise de surveillance autonome</h4>
-        <div class="role">RÔLE // Conception sur-mesure · CSC · attribution de marché</div>
-        <p>Aucune solution du marché ne dépassait 3 à 5 jours d'autonomie sans secteur. En optimisant la consommation de chaque composant, conception d'une valise atteignant 14 jours — GPS, 3G/4G, analyse intelligente et zoom. Rédaction du cahier des charges et attribution du marché au fournisseur.</p>
-        <div class="kpis">
-          <div class="kpi"><b>14 j</b><small>Sans secteur</small></div>
-          <div class="kpi"><b>Sur-mesure</b><small>Vs. 3-5 j marché</small></div>
-        </div>
-        <div class="dossier__tags"><span>Autonomie</span><span>Sur-mesure</span><span>CSC</span></div>
-      </div>
-
-      <div class="frame dossier reveal">
-        <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>Traçage anti-vol de câbles</h4>
-        <div class="role">RÔLE // Tests, déploiement & formation</div>
-        <p>Mise en place d'un système de traçage pour prévenir les vols de câbles. Validation en laboratoire puis en conditions réelles pour minimiser les fausses alarmes, formation des opérateurs des Control Rooms et rédaction des consignes.</p>
-        <div class="dossier__tags"><span>Traçage</span><span>Tests</span><span>Anti-vol</span></div>
-      </div>
-
-      <div class="frame dossier reveal d1">
-        <div class="dossier__top"><span class="dossier__cls">DOSSIER // PRODUCT</span><span class="dossier__st prog">EN COURS</span></div>
-        <h4>Product Owner — applications terrain</h4>
-        <div class="role">RÔLE // Product Owner · méthode agile</div>
-        <p>Pilotage produit des applications smartphone des agents de terrain : analyse du besoin, backlog et priorisation, testing. Animation de groupes de référence d'agents (méthode agile) et formation des coachs au déploiement.</p>
-        <div class="dossier__tags"><span>Product Owner</span><span>Agile</span><span>Mobile</span></div>
-      </div>
-
-      <div class="frame dossier dossier--wide reveal">
-        <div class="dossier__top"><span class="dossier__cls">DOSSIER // DIVERS</span><span class="dossier__st arch">+ ARCHIVE</span></div>
-        <h4>Et encore…</h4>
-        <p>Un échantillon parmi d'autres chantiers menés sur la même période :</p>
-        <div class="dossier__tags more">
-          <span>Interface PHP de pilotage de flotte (API)</span>
-          <span>Outil web interne de gestion d'incidents (opérateurs)</span>
-          <span>Contrôle qualité trimestriel des caméras</span>
-          <span>Migration base Access → Azure / Power-BI</span>
-          <span>Signature digitale & lecteurs e-ID</span>
-          <span>Radio « trunking » & dispositif man-down</span>
-          <span>Caméras thermiques</span>
-          <span>Bodycam agents</span>
-        </div>
-      </div>
-
-    </div>
-
-    <div style="text-align:center;margin-top:44px" class="reveal">
-      <a href="mailto:jerome@fafchamps.be?subject=Demande%20de%20dossier%20d%C3%A9taill%C3%A9" class="btn">Dossier détaillé sur demande <span class="ar">→</span></a>
-      <p style="margin-top:16px;font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;color:var(--text-faint)">Réalisations présentées de façon anonymisée · dossier complet communiqué sur demande, sous accord de confidentialité.</p>
-    </div>
-  </div>
-</section>
-
 <!-- ===================== PROJETS ===================== -->
 <section id="projets">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">05</span><span>// ARCHIVES</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">07</span><span>// ARCHIVES</span><span class="ln"></span></div>
       <h2 class="sec-title">Projets <em>perso & communautaires</em></h2>
       <p class="sec-sub">Deux décennies de plateformes communautaires, de réseaux, de domotique et d'expérimentations. Sélection.</p>
     </div>
@@ -1131,41 +1309,8 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       </div>
     </div>
 
-    <!-- ===== ACTIVITÉ GITHUB (alimentée par data/github.json) ===== -->
-    <div class="sec-head reveal" style="margin-top:74px;margin-bottom:30px">
-      <div class="sec-meta"><span class="idx">05.A</span><span>// ACTIVITÉ GITHUB</span><span class="ln"></span></div>
-      <h2 class="sec-title">Le code <em>parle</em></h2>
-      <p class="sec-sub">Flux synchronisé chaque jour depuis <a href="https://github.com/replicatorbe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">@replicatorbe</a> — contributions des 12 derniers mois et dépôts publics récents.</p>
-    </div>
-
-    <div class="gh-panels">
-      <!-- mur de contributions -->
-      <div class="frame gh-panel reveal">
-        <div class="gh-panel__bar"><span class="dots"><i></i><i></i><i></i></span> contributions — github.com/replicatorbe<span class="grow"></span><a href="https://github.com/replicatorbe" target="_blank" rel="noopener">voir le profil →</a></div>
-        <div class="gh-panel__body">
-          <div class="gh-contrib__top">
-            <div class="gh-num"><span id="ghTotal">2&thinsp;601</span> <span class="u">contrib.</span></div>
-            <div class="gh-num__lab">sur les <b>12 derniers mois</b> — une pratique quotidienne du code.</div>
-          </div>
-          <div class="gh-cal-wrap"><div class="gh-cal" id="ghCal">
-            <div class="gh-loading">chargement du mur de contributions <span class="bk">_</span></div>
-          </div></div>
-          <div class="gh-legend" id="ghLegend" hidden>Moins <i></i><i></i><i></i><i></i><i></i> Plus</div>
-          <div class="gh-foot"><span><span class="live">●</span> synchronisation quotidienne</span><span id="ghGen"></span></div>
-        </div>
-      </div>
-
-      <!-- git log : dépôts publics -->
-      <div class="frame gh-panel reveal d1">
-        <div class="gh-panel__bar"><span class="dots"><i></i><i></i><i></i></span> git log --oneline · dépôts publics<span class="grow"></span><span id="ghRepoCount"></span></div>
-        <div class="gh-panel__body">
-          <div class="gh-log" id="ghLog"><div class="gh-loading">git log <span class="bk">_</span></div></div>
-        </div>
-      </div>
-    </div>
-
     <div class="sec-head reveal archive-head">
-      <div class="sec-meta"><span class="idx">05.B</span><span>// ARCHIVES VISUELLES</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">07.B</span><span>// ARCHIVES VISUELLES</span><span class="ln"></span></div>
       <p class="sec-sub" style="margin-top:4px">Quelques captures d'époque — parce que le web du début des années 2000 mérite qu'on s'en souvienne.</p>
     </div>
     <div class="gallery">
@@ -1191,7 +1336,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <section id="formation">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">05.C</span><span>// ENTRAÎNEMENT CONTINU</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">07.C</span><span>// ENTRAÎNEMENT CONTINU</span><span class="ln"></span></div>
       <h2 class="sec-title">Veille & <em>montée en compétence</em></h2>
     </div>
     <div class="learn-grid">
@@ -1221,7 +1366,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <section id="publications">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">06</span><span>// PUBLICATIONS</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">08</span><span>// PUBLICATIONS</span><span class="ln"></span></div>
       <h2 class="sec-title">Ce que j'<em>écris</em></h2>
       <p class="sec-sub">Notes techniques et retours d'expérience — infrastructure, réseau, DevOps et sûreté. Pas de commentaires, pas de pistage : un <a href="/blog/feed.xml" style="color:var(--cyan);text-decoration:underline">flux RSS</a>, et c'est tout.</p>
     </div>
@@ -1247,7 +1392,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <section id="contact" class="contact">
   <div class="wrap">
     <div class="sec-head reveal" style="margin-bottom:42px">
-      <div class="sec-meta"><span class="idx">07</span><span>// CANAL</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">09</span><span>// CANAL</span><span class="ln"></span></div>
     </div>
     <div class="contact__grid">
       <div class="reveal">
@@ -1361,6 +1506,18 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       'Bâtisseur de communautés en ligne, bidouilleur, passionné',
       'de cybersécurité et de réseau. Basé en Belgique.',
       'Membre du hackerspace Wolfplex (Charleroi).'].join('\n')},
+    'parcours.txt':{type:'file',content:[
+        '2002  IRC, ActionScript, Red5 .... Chat.fr, 700+ connectes',
+        '2004  PHP, Linux, LAMP .......... fafchamps.be, debut sysadmin',
+        '2006  PHP a l\'echelle, infra .... Adosbox, de bout en bout',
+        '2007  Flex, AS3, streaming ...... Espace-IRC',
+        '2009  Java, Spring, Hibernate ... developpement objet structure',
+        '2013  C#, PHP/JS, API, surete ... le code pilote du materiel',
+        '2015  ESP32, Home Assistant ..... domotique auto-hebergee',
+        '2020  Flutter, Docker, LLM ...... Baboon mobile, moderation IA',
+        '2026  PHP CLI, statique ......... ce site',
+        '',
+        'Six changements de pile. Aucune annee sans ecrire de code.'].join('\n')},
     'skills.txt':{type:'file',content:[
       'Développement .......... 96%','Réseau ................. 90%',
       'DevOps & automatisation  90%','Administration système . 84%',
@@ -1653,7 +1810,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       const id=e.target.id; if(map[id]) map[id].classList.add('active');
     }});
   },{rootMargin:'-45% 0px -50% 0px'});
-  ['accueil','profil','competences','realisations','projets','publications','contact'].forEach(id=>{
+  ['accueil','parcours','realisations','code','profil','competences','projets','publications','contact'].forEach(id=>{
     const s=document.getElementById(id); if(s) io.observe(s);
   });
 })();
