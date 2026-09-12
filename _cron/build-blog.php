@@ -536,11 +536,6 @@ function head_common(string $title, string $desc, string $canonical, string $ext
 <div class="grain" aria-hidden="true"></div>
 <div class="scanlines" aria-hidden="true"></div>
 
-<div class="statusbar">
-  <div class="seg"><span class="dot"></span> SYS:ONLINE<span class="sep">/</span>PUBLICATIONS</div>
-  <div class="seg hide-s">BELGIQUE 🇧🇪<span class="sep">/</span>CLEARANCE:PUBLIC</div>
-  <div class="seg"><a href="/blog/feed.xml">RSS</a></div>
-</div>
 ';
 }
 
@@ -555,6 +550,7 @@ function topbar(string $on = ''): string {
       <a href="/">Accueil</a>
       <a href="/blog/"' . ($on === 'blog' ? ' class="on"' : '') . '>Publications</a>
       <a href="/#contact">Contact</a>
+      <a href="/blog/feed.xml">RSS</a>
     </nav>
   </div>
 </div>
