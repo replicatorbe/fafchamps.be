@@ -13,8 +13,8 @@
   --line:rgba(126,148,178,.10);
   --line-bright:rgba(126,148,178,.22);
   --text:#c4ccd8;
-  --text-dim:#6c7686;
-  --text-faint:#444c5a;
+  --text-dim:#8e99ab;
+  --text-faint:#6c7686;
   --amber:#ffb13d;
   --amber-soft:#ffca74;
   --cyan:#48d6cf;
@@ -24,7 +24,7 @@
   --ff-body:'IBM Plex Sans', sans-serif;
   --ff-mono:'JetBrains Mono', monospace;
   --maxw:1240px;
-  --readw:748px;
+  --readw:640px;
   --ease:cubic-bezier(.16,.84,.44,1);
 }
 
@@ -184,10 +184,11 @@ a:focus:not(:focus-visible){outline:none}
   text-transform:uppercase;color:var(--text-faint)}
 .art-meta time{color:var(--amber)}
 .art-meta .s{color:var(--line-bright)}
-.art-lead{color:var(--text-dim);font-size:16.5px;margin-top:18px;max-width:68ch}
+.art-lead{color:var(--text-dim);font-size:17px;margin-top:18px;max-width:68ch}
 
 /* prose */
-.prose{padding-block:38px 10px;font-size:16.5px;line-height:1.78}
+.prose{padding-block:38px 10px;font-size:18px;line-height:1.75}
+@media (max-width:560px){.prose{font-size:17px}}
 .prose>*+*{margin-top:20px}
 .prose h2,.prose h3,.prose h4{font-family:var(--ff-display);font-weight:600;
   letter-spacing:-.01em;line-height:1.25;color:#e2e7ef;scroll-margin-top:70px}
@@ -361,3 +362,67 @@ footer{border-top:1px solid var(--line-bright);margin-top:74px;padding-block:26p
 /* la date de l'en-tête d'article pointe vers son mois d'archives */
 .art-meta a time{color:var(--amber)}
 .art-meta a:hover time{color:var(--amber-soft);text-decoration:underline}
+
+/* ============================================================= *
+ *  LECTURE — pages d'article                                     *
+ * ============================================================= *
+ *  Les effets « terminal » servent la vitrine : sur vingt minutes
+ *  de lecture suivie, la trame fixe scintille sous le texte qui
+ *  défile. Sur une page d'article, ils se taisent.               */
+
+body.is-article{
+  background-color:#0f1319;          /* moins noir : supprime le halation */
+  -webkit-font-smoothing:auto;       /* antialiased amincit les glyphes sur fond sombre */
+  background-image:
+    linear-gradient(rgba(126,148,178,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(126,148,178,.045) 1px, transparent 1px);
+}
+body.is-article .grain,
+body.is-article .scanlines{display:none}
+body.is-article::after{
+  background:
+    radial-gradient(900px 600px at 78% -5%, rgba(255,177,61,.05), transparent 60%),
+    radial-gradient(1200px 900px at 50% 50%, transparent 70%, rgba(0,0,0,.28) 100%);
+}
+
+/* ---------- bascule « mode lecture » ---------- */
+.readbar{display:flex;justify-content:flex-end;margin-bottom:6px}
+.readtoggle{
+  display:inline-flex;align-items:center;gap:9px;cursor:pointer;
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text-dim);background:transparent;border:1px solid var(--line-bright);
+  padding:7px 12px;transition:color .2s var(--ease),border-color .2s var(--ease);
+}
+.readtoggle:hover{color:var(--amber);border-color:var(--amber)}
+.readtoggle .ic{width:9px;height:9px;flex:0 0 auto;border:1px solid currentColor;
+  background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+.readtoggle .off{display:none}
+:root[data-read="on"] .readtoggle .on{display:none}
+:root[data-read="on"] .readtoggle .off{display:inline}
+
+/* ---------- MODE LECTURE : thème clair, papier chaud ---------- */
+:root[data-read="on"]{
+  --bg:#f4f1ea; --bg-2:#eeeade; --panel:#fffdf8; --panel-2:#f7f4ec;
+  --line:rgba(35,38,44,.13); --line-bright:rgba(35,38,44,.26);
+  --text:#23262c; --text-dim:#555c67; --text-faint:#5f6672;
+  --amber:#95560a; --amber-soft:#7d4708; --cyan:#0b645f; --green:#1c6b3a;
+}
+:root[data-read="on"] body{background-color:var(--bg);background-image:none;-webkit-font-smoothing:auto}
+:root[data-read="on"] body::after{background:none}
+:root[data-read="on"] .grain,
+:root[data-read="on"] .scanlines{display:none}
+:root[data-read="on"] .art-head h1,
+:root[data-read="on"] .prose h2,
+:root[data-read="on"] .prose h3,
+:root[data-read="on"] .prose h4,
+:root[data-read="on"] .prose strong{color:#12151a}
+:root[data-read="on"] .prose blockquote{background:rgba(149,86,10,.06)}
+:root[data-read="on"] .prose pre code{color:var(--text)}
+:root[data-read="on"] .cat{background:rgba(149,86,10,.09);border-color:rgba(149,86,10,.4)}
+:root[data-read="on"] .btn,
+:root[data-read="on"] .blogbrand__mono,
+:root[data-read="on"] .subnav a.on{color:#fffdf8}
+:root[data-read="on"] .statusbar{background:var(--panel)}
+:root[data-read="on"] ::selection{background:var(--amber);color:#fffdf8}
+:root[data-read="on"] ::-webkit-scrollbar-track{background:var(--bg)}
+:root[data-read="on"] ::-webkit-scrollbar-thumb{background:#cfc9bb;border-color:var(--bg)}

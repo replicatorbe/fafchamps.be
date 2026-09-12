@@ -497,7 +497,7 @@ ksort($tagsAll);
 
 /* ============================== TEMPLATES =============================== */
 
-function head_common(string $title, string $desc, string $canonical, string $extra = '', bool $noindex = false): string {
+function head_common(string $title, string $desc, string $canonical, string $extra = '', bool $noindex = false, string $bodyClass = ''): string {
     return MARKER . "\n"
 . '<!DOCTYPE html>
 <html lang="fr" dir="ltr">
@@ -515,8 +515,9 @@ function head_common(string $title, string $desc, string $canonical, string $ext
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/blog.css?v=' . CSS_VER . '">
+<script>try{if(localStorage.getItem(\'fcb_read\')===\'1\')document.documentElement.setAttribute(\'data-read\',\'on\')}catch(e){}</script>
 ' . $extra . '</head>
-<body>
+<body' . ($bodyClass !== '' ? ' class="' . $bodyClass . '"' : '') . '>
 <div class="grain" aria-hidden="true"></div>
 <div class="scanlines" aria-hidden="true"></div>
 
@@ -593,11 +594,18 @@ function render_post(array $p, ?array $prev, ?array $next): string {
         . '</script>' . "\n";
 
     $h  = head_common($p['title'] . ' · ' . BLOG_TITLE . ' — ' . SITE_NAME,
-                      $p['summary'], $url, $extra, !$p['listed']);
+                      $p['summary'], $url, $extra, !$p['listed'], 'is-article');
     $h .= topbar();
     $h .= '<main class="wrap">
   <div class="read">
 ' . crumb([[BLOG_TITLE, '/blog/'], [$p['cat'], '/blog/categorie/' . $p['cat_slug'] . '/'], [$p['slug'], null]]) . '
+
+    <div class="readbar">
+      <button class="readtoggle" id="readToggle" type="button" aria-pressed="false">
+        <span class="ic" aria-hidden="true"></span>
+        <span class="on">Mode lecture</span><span class="off">Mode terminal</span>
+      </button>
+    </div>
 
     <header class="art-head">
       <h1>' . e($p['title']) . '</h1>
@@ -619,6 +627,21 @@ function render_post(array $p, ?array $prev, ?array $next): string {
 
     <article class="prose">
 ' . $p['html'] . '    </article>
+
+    <script>
+    (function(){
+      var b=document.getElementById("readToggle"); if(!b) return;
+      var r=document.documentElement;
+      function sync(){ b.setAttribute("aria-pressed", r.getAttribute("data-read")==="on" ? "true":"false"); }
+      sync();
+      b.addEventListener("click",function(){
+        var on = r.getAttribute("data-read")==="on";
+        if(on){ r.removeAttribute("data-read"); } else { r.setAttribute("data-read","on"); }
+        try{ localStorage.setItem("fcb_read", on ? "0" : "1"); }catch(e){}
+        sync();
+      });
+    })();
+    </script>
 
     <div class="art-foot">';
     $h .= '
