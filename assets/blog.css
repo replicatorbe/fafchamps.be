@@ -24,7 +24,8 @@
   --ff-body:'IBM Plex Sans', sans-serif;
   --ff-mono:'JetBrains Mono', monospace;
   --maxw:1240px;
-  --readw:640px;
+  --readw:680px;
+  --wide:940px;
   --ease:cubic-bezier(.16,.84,.44,1);
 }
 
@@ -73,7 +74,7 @@ a:focus:not(:focus-visible){outline:none}
 ::-webkit-scrollbar-thumb:hover{background:var(--amber)}
 
 .wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding-inline:24px}
-.read{max-width:var(--readw)}
+.read{max-width:var(--readw);margin-inline:auto}
 
 /* ---------- Barre d'état + en-tête ---------- */
 .statusbar{
@@ -426,3 +427,17 @@ body.is-article::after{
 :root[data-read="on"] ::selection{background:var(--amber);color:#fffdf8}
 :root[data-read="on"] ::-webkit-scrollbar-track{background:var(--bg)}
 :root[data-read="on"] ::-webkit-scrollbar-thumb{background:#cfc9bb;border-color:var(--bg)}
+
+/* ---------- blocs larges : ils débordent de la colonne de lecture ----------
+   Le texte garde une longueur de ligne confortable (~75 caractères), mais le
+   code, les tableaux, les schémas et les images ne sont plus enfermés dans la
+   même largeur : ils cessent de défiler horizontalement et occupent la page.
+   Certains blocs Pascal de ces archives font plus de 200 caractères. */
+@media (min-width:1080px){
+  .prose > pre,
+  .prose > .tablewrap,
+  .prose > figure{
+    width:var(--wide);
+    margin-inline:calc((var(--readw) - var(--wide)) / 2);
+  }
+}
