@@ -429,12 +429,24 @@ foreach ($files as $file) {
     $tags = array_values(array_unique(array_map(fn($t) => mb_strtolower(trim((string)$t)), (array)$tags)));
 
     $html  = md_to_html($body);
-    $words = max(1, str_word_count(strip_tags($html), 0, 'àâäéèêëîïôöùûüÿçœæÀÂÄÉÈÊËÎÏÔÖÙÛÜŸÇ0123456789'));
+    $plain = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $words = max(1, str_word_count($plain, 0, 'àâäéèêëîïôöùûüÿçœæÀÂÄÉÈÊËÎÏÔÖÙÛÜŸÇ0123456789'));
     $sum   = trim((string)($meta['summary'] ?? ''));
     if ($sum === '') {
+        // Résumé dérivé du premier paragraphe. strip_tags() retire les balises
+        // mais PAS les entités : sans le décodage, « s&#039;agit » ressortirait
+        // ré-échappé en « s&amp;#039;agit » dans la meta, le chapô et le RSS.
         $first = '';
-        if (preg_match('~<p>(.*?)</p>~s', $html, $m)) $first = trim(strip_tags($m[1]));
-        $sum = mb_substr($first, 0, 180) . (mb_strlen($first) > 180 ? '…' : '');
+        if (preg_match('~<p>(.*?)</p>~s', $html, $m)) {
+            $first = trim(html_entity_decode(strip_tags($m[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        }
+        if (mb_strlen($first) > 180) {
+            $cut = mb_substr($first, 0, 180);
+            $sp  = mb_strrpos($cut, ' ');
+            $sum = rtrim($sp !== false ? mb_substr($cut, 0, $sp) : $cut, " ,;:·—-") . '…';
+        } else {
+            $sum = $first;
+        }
     }
 
     if (isset($posts[$slug])) fail("slug en doublon « {$slug} » : " . basename($file));
