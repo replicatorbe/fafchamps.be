@@ -77,3 +77,9 @@ data/*.json
 .DS_Store
 .vscode/
 .idea/
+
+# ----- Sources d'images brutes -----
+# Captures d'écran non retravaillées : volumineuses, et seules les versions
+# préparées (montages, recadrages) ont vocation à être servies.
+img/capture decran*/
+.DS_Store
