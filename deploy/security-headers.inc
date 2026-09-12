@@ -23,12 +23,15 @@ add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 add_header Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()" always;
 
 # CSP. Le site n'a aucune dépendance externe hormis Google Fonts.
-#   script-src ne contient PAS 'unsafe-inline' : tout le JavaScript a été sorti
-#   dans des fichiers (assets/site.js, blog-list.js, blog-read.js), donc 'self'
-#   suffit. Seule exception, le script anti-clignotement du mode lecture : il
-#   doit s'exécuter avant le rendu, il reste donc inline et est autorisé par son
-#   empreinte. Ce script est figé dans le générateur ; s'il change un jour, il
-#   faut recalculer l'empreinte, sinon le thème clignote au chargement.
+#   script-src ne contient PAS 'unsafe-inline' : le gros du JavaScript est dans
+#   des fichiers (assets/site.js, assets/blog-list.js), donc 'self' suffit.
+#   Deux exceptions, les scripts de thème — celui de l'accueil (index.html) et
+#   celui du blog (inline_js() dans _cron/build-blog.php). Ils posent le mode
+#   lecture avant le premier rendu ET portent la bascule qui permet d'en sortir :
+#   ils doivent rester en ligne, sans dépendance réseau. D'où les deux empreintes.
+#   /!\ Une empreinte change dès qu'on touche à l'un de ces deux scripts.
+#   ./publier.sh publie le détecte et affiche la valeur à coller ici. Sans ça le
+#   navigateur refuse le script, et le mode lecture devient inatteignable.
 #   style-src garde 'unsafe-inline' : tout le CSS est encore inline.
 #   data: sert au favicon SVG et à la texture de grain.
-add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'sha256-7B7r0MF69gvCOx77eqmph4VIrQNxJlXrY6nq4qMVuZs='; connect-src 'self'" always;
+add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'sha256-KyRX8yLdt8Ot0Nr6KyLMq2jy6cw567KnpYw9avnPh2A=' 'sha256-co5sw6VxZjrfaEV6BO4PXwYZrLJk1VAs9Ulm8OHbdSU='; connect-src 'self'" always;
