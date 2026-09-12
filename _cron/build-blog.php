@@ -159,9 +159,12 @@ function md_inline(string $s): string {
     // 2. échappement (une seule fois : les sorties ci-dessous ne re-échappent pas)
     $s = htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 
-    // 3. images, puis liens — chaque balise produite est mise à l'abri
+    // 3. images, puis liens — chaque balise produite est mise à l'abri.
+    // La légende est capturée par (?:(?!&quot;).)* et non [^&]* : htmlspecialchars
+    // est passé avant, donc la moindre apostrophe y est déjà « &#039; ». Avec [^&]*
+    // la regex échouait et l'image entière retombait en Markdown brut.
     $s = preg_replace_callback(
-        '/!\[([^\]]*)\]\(((?:[^()\s]|\([^()\s]*\))+)(?:\s+&quot;([^&]*)&quot;)?\)/',
+        '/!\[([^\]]*)\]\(((?:[^()\s]|\([^()\s]*\))+)(?:\s+&quot;((?:(?!&quot;).)*)&quot;)?\)/',
         function ($m) use (&$tags) {
             $cap = $m[3] ?? '';
             $img = '<img src="' . safe_url($m[2]) . '" alt="' . $m[1] . '" loading="lazy" decoding="async">';
