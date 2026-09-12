@@ -23,8 +23,12 @@ add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 add_header Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()" always;
 
 # CSP. Le site n'a aucune dépendance externe hormis Google Fonts.
-#   'unsafe-inline' est nécessaire : tout le CSS et tout le JS sont inline
-#   (page unique, sans build). C'est le prix de l'absence de chaîne de
-#   construction ; frame-ancestors et object-src ferment l'essentiel du reste.
+#   script-src ne contient PAS 'unsafe-inline' : tout le JavaScript a été sorti
+#   dans des fichiers (assets/site.js, blog-list.js, blog-read.js), donc 'self'
+#   suffit. Seule exception, le script anti-clignotement du mode lecture : il
+#   doit s'exécuter avant le rendu, il reste donc inline et est autorisé par son
+#   empreinte. Ce script est figé dans le générateur ; s'il change un jour, il
+#   faut recalculer l'empreinte, sinon le thème clignote au chargement.
+#   style-src garde 'unsafe-inline' : tout le CSS est encore inline.
 #   data: sert au favicon SVG et à la texture de grain.
-add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self'" always;
+add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'sha256-7B7r0MF69gvCOx77eqmph4VIrQNxJlXrY6nq4qMVuZs='; connect-src 'self'" always;
