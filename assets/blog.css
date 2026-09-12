@@ -97,11 +97,10 @@ a:focus:not(:focus-visible){outline:none}
 }
 .blogbrand{display:flex;align-items:center;gap:12px}
 .blogbrand__mono{
-  width:34px;height:34px;flex:none;display:grid;place-items:center;
-  font-family:var(--ff-mono);font-weight:700;font-size:13px;
-  color:#0a0c10;background:var(--amber);
+  width:34px;height:34px;flex:none;overflow:hidden;background:var(--amber);
   clip-path:polygon(0 0,100% 0,100% 74%,74% 100%,0 100%);
 }
+.blogbrand__mono img{width:100%;height:100%;object-fit:cover;display:block}
 .blogbrand__txt{font-family:var(--ff-mono);font-size:12px;letter-spacing:.1em;color:var(--text)}
 .topnav{display:flex;align-items:center;gap:20px;font-family:var(--ff-mono);
   font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim)}
@@ -419,9 +418,7 @@ body.is-article::after{
 :root[data-read="on"] .prose pre code{color:var(--text)}
 :root[data-read="on"] .cat{background:rgba(149,86,10,.09);border-color:rgba(149,86,10,.4)}
 :root[data-read="on"] .btn,
-:root[data-read="on"] .blogbrand__mono,
 :root[data-read="on"] .subnav a.on{color:#fffdf8}
-:root[data-read="on"] .statusbar{background:var(--panel)}
 :root[data-read="on"] ::selection{background:var(--amber);color:#fffdf8}
 :root[data-read="on"] ::-webkit-scrollbar-track{background:var(--bg)}
 :root[data-read="on"] ::-webkit-scrollbar-thumb{background:#cfc9bb;border-color:var(--bg)}
