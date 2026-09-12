@@ -512,6 +512,131 @@ ksort($tagsAll);
 
 /* ============================== TEMPLATES =============================== */
 
+/**
+ * L'empreinte CSP ne dit rien de la VALIDITÉ du script : un script cassé a une
+ * empreinte parfaitement valide, il est juste rejeté en bloc par le navigateur
+ * — sans erreur CSP, sans avertissement, et le mode lecture meurt en silence.
+ * Ce contrôle grossier attrape le cas qui s'est réellement produit : des lignes
+ * parasites laissées par une édition automatisée dans le corps du nowdoc.
+ */
+function check_js_balance(): void {
+    if (!preg_match('~<script>(.*?)</script>~s', inline_js(), $m)) return;
+    $js = $m[1];
+
+    foreach ([['{', '}'], ['(', ')'], ['[', ']']] as [$open, $close]) {
+        if (substr_count($js, $open) !== substr_count($js, $close)) {
+            warn('le script du blog est déséquilibré : ' . $open . ' ' . substr_count($js, $open)
+                 . ' contre ' . $close . ' ' . substr_count($js, $close) . '. Il sera rejeté en bloc.');
+        }
+    }
+    /* une ligne de code qui commence par un guillemet ou un point de
+       concaténation ne vient jamais du JavaScript : c'est un résidu d'édition */
+    foreach (explode("\n", $js) as $i => $ligne) {
+        if (preg_match('~^\s*[."\']+\s*$~', $ligne)) {
+            warn('résidu d\'édition ligne ' . ($i + 1) . ' du script du blog : ' . trim($ligne));
+        }
+    }
+}
+
+
+/**
+ * La CSP (deploy/security-headers.inc) autorise les deux scripts de thème par
+ * leur empreinte. Si l'un d'eux change sans que l'empreinte suive, le navigateur
+ * le refuse : le thème ne se pose plus et la bascule devient un bouton mort —
+ * sans le moindre message d'erreur visible. On compare donc à chaque génération.
+ * L'accueil est statique mais passe par le même contrôle : c'est le seul endroit
+ * automatisé du projet, autant qu'il couvre les deux.
+ */
+function check_csp_hash(): void {
+    global $ROOT;
+    $conf = $ROOT . '/deploy/security-headers.inc';
+    if (!is_file($conf)) return;
+    $csp = file_get_contents($conf);
+
+    $home = $ROOT . '/index.html';
+    $sources = ['le blog (inline_js)' => inline_js()];
+    if (is_file($home)) $sources['l\'accueil (index.html)'] = file_get_contents($home);
+
+    foreach ($sources as $quoi => $html) {
+        if (!preg_match('~<script>(.*?)</script>~s', $html, $m)) continue;
+        $hash = 'sha256-' . base64_encode(hash('sha256', $m[1], true));
+        if (strpos($csp, $hash) !== false) continue;
+
+        warn("l'empreinte CSP du script de " . $quoi . " ne correspond plus.");
+        warn("  à coller dans deploy/security-headers.inc (script-src) :");
+        warn("  '" . $hash . "'");
+        warn("  puis : cp deploy/security-headers.inc /var/www/nginx/conf.d/ && \\");
+        warn("         docker exec all-sites-nginx nginx -t && docker exec all-sites-nginx nginx -s reload");
+    }
+}
+
+/**
+ * Le seul script du blog, servi en ligne dans le <head> et non en fichier.
+ * Raison : c'est l'unique sortie du mode clair. Le thème est posé par ce même
+ * script, qui ne peut pas échouer ; s'il fallait un second fichier pour en
+ * sortir, un déploiement partiel ou une requête bloquée laisserait le visiteur
+ * enfermé dans un thème qu'il n'a plus aucun moyen de quitter.
+ */
+function inline_js(): string {
+    return <<<'JS'
+<script>
+(function(){
+  var r=document.documentElement, m=document.querySelector('meta[name="theme-color"]');
+  function lu(){ try{ return localStorage.getItem('fcb_read')==='1'; }catch(e){ return false; } }
+  /* Posé avant le premier rendu : sans ça, la page clignote en sombre. */
+  function paint(on){
+    if(on){ r.setAttribute('data-read','on'); } else { r.removeAttribute('data-read'); }
+    if(m){ m.setAttribute('content', on ? '#f4f1ea' : '#0a0c10'); }
+  }
+  paint(lu());
+  document.addEventListener('DOMContentLoaded', function(){
+    var b=document.getElementById('readToggle');
+    if(b){ b.addEventListener('click', function(){
+      var next = r.getAttribute('data-read')!=='on';
+      /* on persiste avant d'afficher : une bascule qui ne survit pas au clic
+         suivant vaut moins qu'une bascule qui refuse de s'appliquer */
+      try{ localStorage.setItem('fcb_read', next?'1':'0'); }catch(e){}
+      paint(next);
+    }); }
+    /* un autre onglet a changé d'avis : on suit sans réécrire le stockage */
+    window.addEventListener('storage', function(e){ if(e.key==='fcb_read'){ paint(lu()); } });
+
+    /* Menu mobile : la case à cocher l'ouvre et le referme toute seule, JS ou
+       pas. Ce qui suit n'est que du confort, greffé si le script tourne. */
+    var n=document.getElementById('navSwitch'), nav=document.querySelector('.topnav');
+    if(!n) return;
+    var main=document.querySelector('main'), foot=document.querySelector('footer');
+    function sync(){
+      var on=n.checked;
+      document.body.style.overflow = on ? 'hidden' : '';
+      /* le menu recouvre la page : ce qu'il cache sort aussi du parcours clavier */
+      [main,foot].forEach(function(el){ if(el){ el.inert=on; } });
+    }
+    function shut(back){ n.checked=false; sync(); if(back){ n.focus(); } }
+    n.addEventListener('change', sync);
+    document.addEventListener('keydown', function(e){
+      if((e.key==='Escape'||e.key==='Esc') && n.checked){ shut(true); }
+    });
+    /* clic dans le vide du menu, à côté des liens */
+    if(nav){ nav.addEventListener('click', function(e){
+      if(e.target===nav && n.checked){ shut(false); }
+    }); }
+    /* Élargie au format bureau, la case resterait cochée alors que son bouton
+       n'est plus affiché : le verrou de défilement se refermerait sur le
+       visiteur, sans rien à cliquer pour en sortir. */
+    var wide=matchMedia('(min-width:801px)');
+    function relax(){ if(wide.matches && n.checked){ shut(false); } }
+    if(wide.addEventListener){ wide.addEventListener('change', relax); }
+    else if(wide.addListener){ wide.addListener(relax); }
+    /* retour arrière : le navigateur restaure la case cochée, et le verrou avec */
+    window.addEventListener('pageshow', function(e){ if(e.persisted && n.checked){ shut(false); } });
+  });
+})();
+</script>
+<noscript><style>.readtoggle{display:none!important}</style></noscript>
+JS;
+}
+
 function head_common(string $title, string $desc, string $canonical, string $extra = '', bool $noindex = false, string $bodyClass = ''): string {
     return MARKER . "\n"
 . '<!DOCTYPE html>
@@ -523,6 +648,7 @@ function head_common(string $title, string $desc, string $canonical, string $ext
 <meta name="description" content="' . e($desc) . '">
 <meta name="author" content="' . e(AUTHOR) . '">
 <meta name="theme-color" content="#0a0c10">
+' . inline_js() . '
 ' . ($noindex ? '<meta name="robots" content="noindex, follow">' . "\n" : '') . '<link rel="canonical" href="' . e($canonical) . '">
 <link rel="alternate" type="application/rss+xml" title="' . e(SITE_NAME . ' — ' . BLOG_TITLE) . '" href="' . SITE_URL . '/blog/feed.xml">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
@@ -532,7 +658,6 @@ function head_common(string $title, string $desc, string $canonical, string $ext
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/blog.css?v=' . CSS_VER . '">
-<script>try{if(localStorage.getItem(\'fcb_read\')===\'1\')document.documentElement.setAttribute(\'data-read\',\'on\')}catch(e){}</script>
 ' . $extra . '</head>
 <body' . ($bodyClass !== '' ? ' class="' . $bodyClass . '"' : '') . '>
 <div class="grain" aria-hidden="true"></div>
@@ -541,21 +666,41 @@ function head_common(string $title, string $desc, string $canonical, string $ext
 ';
 }
 
+/**
+ * Barre de navigation commune aux 60 pages.
+ * La bascule « mode lecture » y est logée et non dans la colonne d'article :
+ * le choix est mémorisé pour tout le site, il faut donc pouvoir le défaire
+ * depuis une liste, une catégorie ou une archive.
+ *
+ * Sous 800px, la même <nav> se transforme en menu plein écran, sur le modèle
+ * de l'accueil. La mécanique est une case à cocher — ces pages statiques
+ * n'embarquent aucun script de navigation et il aurait été dommage d'en
+ * ajouter un pour quatre liens. D'où l'ordre du balisage : la case DOIT
+ * précéder le bouton sandwich et la navigation, puisque c'est le sélecteur
+ * « frère suivant » (~) qui porte l'ouverture. Les deux éléments sont en
+ * display:none au-dessus de 800px : le rendu bureau est inchangé.
+ */
 function topbar(string $on = ''): string {
-    return '<div class="wrap">
+    return '<header class="wrap">
   <div class="topbar">
-    <a class="blogbrand" href="/" aria-label="Accueil">
+    <a class="blogbrand" href="/" aria-label="sMug — accueil du site">
       <span class="blogbrand__mono"><img src="/img/avatar-smug.png" alt="" width="128" height="128" decoding="async"></span>
       <span class="blogbrand__txt">sMug@replicatorbe</span>
     </a>
+    <input class="navswitch" type="checkbox" id="navSwitch" autocomplete="off" aria-label="Menu de navigation">
+    <label class="burger" for="navSwitch"><span></span><span></span><span></span></label>
     <nav class="topnav" aria-label="Navigation">
-      <a href="/">Accueil</a>
-      <a href="/blog/"' . ($on === 'blog' ? ' class="on"' : '') . '>Publications</a>
-      <a href="/#contact">Contact</a>
-      <a href="/blog/feed.xml">RSS</a>
+      <a href="/"><span class="num">01</span>Accueil</a>
+      <a href="/blog/"' . ($on === 'blog' ? ' class="on"' : '') . '><span class="num">02</span>Publications</a>
+      <a href="/#contact"><span class="num">03</span>Contact</a>
+      <a href="/blog/feed.xml"><span class="num">04</span>RSS</a>
     </nav>
+    <button class="readtoggle" id="readToggle" type="button">
+      <span class="ic" aria-hidden="true"></span>
+      <span class="on">Mode lecture</span><span class="off">Mode terminal</span>
+    </button>
   </div>
-</div>
+</header>
 ';
 }
 
@@ -614,13 +759,6 @@ function render_post(array $p, ?array $prev, ?array $next): string {
   <div class="read">
 ' . crumb([[BLOG_TITLE, '/blog/'], [$p['cat'], '/blog/categorie/' . $p['cat_slug'] . '/'], [$p['slug'], null]]) . '
 
-    <div class="readbar">
-      <button class="readtoggle" id="readToggle" type="button" aria-pressed="false">
-        <span class="ic" aria-hidden="true"></span>
-        <span class="on">Mode lecture</span><span class="off">Mode terminal</span>
-      </button>
-    </div>
-
     <header class="art-head">
       <h1>' . e($p['title']) . '</h1>
       <div class="art-meta">
@@ -641,8 +779,6 @@ function render_post(array $p, ?array $prev, ?array $next): string {
 
     <article class="prose">
 ' . $p['html'] . '    </article>
-
-    <script src="/assets/blog-read.js?v=1"></script>
 
     <div class="art-foot">';
     $h .= '
@@ -1232,3 +1368,6 @@ put($JSON_OUT, json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | J
 
 logmsg(sprintf('terminé : %d publiée(s) · %d non listée(s) · %d brouillon(s) · %d catégorie(s) · %d année(s)',
     count($listed), count($all) - count($listed), $drafts, count($cats), count($years)));
+
+check_js_balance();
+check_csp_hash();

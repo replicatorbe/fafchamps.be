@@ -355,6 +355,8 @@ touch -d "2019-03-14 09:20" ma-capture.png       # recale la date du fichier
 | La mise en page est cassée | la feuille de style a été touchée | `git checkout assets/blog.css` |
 | `Cannot connect to the Docker daemon` | Docker est arrêté | `sudo systemctl start docker` |
 | `Permission denied` en enregistrant dans nano | le fichier appartient à `root` (script lancé sans `publier.sh`) | `sudo chown -R $(id -un): _posts blog` puis repasser par `./publier.sh` |
+| `AVERTISSEMENT: l'empreinte CSP du script inline ne correspond plus` | le script du blog a été modifié dans `_cron/build-blog.php` | colle l'empreinte affichée dans `deploy/security-headers.inc`, copie le fichier dans `/var/www/nginx/conf.d/`, puis `docker exec all-sites-nginx nginx -t && docker exec all-sites-nginx nginx -s reload` |
+| Le mode lecture ne répond plus sur le blog | l'empreinte CSP ne correspond plus (message ci-dessus ignoré) | même correctif ; la console du navigateur affiche « Refused to execute inline script » |
 
 Fonctionnement interne du générateur : [`_cron/README-blog.md`](_cron/README-blog.md).
 Relevé de tous les endroits où une date apparaît : `DATATION.md`.

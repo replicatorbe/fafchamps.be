@@ -12,14 +12,16 @@
   --panel-2:#141923;
   --line:rgba(126,148,178,.10);
   --line-bright:rgba(126,148,178,.22);
+  --text-strong:#eef1f6;          /* titres et intitulés : un cran au-dessus de --text */
   --text:#c4ccd8;
   --text-dim:#8e99ab;
-  --text-faint:#6c7686;
+  --text-faint:#7a8396;
   --amber:#ffb13d;
   --amber-soft:#ffca74;
   --cyan:#48d6cf;
   --green:#62e08a;
   --red:#ff5d5d;
+  color-scheme:dark;
   --ff-display:'Chakra Petch', sans-serif;
   --ff-body:'IBM Plex Sans', sans-serif;
   --ff-mono:'JetBrains Mono', monospace;
@@ -92,10 +94,12 @@ a:focus:not(:focus-visible){outline:none}
 @media (max-width:640px){.statusbar .hide-s{display:none}}
 
 .topbar{
-  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  display:flex;align-items:center;gap:16px;
   padding-block:22px;border-bottom:1px solid var(--line);
 }
-.blogbrand{display:flex;align-items:center;gap:12px}
+/* la marge automatique colle la marque à gauche et pousse la navigation ET la
+   bascule « mode lecture » vers la droite, sans les séparer l'une de l'autre */
+.blogbrand{display:flex;align-items:center;gap:12px;margin-inline-end:auto}
 .blogbrand__mono{
   width:34px;height:34px;flex:none;overflow:hidden;background:var(--amber);
   clip-path:polygon(0 0,100% 0,100% 74%,74% 100%,0 100%);
@@ -107,7 +111,12 @@ a:focus:not(:focus-visible){outline:none}
 .topnav a{transition:color .2s var(--ease)}
 .topnav a:hover{color:var(--amber)}
 .topnav a.on{color:var(--amber)}
-@media (max-width:560px){.topnav{gap:13px;font-size:9.5px;letter-spacing:.1em}}
+/* La numérotation reprend le motif de l'accueil ; elle ne sert qu'au menu
+   plein écran mobile et reste invisible sur la barre bureau. */
+.topnav .num{display:none}
+/* Mécanique du menu mobile (case à cocher + bouton sandwich) : totalement
+   inerte au-dessus de 800px, donc hors flux et hors tabulation. */
+.navswitch,.burger{display:none}
 
 /* ---------- En-tête de section ---------- */
 .sec-head{padding-block:54px 34px}
@@ -166,6 +175,8 @@ a:focus:not(:focus-visible){outline:none}
   padding:30px 0;border-top:1px solid var(--line)}
 .empty .bk{animation:bk 1.05s steps(2) infinite}
 @keyframes bk{0%,49%{opacity:1}50%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.empty .bk{animation:none}}
+@media (prefers-reduced-motion:reduce){.topnav,.burger span{transition:none}}
 
 /* ---------- Article ---------- */
 .crumb{font-family:var(--ff-mono);font-size:11px;color:var(--text-faint);
@@ -352,7 +363,7 @@ footer{border-top:1px solid var(--line-bright);margin-top:74px;padding-block:26p
   clip-path:polygon(0 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%)}
 .catcard:hover{border-color:var(--amber);background:var(--panel-2)}
 .catcard b{display:block;font-family:var(--ff-display);font-size:17px;font-weight:600;
-  color:#eef1f6;transition:color .2s var(--ease)}
+  color:var(--text-strong);transition:color .2s var(--ease)}
 .catcard:hover b{color:var(--amber)}
 .catcard span{display:block;margin-top:6px;font-family:var(--ff-mono);font-size:10.5px;
   letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint)}
@@ -383,13 +394,20 @@ body.is-article::after{
     radial-gradient(1200px 900px at 50% 50%, transparent 70%, rgba(0,0,0,.28) 100%);
 }
 
-/* ---------- bascule « mode lecture » ---------- */
-.readbar{display:flex;justify-content:flex-end;margin-bottom:6px}
+/* ---------- bascule « mode lecture » ----------
+   Elle siège dans la barre de navigation, donc sur toutes les pages : le mode
+   clair est mémorisé pour tout le blog, on doit pouvoir le couper d'où qu'on
+   soit. Calquée sur .topnav a (mono, capitales, 10.5px), avec une cible
+   tactile qui ne descend pas sous 24px de haut. */
 .readtoggle{
-  display:inline-flex;align-items:center;gap:9px;cursor:pointer;
-  font-family:var(--ff-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:8px;flex:none;cursor:pointer;
+  font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--text-dim);background:transparent;border:1px solid var(--line-bright);
-  padding:7px 12px;transition:color .2s var(--ease),border-color .2s var(--ease);
+  padding:6px 11px;min-height:26px;
+  /* « MODE LECTURE » et « MODE TERMINAL » n'ont pas la même longueur : sans
+     largeur plancher, la navigation glisserait de 8px à chaque bascule. */
+  min-width:150px;justify-content:center;
+  transition:color .2s var(--ease),border-color .2s var(--ease);
 }
 .readtoggle:hover{color:var(--amber);border-color:var(--amber)}
 .readtoggle .ic{width:9px;height:9px;flex:0 0 auto;border:1px solid currentColor;
@@ -397,13 +415,99 @@ body.is-article::after{
 .readtoggle .off{display:none}
 :root[data-read="on"] .readtoggle .on{display:none}
 :root[data-read="on"] .readtoggle .off{display:inline}
+/* seul le texte distinguait les deux états : le carré s'inverse aussi */
+:root[data-read="on"] .readtoggle .ic{background:linear-gradient(90deg,transparent 50%,currentColor 50%)}
+
+/* ---------- barre de navigation en mobile ----------
+   Le compte est vite fait : marque (34 + 12 + 143) + 16 + quatre liens (292)
+   + 16 + bascule (150) = 663px de contenu, plus les 48px de gouttière du
+   .wrap, soit 711px. Sous 800px (marge prise sur le repli de police) la barre déborde ; la renvoyer à la
+   ligne donnait deux niveaux subis, la navigation pleine largeur sous le logo.
+   On reprend donc le langage de l'accueil : bouton sandwich et menu plein
+   écran. La bascule « mode lecture », elle, RESTE dans la barre à toutes les
+   largeurs — c'est la seule sortie du thème clair, elle ne peut pas dormir
+   derrière l'ouverture d'un menu.
+   Tout est en CSS : une case à cocher transparente porte le clic, le focus et
+   l'état ; aucune de ces 60 pages n'a besoin d'un script pour naviguer. */
+@media (max-width:800px){
+  .topbar{position:relative;gap:16px;padding-block:16px}
+
+  /* La case est le vrai bouton : native, focusable au clavier, actionnable à
+     la barre d'espace. On la rend invisible et on la pose pile sur le dessin,
+     qui n'est qu'un <label>. */
+  .navswitch{
+    display:block;position:absolute;right:0;top:50%;transform:translateY(-50%);
+    width:42px;height:42px;margin:0;padding:0;z-index:904;
+    -webkit-appearance:none;appearance:none;opacity:0;cursor:pointer;
+  }
+  /* Un anneau de focus sur une case transparente ne se verrait pas : on le
+     reporte sur le dessin, qui est son frère suivant. */
+  .navswitch:focus-visible ~ .burger{outline:2px solid var(--amber);outline-offset:3px}
+
+  /* Sans z-index, ce flex item resterait dans la couche de flux normal, donc
+     sous l'overlay : invisible mais toujours tabulable. La promesse ci-dessus
+     ne tient que par cette ligne. */
+  .readtoggle{z-index:903}
+
+  .burger{
+    display:flex;order:3;flex:none;z-index:903;
+    width:42px;height:42px;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    background:var(--panel);border:1px solid var(--line-bright);
+  }
+  .burger span{width:20px;height:2px;background:var(--amber);
+    transition:transform .3s var(--ease),opacity .3s var(--ease)}
+  /* les trois traits se replient en croix quand le menu est ouvert */
+  .navswitch:checked ~ .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .navswitch:checked ~ .burger span:nth-child(2){opacity:0}
+  .navswitch:checked ~ .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+  /* Le menu : la même <nav>, dépliée en plein écran. Le fond se compose à
+     partir de --bg, donc il suit le mode lecture ; la première déclaration
+     sert de repli aux navigateurs sans color-mix(). */
+  .topnav{
+    position:fixed;inset:0;z-index:902;
+    flex-direction:column;justify-content:safe center;gap:6px;
+    background:var(--bg);
+    background:color-mix(in srgb,var(--bg) 96%,transparent);
+    backdrop-filter:blur(10px);
+    padding:68px 20px 28px;overflow-y:auto;overscroll-behavior:contain;
+    opacity:0;visibility:hidden;
+    transition:opacity .35s var(--ease),visibility .35s var(--ease);
+  }
+  /* Tous les liens du menu quittent la page : il n'y a rien à refermer au
+     clic. Le rechargement et le retour arrière, eux, restaurent la case —
+     autocomplete="off" et un pageshow dans le script s'en chargent. */
+  .navswitch:checked ~ .topnav{opacity:1;visibility:visible}
+  /* Les quatre liens quittent le corps de texte mono minuscule de la barre
+     pour la typographie d'affichage de l'accueil : la cible tactile passe de
+     ~17px à ~50px de haut, largement au-dessus des 24px exigés. */
+  .topnav a{
+    display:flex;align-items:baseline;gap:14px;
+    font-family:var(--ff-display);font-weight:600;
+    font-size:clamp(24px,7.4vw,30px);letter-spacing:.04em;text-transform:none;
+    color:var(--text);
+  }
+  .topnav .num{display:inline;font-family:var(--ff-mono);font-weight:400;
+    font-size:13px;letter-spacing:.12em;color:var(--amber)}
+}
+/* La bascule se resserre là où la marque perd son texte, pour que la barre
+   garde de l'air entre l'avatar et le couple bascule + sandwich. */
+@media (max-width:560px){
+  .readtoggle{font-size:9.5px;letter-spacing:.1em;gap:7px;padding:6px 9px;min-width:128px}
+  /* Sous 560px, avatar + intitulé + bascule + sandwich ne tiennent plus :
+     c'est l'intitulé qui cède — l'accueil escamote sa marque de la même
+     façon —, jamais une cible tactile. Reste 34 + 16 + 128 + 16 + 42 = 236px
+     de contenu, confortable jusqu'à 320px de large. */
+  .blogbrand__txt{display:none}
+}
 
 /* ---------- MODE LECTURE : thème clair, papier chaud ---------- */
 :root[data-read="on"]{
   --bg:#f4f1ea; --bg-2:#eeeade; --panel:#fffdf8; --panel-2:#f7f4ec;
   --line:rgba(35,38,44,.13); --line-bright:rgba(35,38,44,.26);
-  --text:#23262c; --text-dim:#555c67; --text-faint:#5f6672;
+  --text-strong:#12151a; --text:#23262c; --text-dim:#555c67; --text-faint:#5f6672;
   --amber:#95560a; --amber-soft:#7d4708; --cyan:#0b645f; --green:#1c6b3a;
+  color-scheme:light;
 }
 :root[data-read="on"] body{background-color:var(--bg);background-image:none;-webkit-font-smoothing:auto}
 :root[data-read="on"] body::after{background:none}
@@ -413,12 +517,29 @@ body.is-article::after{
 :root[data-read="on"] .prose h2,
 :root[data-read="on"] .prose h3,
 :root[data-read="on"] .prose h4,
-:root[data-read="on"] .prose strong{color:#12151a}
+:root[data-read="on"] .prose strong{color:var(--text-strong)}
 :root[data-read="on"] .prose blockquote{background:rgba(149,86,10,.06)}
 :root[data-read="on"] .prose pre code{color:var(--text)}
 :root[data-read="on"] .cat{background:rgba(149,86,10,.09);border-color:rgba(149,86,10,.4)}
+/* la surcharge ci-dessus est plus spécifique que .cat:hover : sans cette
+   ligne, la pastille perdrait tout retour visuel au survol en mode clair. */
+:root[data-read="on"] .cat:hover{background:rgba(149,86,10,.18)}
+/* Pastilles pleines : sur l'ambre foncé du papier, le texte passe en clair —
+   le #0a0c10 du thème terminal y serait presque invisible. */
 :root[data-read="on"] .btn,
-:root[data-read="on"] .subnav a.on{color:#fffdf8}
+:root[data-read="on"] .subnav a.on,
+:root[data-read="on"] .fsort button.on,
+:root[data-read="on"] .chip.on{color:#fffdf8}
+/* …sauf le bouton fantôme, qui n'a aucun fond pour porter ce clair. */
+:root[data-read="on"] .btn--ghost{color:var(--amber);background:transparent}
+:root[data-read="on"] .btn--ghost:hover{color:var(--amber-soft);background:rgba(149,86,10,.09)}
+/* Le lien souligné gardait un trait cyan vif, invisible sur le papier. */
+:root[data-read="on"] .prose a{text-decoration-color:rgba(11,100,95,.45)}
+/* Idem pour la flèche des <select> de la barre de filtres. */
+:root[data-read="on"] .fgroup select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2395560a'/%3E%3C/svg%3E")}
+/* le gris bleuté du thème sombre vire au froid sur le papier. */
+:root[data-read="on"] .postrow:hover{background:rgba(35,38,44,.04)}
 :root[data-read="on"] ::selection{background:var(--amber);color:#fffdf8}
 :root[data-read="on"] ::-webkit-scrollbar-track{background:var(--bg)}
 :root[data-read="on"] ::-webkit-scrollbar-thumb{background:#cfc9bb;border-color:var(--bg)}
