@@ -488,7 +488,7 @@ section{position:relative;padding:120px 0;scroll-margin-top:44px}
 .konami__msg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
   text-align:center;padding:26px 36px;background:rgba(10,12,16,.72);border:1px solid var(--amber);
   box-shadow:0 0 50px rgba(255,177,61,.35);backdrop-filter:blur(2px)}
-.konami__msg h3{font-family:var(--ff-display);font-weight:700;font-size:clamp(22px,4vw,34px);
+.konami__msg .konami__ttl{font-family:var(--ff-display);font-weight:700;font-size:clamp(22px,4vw,34px);
   color:var(--amber);letter-spacing:.04em;text-shadow:0 0 24px rgba(255,177,61,.5)}
 .konami__msg p{font-family:var(--ff-mono);font-size:12px;color:var(--cyan);margin-top:10px;letter-spacing:.1em}
 .konami__msg small{display:block;margin-top:16px;font-family:var(--ff-mono);font-size:10px;color:var(--text-dim);letter-spacing:.12em}
@@ -630,7 +630,7 @@ a.stat--lk:hover .l,a.stat--lk:focus-visible .l{color:var(--amber)}
   font-size:clamp(34px,4.6vw,46px);color:var(--amber);white-space:nowrap}
 .flag-fig small{font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.09em;
   text-transform:uppercase;color:var(--text-dim);line-height:1.55}
-.dossier--flag h4{font-size:21px;margin-bottom:8px}
+.dossier--flag h3{font-size:21px;margin-bottom:8px}
 .dossier--flag p{font-size:14px}
 .flag-proof{margin-top:16px;padding-top:13px;border-top:1px dashed var(--line);
   font-size:13px;color:var(--text-dim);line-height:1.65;max-width:70ch}
@@ -670,7 +670,7 @@ a.stat--lk:hover .l,a.stat--lk:focus-visible .l{color:var(--amber)}
 .proj--shot .glyph{display:none}
 .proj--shot:hover .proj__thumb img{filter:saturate(1) brightness(.82)}
 .proj__body{padding:16px 17px 18px;flex:1;display:flex;flex-direction:column}
-.proj__body h4{font-family:var(--ff-display);font-size:17px;color:var(--text-strong);display:flex;
+.proj__body h3{font-family:var(--ff-display);font-size:17px;color:var(--text-strong);display:flex;
   justify-content:space-between;align-items:center;gap:10px}
 .proj__body .st{font-family:var(--ff-mono);font-size:9px;letter-spacing:.12em;
   padding:3px 7px;border:1px solid var(--line-bright);color:var(--text-dim);white-space:nowrap}
@@ -699,7 +699,7 @@ a.stat--lk:hover .l,a.stat--lk:focus-visible .l{color:var(--amber)}
   background:currentColor;box-shadow:0 0 7px currentColor}
 .dossier__st.prog{color:var(--amber)}
 .dossier__st.arch{color:var(--text-dim)}
-.dossier h4{font-family:var(--ff-display);font-size:18px;color:var(--text-strong);line-height:1.22;margin-bottom:7px}
+.dossier h3{font-family:var(--ff-display);font-size:18px;color:var(--text-strong);line-height:1.22;margin-bottom:7px}
 .dossier .role{font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.05em;
   color:var(--amber);margin-bottom:13px}
 .dossier p{font-size:14px;color:var(--text-dim);line-height:1.65;flex:1;margin:0;max-width:70ch}
@@ -1035,7 +1035,9 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <div class="konami" id="konami" aria-hidden="true">
   <canvas id="konamiCanvas"></canvas>
   <div class="konami__msg">
-    <h3>ACCÈS ROOT DÉBLOQUÉ</h3>
+    <!-- Titre décoratif de l'easter egg : volontairement pas un titre de niveau,
+         pour ne pas trouer le plan des sections. -->
+    <div class="konami__ttl">ACCÈS ROOT DÉBLOQUÉ</div>
     <p>// sMug@replicatorbe says hi 👋</p>
     <small>[ clic ou Échap pour fermer ]</small>
   </div>
@@ -1331,7 +1333,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       <article class="frame dossier dossier--flag reveal">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // RÉSEAU</span><span class="dossier__st">LIVRÉ</span></div>
         <div class="flag-fig"><b>72&nbsp;h</b><small>d'autonomie en intervention,<br>en lien temps réel avec le SOC</small></div>
-        <h4>CommandCar — poste de commandement mobile</h4>
+        <h3>CommandCar — poste de commandement mobile</h3>
         <div class="role">RÔLE // Conception intégrale · CSC · réception · formation</div>
         <p>Poste de commandement mobile conçu de A à Z, communiquant en temps réel avec le centre fixe : module de communication sur-mesure (4G/APN dédié, 802.1x/Radius), accès vidéo complet, alarmes intrusion/CO/incendie, le tout pilotable à distance. Cahier des charges, tests et réception du véhicule, procédures et formation des intervenants pour les scénarios de crise.</p>
         <div class="flag-proof"><span class="mono-tag">// CE QUE ÇA A DEMANDÉ</span>Du réseau opérateur (APN dédié, authentification 802.1x/Radius), un marché public, la réception d'un véhicule, et la formation d'équipes à des scénarios de crise. Quatre métiers, un seul projet.</div>
@@ -1341,7 +1343,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       <article class="frame dossier dossier--flag reveal d1">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
         <div class="flag-fig"><b>14&nbsp;j</b><small>sans alimentation secteur —<br>le marché plafonnait à 3-5 jours</small></div>
-        <h4>Valise de surveillance autonome</h4>
+        <h3>Valise de surveillance autonome</h3>
         <div class="role">RÔLE // Conception sur-mesure · CSC · attribution de marché</div>
         <p>Aucune solution du marché ne dépassait 3 à 5 jours d'autonomie sans secteur. En optimisant la consommation de chaque composant, conception d'une valise atteignant 14 jours — GPS, 3G/4G, analyse intelligente et zoom. Rédaction du cahier des charges et attribution du marché au fournisseur.</p>
         <div class="flag-proof"><span class="mono-tag">// CE QUE ÇA A DEMANDÉ</span>Mesurer la consommation de chaque composant, puis réécrire le cahier des charges autour de cette contrainte — au lieu d'accepter ce que proposaient les catalogues.</div>
@@ -1351,7 +1353,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       <article class="frame dossier dossier--flag reveal">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // DEV</span><span class="dossier__st">LIVRÉ</span></div>
         <div class="flag-fig"><b>21</b><small>unités pilotées par<br>une application que j'ai écrite</small></div>
-        <h4>Flotte de surveillance mobile — 21 unités</h4>
+        <h3>Flotte de surveillance mobile — 21 unités</h3>
         <div class="role">RÔLE // Dev applicatif · marché d'acquisition · sous-traitance</div>
         <p>Mise en service d'un parc de 21 caméras mobiles autonomes sur remorque (PTZ 360°, zoom 36x, infrarouge). Développement de l'application PHP/JS qui pilote toute la flotte via API. Côté gestion : marché d'acquisition, encadrement du sous-traitant, stocks, formation des chauffeurs et procédures d'exploitation.</p>
         <div class="flag-proof"><span class="mono-tag">// CE QUE ÇA A DEMANDÉ</span>Écrire le code, passer le marché, encadrer le sous-traitant, tenir les stocks et former les chauffeurs. Sur le même projet, dans la même année.</div>
@@ -1361,7 +1363,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       <article class="frame dossier dossier--flag reveal d1">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // PLATEFORME</span><span class="dossier__st prog">EN PRODUCTION</span></div>
         <div class="flag-fig"><b>50 → 1</b><small>logiciels métiers remplacés<br>par une interface unique</small></div>
-        <h4>Hypervisor — supervision unifiée des alarmes</h4>
+        <h3>Hypervisor — supervision unifiée des alarmes</h3>
         <div class="role">RÔLE // Intégration &amp; déploiement transverse</div>
         <p>Déploiement d'une plateforme unifiant la gestion des alarmes, toutes technologies confondues — intrusion, incendie, ascenseurs, tunnels, ventilation… Une seule interface en remplacement d'une cinquantaine de logiciels métiers : moins d'erreurs, formation simplifiée, supervision homogène.</p>
         <div class="flag-proof"><span class="mono-tag">// CE QUE ÇA A DEMANDÉ</span>Faire coexister des technologies qui ne se parlaient pas, puis convaincre des opérateurs de renoncer aux outils qu'ils connaissaient par cœur.</div>
@@ -1376,7 +1378,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
       <div class="frame dossier reveal">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // INFRA</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>Security Operation Center — nouvelle génération</h4>
+        <h3>Security Operation Center — nouvelle génération</h3>
         <div class="role">RÔLE // Pilotage de A à Z · marché public · principal + repli</div>
         <p>Conception et déploiement d'un nouveau centre d'opérations de sûreté et de son site de repli. De l'analyse du besoin à la réception : cahier des charges, ergonomie des postes opérateurs, continuité d'activité — chaque choix validé sur le terrain avec les agents.</p>
         <div class="dossier__tags"><span>SOC</span><span>Continuité</span><span>Ergonomie</span></div>
@@ -1384,7 +1386,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
       <div class="frame dossier reveal d1">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // SUPERVISION</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>Refonte des Control Rooms techniques</h4>
+        <h3>Refonte des Control Rooms techniques</h3>
         <div class="role">RÔLE // Architecture & conduite du changement</div>
         <p>Centralisation de la supervision — vidéo, intrusion, incendie, contrôle d'accès — sur des postes opérateurs unifiés répartis sur plusieurs positions. Une refonte pensée pour réduire la charge cognitive des opérateurs et fiabiliser la prise de décision.</p>
         <div class="dossier__tags"><span>Supervision</span><span>CCTV</span><span>Multi-postes</span></div>
@@ -1392,7 +1394,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
       <div class="frame dossier reveal">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>Surveillance mobile — nouvelle génération</h4>
+        <h3>Surveillance mobile — nouvelle génération</h3>
         <div class="role">RÔLE // Analyse · CSC complet · nouvelles méthodes</div>
         <p>Refonte complète de la flotte sur la base d'une analyse des défauts de la génération précédente : passage à une batterie lithium-ion, caméras 4K, GPS et lien 3G/4G. Rédaction du cahier des charges de transformation et définition des nouvelles méthodes de travail des équipes. « Exit l'analogique. »</p>
         <div class="kpis">
@@ -1405,7 +1407,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
       <div class="frame dossier reveal">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // DEV</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>CCTV embarquée — nouvelles rames</h4>
+        <h3>CCTV embarquée — nouvelles rames</h3>
         <div class="role">RÔLE // Définition technique & développement logiciel</div>
         <p>Définition du parc de caméras pour les nouvelles voitures, puis développement du logiciel de récupération des images à distance (réseau cellulaire ou borne WiFi). Rédaction du manuel, formation des utilisateurs et suivi du sous-traitant.</p>
         <div class="dossier__tags"><span>CCTV</span><span>Cellulaire</span><span>Logiciel</span></div>
@@ -1413,7 +1415,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
       <div class="frame dossier reveal">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
-        <h4>Traçage anti-vol de câbles</h4>
+        <h3>Traçage anti-vol de câbles</h3>
         <div class="role">RÔLE // Tests, déploiement & formation</div>
         <p>Mise en place d'un système de traçage pour prévenir les vols de câbles. Validation en laboratoire puis en conditions réelles pour minimiser les fausses alarmes, formation des opérateurs des Control Rooms et rédaction des consignes.</p>
         <div class="dossier__tags"><span>Traçage</span><span>Tests</span><span>Anti-vol</span></div>
@@ -1421,7 +1423,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
       <div class="frame dossier reveal d1">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // PRODUCT</span><span class="dossier__st prog">EN COURS</span></div>
-        <h4>Product Owner — applications terrain</h4>
+        <h3>Product Owner — applications terrain</h3>
         <div class="role">RÔLE // Product Owner · méthode agile</div>
         <p>Pilotage produit des applications smartphone des agents de terrain : analyse du besoin, backlog et priorisation, testing. Animation de groupes de référence d'agents (méthode agile) et formation des coachs au déploiement.</p>
         <div class="dossier__tags"><span>Product Owner</span><span>Agile</span><span>Mobile</span></div>
@@ -1429,7 +1431,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
       <div class="frame dossier dossier--wide reveal">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // DIVERS</span><span class="dossier__st arch">+ ARCHIVE</span></div>
-        <h4>Et encore…</h4>
+        <h3>Et encore…</h3>
         <p>Un échantillon parmi d'autres chantiers menés sur la même période :</p>
         <div class="dossier__tags more">
           <span>Interface PHP de pilotage de flotte (API)</span>
@@ -1656,43 +1658,43 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
     <div class="proj-grid">
       <div class="frame proj proj--shot reveal">
         <div class="proj__thumb"><img src="img/adosbox-accueil.png" alt="Page d'accueil d'Adosbox : rubriques, articles de la communauté et photos des membres" width="500" height="300" loading="lazy" decoding="async"><span class="yr">2006–2010</span><span class="glyph">A</span></div>
-        <div class="proj__body"><h4>Adosbox <span class="st">ARCHIVÉ</span></h4>
+        <div class="proj__body"><h3>Adosbox <span class="st">ARCHIVÉ</span></h3>
           <p>Communauté et chat pour ados — modération, infra et développement complet à grande échelle. <a href="https://web.archive.org/web/*/adosbox.com" target="_blank" rel="noopener">Voir sur archive.org ↗</a></p>
           <div class="proj__tags"><span>PHP</span><span>Chat</span><span>Communauté</span></div></div>
       </div>
       <div class="frame proj proj--shot reveal d1">
         <div class="proj__thumb"><img src="img/baboon-app.png" alt="Trois écrans de l'application Baboon : accueil, salon de discussion avec signalement, et filtres du profil" width="1008" height="526" loading="lazy" decoding="async"><span class="yr">2008 → 2026</span><span class="glyph">B</span></div>
-        <div class="proj__body"><h4>Baboon.fr <span class="st on">● PROJET PHARE</span></h4>
+        <div class="proj__body"><h3>Baboon.fr <span class="st on">● PROJET PHARE</span></h3>
           <p>Mon chat IRC historique entièrement remis au goût du jour : appli mobile Flutter/Dart (iOS &amp; Android), client web KiwiIRC profondément modifié, visio Jitsi Meet et modération de chat assistée par IA. Mon dernier gros projet perso — fermeture en 2026.</p>
           <div class="proj__tags"><span>Flutter/Dart</span><span>KiwiIRC</span><span>Modération IA</span><span>Jitsi</span></div></div>
       </div>
       <div class="frame proj proj--shot reveal d2">
         <div class="proj__thumb"><img src="img/espace-irc-banniere.png" alt="Bannière du réseau Espace-IRC" width="741" height="293" loading="lazy" decoding="async"><span class="yr">2007</span><span class="glyph">I</span></div>
-        <div class="proj__body"><h4>Espace-IRC <span class="st">ARCHIVÉ</span></h4>
+        <div class="proj__body"><h3>Espace-IRC <span class="st">ARCHIVÉ</span></h3>
           <p>Chat et réseau IRC avec un client riche en Flash/Flex/AS3 et serveur Red5 (webcam), bots et sécurité du chan. <a href="/blog/espace-irc-kesako/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Le récit complet →</a> Le robot de modération qui tenait le réseau est <a href="https://github.com/replicatorbe/IRCBook" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">sur GitHub, en Java ↗</a>.  Rendu obsolète par la fin de Flash Player — la relève moderne, c'est Baboon.fr. <a href="https://web.archive.org/web/*/espace-irc.org" target="_blank" rel="noopener">Voir sur archive.org ↗</a></p>
           <div class="proj__tags"><span>IRC</span><span>Flash / AS3</span><span>Flex</span><span>Red5</span></div></div>
       </div>
       <div class="frame proj proj--shot reveal">
         <div class="proj__thumb"><img src="img/domotique-plan.jpg" alt="Plan de la maison sous Vera : éclairages, températures, humidité, détecteurs de fumée et station météo" width="1100" height="531" loading="lazy" decoding="async"><span class="yr">2015 → ∞</span><span class="glyph">⌂</span></div>
-        <div class="proj__body"><h4>Domotique maison <span class="st">PERSO</span></h4>
+        <div class="proj__body"><h3>Domotique maison <span class="st">PERSO</span></h3>
           <p>Maison connectée auto-hébergée, principalement sous Home Assistant, avec Jeedom toujours en service : modules Shelly, microcontrôleurs ESP32, capteurs en réseau et automatisations sur mesure. Ce qui manquait, je l'ai écrit — plugins Jeedom <a href="https://github.com/replicatorbe/jeedom-plugin-dahua" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">caméras Dahua</a>, <a href="https://github.com/replicatorbe/jeedom-plugin-sncbnmbs" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">trains SNCB</a> et <a href="https://github.com/replicatorbe/jeedom-plugin-hygeabe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">collectes de déchets</a>, tous publics. <a href="/blog/sonde-de-temperature-banggood-433-mhz-station-meteo-sans-fil-et-capteur-d-humidite/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Les débuts, en 433 MHz →</a></p>
           <div class="proj__tags"><span>Home Assistant</span><span>Shelly</span><span>ESP32</span></div></div>
       </div>
       <div class="frame proj proj--shot reveal d1">
         <div class="proj__thumb"><img src="img/mastermind.png" alt="Écran titre du jeu MasterMind : menu Jouer, Score, Configuration, Crédit" width="500" height="300" loading="lazy" decoding="async"><span class="yr">2009</span><span class="glyph">M</span></div>
-        <div class="proj__body"><h4>MasterMind GUI <span class="st">PERSO</span></h4>
+        <div class="proj__body"><h3>MasterMind GUI <span class="st">PERSO</span></h3>
           <p>Jeu MasterMind en Java : interface Swing, persistance Hibernate, architecture Spring MVC. <a href="/blog/hibernate-mapping-ne-pas-oublier-les-getteurs-et-setteurs/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Le mapping Hibernate →</a></p>
           <div class="proj__tags"><span>Java</span><span>Spring</span><span>Hibernate</span></div></div>
       </div>
       <div class="frame proj reveal d2">
         <div class="proj__thumb"><span class="yr">2004 → ∞</span><span class="glyph">★</span></div>
-        <div class="proj__body"><h4>fafchamps.be <span class="st on">● ACTIF</span></h4>
+        <div class="proj__body"><h3>fafchamps.be <span class="st on">● ACTIF</span></h3>
           <p>Mon espace personnel depuis 2004, refondu au fil des ans — vous y êtes (refonte 2026, façon terminal). <a href="https://github.com/replicatorbe/fafchamps.be" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Le code de cette page est public ↗</a> <a href="https://web.archive.org/web/*/fafchamps.be" target="_blank" rel="noopener">Toutes les versions sur archive.org ↗</a></p>
           <div class="proj__tags"><span>HTML/CSS</span><span>Design</span><span>Archive.org</span></div></div>
       </div>
       <div class="frame proj proj--shot reveal">
         <div class="proj__thumb"><img src="img/chatfr-evolution.jpg" alt="Six versions de l'interface Chat.fr, de 2002 à 2007" width="1497" height="762" loading="lazy" decoding="async"><span class="yr">2002–2007</span><span class="glyph">C</span></div>
-        <div class="proj__body"><h4>Chat.fr <span class="st">DEV &amp; GESTION</span></h4>
+        <div class="proj__body"><h3>Chat.fr <span class="st">DEV &amp; GESTION</span></h3>
           <p>Développement et gestion d'un des plus gros chats francophones (700+ connectés en soirée) : interface AS3, serveur Red5 webcam. Plateforme tierce, revendue par son propriétaire en 2007. <a href="https://web.archive.org/web/*/chat.fr" target="_blank" rel="noopener">Voir sur archive.org ↗</a></p>
           <div class="proj__tags"><span>PHP</span><span>AS3</span><span>Red5</span></div></div>
       </div>
