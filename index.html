@@ -451,14 +451,6 @@ section{position:relative;padding:120px 0;scroll-margin-top:44px}
 .console__bar .dots i:nth-child(2){background:var(--amber)}
 .console__bar .dots i:nth-child(3){background:var(--green)}
 .console__body{padding:18px 18px 20px}
-.console__row{display:flex;justify-content:space-between;padding:9px 0;
-  border-bottom:1px dashed var(--line);font-size:12.5px}
-.console__row:last-child{border:0}
-.console__row .k{color:var(--text-dim)}
-.console__row .v{color:var(--text)}
-.console__row .v.amber{color:var(--amber)}
-.console__row .v.cyan{color:var(--cyan)}
-.console__row .v.green{color:var(--green)}
 .console__foot{margin-top:6px;padding:12px 18px;border-top:1px solid var(--line);
   font-size:11px;color:var(--text-faint);letter-spacing:.08em}
 .console__foot .live{color:var(--green)}
@@ -508,25 +500,6 @@ a.stat--lk:hover,a.stat--lk:focus-visible{background:color-mix(in srgb,var(--amb
 a.stat--lk:hover .l,a.stat--lk:focus-visible .l{color:var(--amber)}
 @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}
   .stat:nth-child(2){border-right:0}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}}
-
-/* ============================================================= *
- *  MISSION / OBJECTIF                                            *
- * ============================================================= */
-.mission{background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--amber) 3%,transparent),transparent)}
-.mission__grid{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center}
-@media(max-width:900px){.mission__grid{grid-template-columns:1fr;gap:34px}}
-.mission p{color:var(--text-dim);font-size:16.5px;margin-bottom:18px;max-width:70ch}
-.mission p strong{color:var(--text);font-weight:500}
-.mission .hl{color:var(--amber)}
-.obj-card{padding:30px 28px}
-.obj-card h3{font-family:var(--ff-mono);font-size:12px;letter-spacing:.2em;color:var(--cyan);
-  text-transform:uppercase;margin-bottom:22px;display:flex;align-items:center;gap:10px}
-.obj-list{list-style:none;display:flex;flex-direction:column;gap:16px}
-.obj-list li{display:flex;gap:14px;align-items:flex-start;font-size:14.5px}
-.obj-list .ic{flex:0 0 auto;width:30px;height:30px;display:grid;place-items:center;
-  border:1px solid var(--line-bright);color:var(--amber);font-family:var(--ff-mono);font-size:13px}
-.obj-list b{color:var(--text);font-weight:600;display:block;font-family:var(--ff-display);letter-spacing:.01em}
-.obj-list span{color:var(--text-dim);font-size:14px}
 
 /* ============================================================= *
  *  PROFIL                                                        *
