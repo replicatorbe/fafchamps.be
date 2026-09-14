@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>404 — page introuvable</title>
+<!-- Une page d'erreur qui remonte dans les résultats de recherche envoie des
+     visiteurs dans un cul-de-sac : elle reste hors de l'index. -->
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0a0c10">
+<!-- Mode lecture. Ce bloc est la copie octet pour octet de celui de index.html :
+     la CSP n'autorise le JavaScript en ligne que par empreinte sha256, et la
+     moindre espace en plus ferait refuser le script par le navigateur. Il pose
+     data-read avant le premier rendu, sinon la page clignoterait en sombre chez
+     qui a choisi le papier. Pas de bascule ici — cette page est une sortie, la
+     préférence se règle sur l'accueil ou le blog. -->
+<script>
+(function(){
+  var r=document.documentElement, m=document.querySelector('meta[name="theme-color"]');
+  function lu(){ try{ return localStorage.getItem('fcb_read')==='1'; }catch(e){ return false; } }
+  function paint(on){
+    if(on){ r.setAttribute('data-read','on'); } else { r.removeAttribute('data-read'); }
+    if(m){ m.setAttribute('content', on ? '#f4f1ea' : '#0a0c10'); }
+  }
+  paint(lu());
+  document.addEventListener('DOMContentLoaded', function(){
+    var b=document.getElementById('readToggle');
+    if(b){ b.addEventListener('click', function(){
+      var next = r.getAttribute('data-read')!=='on';
+      /* on persiste avant d'afficher : une bascule qui ne survit pas au clic
+         suivant vaut moins qu'une bascule qui refuse de s'appliquer */
+      try{ localStorage.setItem('fcb_read', next?'1':'0'); }catch(e){}
+      paint(next);
+    }); }
+    /* un autre onglet a changé d'avis : on suit sans réécrire le stockage */
+    window.addEventListener('storage', function(e){ if(e.key==='fcb_read'){ paint(lu()); } });
+  });
+})();
+</script>
+
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/img/favicon-192.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=IBM+Plex+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* Jetons repris d'index.html — seuls ceux dont cette page se sert. Les deux
+   thèmes se jouent entièrement ici : le reste de la feuille ne connaît que
+   les variables. */
+:root{
+  --bg:#0a0c10; --panel:#11151d; --panel-2:#141923;
+  --line:rgba(126,148,178,.10); --line-bright:rgba(126,148,178,.22);
+  --text-strong:#eef1f6; --text:#c4ccd8; --text-dim:#8e99ab;
+  --amber:#ffb13d; --cyan:#48d6cf; --green:#62e08a; --red:#ff5d5d;
+  --dot-off:#2a323f;
+  --ff-display:'Chakra Petch', sans-serif;
+  --ff-body:'IBM Plex Sans', sans-serif;
+  --ff-mono:'JetBrains Mono', monospace;
+  color-scheme:dark;
+}
+/* Mode lecture : mêmes valeurs qu'en fin de feuille d'index.html, pour que les
+   deux surfaces ne dérivent pas. Le rouge vif du terminal tombe à 2,3:1 sur le
+   papier — il faut un rouge d'encre. */
+:root[data-read="on"]{
+  --bg:#f4f1ea; --panel:#fffdf8; --panel-2:#f7f4ec;
+  --line:rgba(35,38,44,.13); --line-bright:rgba(35,38,44,.26);
+  --text-strong:#12151a; --text:#23262c; --text-dim:#555c67;
+  --amber:#95560a; --cyan:#0b645f; --green:#1c6b3a; --red:#b3261e;
+  --dot-off:#d9d3c6;
+  color-scheme:light;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:var(--ff-body); color:var(--text); background-color:var(--bg);
+  line-height:1.65; overflow-x:hidden;
+  display:flex; align-items:center; justify-content:center;
+  padding:32px 16px;
+  min-height:100vh;
+  min-height:100svh;   /* sur mobile, 100vh dépasse la fenêtre barres comprises */
+  /* Le quadrillage de l'accueil : bâti sur --line, il bascule seul avec le thème. */
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:46px 46px;
+  background-position:center top;
+}
+/* La lueur d'ambiance ne sert qu'à creuser un fond sombre ; sur le papier elle
+   ne laisserait qu'un voile sale. */
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(900px 600px at 78% -5%, rgba(255,177,61,.10), transparent 60%),
+    radial-gradient(800px 700px at 0% 100%, rgba(72,214,207,.07), transparent 60%);
+}
+:root[data-read="on"] body::after{background:none}
+
+.term{
+  width:100%; max-width:640px;
+  background:var(--panel); border:1px solid var(--line-bright);
+  border-radius:10px; overflow:hidden;
+}
+.term__bar{
+  display:flex; align-items:center; gap:8px;
+  padding:10px 14px; background:var(--panel-2);
+  border-bottom:1px solid var(--line);
+}
+.term__dot{width:10px;height:10px;border-radius:50%;background:var(--dot-off);flex:none}
+.term__name{
+  margin-left:6px; font-family:var(--ff-mono); font-size:12px;
+  color:var(--text-dim); letter-spacing:.04em;
+}
+.term__body{padding:26px 22px 24px}
+
+/* Les deux lignes de terminal. « anywhere » parce que la sortie d'erreur est
+   plus longue que 360 px : sans lui elle déborderait au lieu de se couper. */
+.io{font-family:var(--ff-mono);font-size:14px;line-height:1.7;overflow-wrap:anywhere}
+.io + .io{margin-top:4px}
+.prompt{color:var(--green)}
+.arg{color:var(--cyan)}
+.io--err{color:var(--red)}
+
+h1{
+  font-family:var(--ff-display); font-weight:700; color:var(--amber);
+  font-size:clamp(58px,17vw,100px); line-height:.95; letter-spacing:.02em;
+  margin:20px 0 0;
+}
+h1 .sub{
+  display:block; margin-top:10px;
+  font-size:clamp(15px,4vw,19px); font-weight:500;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--text-strong);
+}
+
+.say{margin-top:16px;max-width:48ch;color:var(--text-dim);font-size:15.5px}
+
+.out{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.out a{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--ff-mono); font-size:13.5px; color:var(--text-strong);
+  text-decoration:none; padding:9px 14px;
+  border:1px solid var(--line-bright); border-radius:6px;
+  transition:color .18s, border-color .18s, background-color .18s;
+}
+.out a::before{content:"\2192";color:var(--cyan)}
+/* Le lien qui quitte le site le dit avant le clic. */
+.out a[target]::before{content:"\2197"}
+.out a:hover,
+.out a:focus-visible{color:var(--amber);border-color:var(--amber);background:var(--panel-2)}
+.out a:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
+@media (prefers-reduced-motion:reduce){.out a{transition:none}}
+</style>
+</head>
+<body>
+
+<main class="term">
+  <div class="term__bar">
+    <span class="term__dot" aria-hidden="true"></span>
+    <span class="term__dot" aria-hidden="true"></span>
+    <span class="term__dot" aria-hidden="true"></span>
+    <span class="term__name">fafchamps.be — sortie d'erreur</span>
+  </div>
+
+  <div class="term__body">
+    <p class="io"><span class="prompt">visitor@fafchamps:~$</span> cat <span class="arg">ressource-demandée</span></p>
+    <p class="io io--err">cat: ressource-demandée: aucun fichier ou dossier de ce type</p>
+
+    <h1>404<span class="sub">Page introuvable</span></h1>
+
+    <p class="say">Rien ne répond à cette adresse. Elle a peut-être changé de place, ou n'a jamais existé.</p>
+
+    <nav class="out" aria-label="Sorties">
+      <a href="/">Accueil</a>
+      <a href="/blog/">Publications</a>
+      <a href="https://github.com/replicatorbe" target="_blank" rel="noopener">GitHub — replicatorbe</a>
+    </nav>
+  </div>
+</main>
+
+</body>
+</html>
