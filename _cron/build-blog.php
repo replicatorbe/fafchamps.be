@@ -42,11 +42,14 @@ const SITE_URL   = 'https://www.fafchamps.be';
 const SITE_NAME  = 'Jérôme Fafchamps';
 const AUTHOR     = 'Jérôme Fafchamps';
 const AUTHOR_URL = SITE_URL . '/';
+/* Profils qui désignent le même auteur. Sans ce lien, un moteur voit l'article
+   et le dépôt de code comme deux personnes qui portent le même nom. */
+const AUTHOR_SAME = ['https://github.com/replicatorbe'];
 const EMAIL      = 'jerome@fafchamps.be';
 const BLOG_TITLE = 'Publications';
 const BLOG_DESC  = "Notes techniques, retours d'expérience et analyses — infrastructure, réseau, "
                  . 'DevOps, sûreté et cybersécurité. Par Jérôme Fafchamps.';
-const TEASER_N   = 4;        // nb d'articles poussés dans data/blog.json
+const TEASER_N   = 6;        // nb d'articles poussés dans data/blog.json
 const WPM        = 200;      // mots/minute pour le temps de lecture
 const MARKER     = '<!-- généré par _cron/build-blog.php — ne pas éditer à la main -->';
 const CAT_DEFAUT = 'Divers';   // catégorie des articles qui n'en déclarent pas
@@ -731,7 +734,7 @@ function render_post(array $p, ?array $prev, ?array $next): string {
         'inLanguage'       => 'fr-BE',
         'url'              => $url,
         'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => $url],
-        'author'           => ['@type' => 'Person', 'name' => AUTHOR, 'url' => AUTHOR_URL],
+        'author'           => ['@type' => 'Person', 'name' => AUTHOR, 'url' => AUTHOR_URL, 'sameAs' => AUTHOR_SAME],
         'publisher'        => ['@type' => 'Person', 'name' => AUTHOR, 'url' => AUTHOR_URL],
         'wordCount'        => $p['words'],
     ];
@@ -927,7 +930,7 @@ function render_index(array $posts, array $cats, array $years, array $tagsAll): 
         'description' => BLOG_DESC,
         'url'         => $url,
         'inLanguage'  => 'fr-BE',
-        'author'      => ['@type' => 'Person', 'name' => AUTHOR, 'url' => AUTHOR_URL],
+        'author'      => ['@type' => 'Person', 'name' => AUTHOR, 'url' => AUTHOR_URL, 'sameAs' => AUTHOR_SAME],
         'blogPost'    => array_map(fn($p) => [
             '@type'         => 'BlogPosting',
             'headline'      => $p['title'],
@@ -1338,6 +1341,8 @@ $json = [
     'feed_url'     => SITE_URL . '/blog/feed.xml',
     'count'        => count($listed),
     'archives_url' => SITE_URL . '/blog/archives/',
+    // temps de lecture cumulé, pour le bandeau de la page d'accueil
+    'minutes_total' => array_sum(array_column($listed, 'minutes')),
     // sommaires, pour la page d'accueil et la commande `blog` du terminal
     'categories'   => array_values(array_map(fn($c) => [
         'label' => $c['label'],

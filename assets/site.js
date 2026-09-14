@@ -93,9 +93,19 @@
       'Du serveur physique au conteneur, de l\'IRC au LLM.',
       'Aucune annee sans ecrire de code.'].join('\n')},
     'skills.txt':{type:'file',content:[
-      'Développement .......... 96%','Réseau ................. 90%',
-      'DevOps & automatisation  90%','Administration système . 84%',
-      'Forensic & investigation  en montée'].join('\n')},
+      'EN SERVICE (cette semaine)',
+      '  Linux (Debian), Docker, nginx, PHP, Bash, Git, MySQL',
+      '  Réseau : TCP/IP, DNS, VPN, VLAN, pare-feu',
+      '  Home Assistant, Jeedom, ESPHome',
+      '',
+      'TENU EN PRODUCTION (à rallumer, pas à réapprendre)',
+      '  Java/Spring/Hibernate 2009 · C# 2016 · Flutter/Dart 2020',
+      '  ActionScript 3/Flex et Red5 2002-2012 · Vera/Luup 2015',
+      '',
+      'EN COURS',
+      '  analyse de capture, forensic système, OSINT, durcissement',
+      '',
+      "Pas de pourcentage : ce qu'on ne pratique plus s'oublie."].join('\n')},
     'contact.txt':{type:'file',content:[
       'E-mail   : jerome@fafchamps.be','GitHub   : github.com/replicatorbe',
       'Wolfplex : wolfplex.be'].join('\n')},
@@ -120,9 +130,9 @@
       'anti-vol.md':{type:'file',content:'# Traçage anti-vol de câbles\nTests labo + conditions réelles, formation des opérateurs Control Rooms.'}
     }},
     'stack':{type:'dir',children:{
-      'langages.txt':{type:'file',content:'PHP, Java, C#, JavaScript, Flutter/Dart, SQL, Bash'},
-      'systemes.txt':{type:'file',content:'Linux (Debian), Docker, Nginx/Apache, MySQL/MariaDB, VLAN, VPN'},
-      'securite.txt':{type:'file',content:'Wireshark, Nmap, hardening, OSINT, analyse réseau & logs'}
+      'langages.txt':{type:'file',content:"Écrits au quotidien : PHP, Bash, SQL, JavaScript.\nTenus en production autrefois : Java, C#, Flutter/Dart, ActionScript 3.\nCe qu'on ne pratique plus s'oublie — et se rallume."},
+      'systemes.txt':{type:'file',content:'Linux (Debian), Docker/Compose, nginx, MySQL/MariaDB, VLAN, VPN'},
+      'securite.txt':{type:'file',content:'Wireshark, tcpdump, nmap, durcissement, OSINT, analyse réseau & logs'}
     }},
     '.secret':{type:'dir',children:{
       'flag.txt':{type:'file',content:'Bien joué, fouineur. 🕵\nIndice : le code Konami -> haut haut bas bas gauche droite gauche droite B A'}
@@ -153,15 +163,22 @@
     whoami:()=>['<b>Jérôme Fafchamps</b> · alias <span class="cyan">sMug@replicatorbe</span>',
       'DevOps · SysAdmin · Développeur — <span class="amber">20+ ans</span> d\'informatique',
       'Belgique · focus : cybersécurité & réseau'].join('\n'),
-    skills:()=>['Développement .......... <span class="amber">96%</span>',
-      'Réseau ................. <span class="amber">90%</span>',
-      'DevOps & automatisation  <span class="amber">90%</span>',
-      'Administration système . <span class="amber">84%</span>',
-      'Forensic & investigation <span class="cyan">en montée ↗</span>'].join('\n'),
-    stack:()=>['<b>Langages</b> : PHP, Java, C#, JavaScript, Flutter/Dart, SQL, Bash',
-      '<b>Systèmes</b> : Linux (Debian), Docker, Nginx/Apache, MySQL',
-      '<b>DevOps</b>   : CI/CD, Git, monitoring, reverse proxy',
-      '<b>Sécurité</b> : Wireshark, Nmap, hardening, OSINT'].join('\n'),
+    skills:()=>['<span class="green">[ EN SERVICE ]</span> cette semaine',
+      '  Linux (Debian) · Docker · nginx · PHP · Bash · Git · MySQL',
+      '  Réseau : TCP/IP, DNS, VPN, VLAN, pare-feu',
+      '  Home Assistant · Jeedom · ESPHome',
+      '<span class="amber">[ TENU EN PRODUCTION ]</span> à rallumer',
+      '  Java/Spring/Hibernate <span class="res">2009</span> · C# <span class="res">2016</span> · Flutter/Dart <span class="res">2020</span>',
+      '  ActionScript 3/Flex · Red5 <span class="res">2002-2012</span> · Vera/Luup <span class="res">2015</span>',
+      '<span class="cyan">[ EN COURS ]</span> maintenant',
+      '  analyse de capture · forensic système · OSINT · durcissement',
+      '',
+      'Pas de pourcentage : ce qu\'on ne pratique plus s\'oublie.'].join('\n'),
+    stack:()=>['<b>Systèmes</b> : Linux (Debian), Docker/Compose, nginx, MySQL/MariaDB',
+      '<b>Réseau</b>   : TCP/IP, DNS, VPN, VLAN, pare-feu',
+      '<b>DevOps</b>   : Git, cron, reverse proxy, supervision, sauvegardes',
+      '<b>Sécurité</b> : Wireshark, tcpdump, nmap, durcissement',
+      '<b>Écrits ici</b> : PHP et Bash — le reste, voir <span class="cyan">skills</span>'].join('\n'),
     projects:()=>['<span class="amber">[2002-2007]</span> Chat.fr       dev & gestion (700+ connectés)',
       '<span class="amber">[2006-2010]</span> Adosbox       communauté & chat (PHP)',
       '<span class="amber">[2008-2026]</span> Baboon.fr     chat IRC modernisé (Flutter/IA/Jitsi)',
@@ -368,7 +385,6 @@
     es.forEach(e=>{
       if(!e.isIntersecting) return;
       e.target.classList.add('in');
-      e.target.querySelectorAll('.bar__fill').forEach(f=>{ f.style.width=f.dataset.w+'%'; });
       e.target.querySelectorAll('.counter').forEach(c=>{
         const goal=+c.dataset.count||+c.parentElement.dataset.count||0;
         if(!goal||c.dataset.done) return; c.dataset.done=1;
@@ -453,8 +469,54 @@
 (function(){
   const host=document.getElementById('pubList');
   if(!host) return;
+  const gid=id=>document.getElementById(id);
+  /* Ces deux blocs partent en hidden : tant que le JSON n'a pas répondu, ils
+     n'ont rien à montrer. Or un élément en display:none ne croise jamais
+     l'observateur qui pose .reveal.in — il faut donc l'ajouter nous-mêmes en
+     les découvrant, sinon ils resteraient transparents. */
+  const show=e=>{ e.hidden=false; e.classList.add('in'); };
+
+  /* Les quatre chiffres du bandeau, la tuile du héros et les pastilles de
+     catégories sortent tous du même JSON que la liste : une seule source, donc
+     aucun chiffre à retoucher à la main quand un article paraît. */
+  function renderSummary(b){
+    const cats=Array.isArray(b.categories)?b.categories:[];
+    const years=Array.isArray(b.years)?b.years:[];
+    const n=b.count||(Array.isArray(b.posts)?b.posts.length:0);
+
+    const hero=gid('stPosts'); if(hero&&n) hero.textContent=String(n);
+
+    const box=gid('pubStats');
+    if(box&&n){
+      const put=(id,v)=>{ const e=gid(id); if(e&&v) e.textContent=v; };
+      put('pubCount',String(n));
+      if(years.length){
+        const ys=years.map(y=>String(y.year)).sort();
+        put('pubSpan', ys[0]===ys[ys.length-1] ? ys[0] : ys[0]+' → '+ys[ys.length-1]);
+      }
+      put('pubCats', cats.length?String(cats.length):'');
+      const m=Number(b.minutes_total||0);
+      if(m>0) put('pubMin', m>=60 ? Math.floor(m/60)+' h '+('0'+(m%60)).slice(-2) : m+' min');
+      show(box);
+    }
+
+    const chips=gid('pubChips');
+    if(chips&&cats.length){
+      chips.innerHTML='';
+      cats.forEach(c=>{
+        if(typeof c.url!=='string'||!/^\/[\w\-./]*$/.test(c.url)) return;
+        const a=document.createElement('a'); a.href=c.url;
+        a.appendChild(document.createTextNode(c.label||c.slug||''));
+        const i=document.createElement('i'); i.textContent=String(c.count||0);
+        a.appendChild(i); chips.appendChild(a);
+      });
+      if(chips.children.length) show(chips);
+    }
+  }
+
   fetch('data/blog.json',{cache:'no-cache'}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(b=>{
     window.fcbBlog=b;
+    renderSummary(b);
     const posts=Array.isArray(b.posts)?b.posts:[];
     if(!posts.length){ host.innerHTML='<div class="gh-loading">première publication en préparation <span class="bk">_</span></div>'; return; }
     host.innerHTML='';
@@ -560,6 +622,47 @@
     if(leg){ leg.hidden=false; leg.querySelectorAll('i').forEach((i,k)=>i.setAttribute('data-lv',String(k))); }
   }
 
+  /* Trois chiffres que le mur contient déjà mais ne dit pas : combien de jours
+     ont vu au moins un commit, la plus longue série sans interruption, et le
+     pic. Recalculés à chaque chargement — donc jamais périmés. */
+  function renderKpis(days){
+    const box=el('ghKpis'); if(!box) return;
+    let active=0, best=0, run=0, streak=0;
+    days.forEach(d=>{
+      const c=Number(d.count)||0;
+      if(c>0){ active++; run++; if(run>streak) streak=run; } else { run=0; }
+      if(c>best) best=c;
+    });
+    if(!active) return;
+    const put=(id,v)=>{ const e=el(id); if(e) e.textContent=v; };
+    put('ghDays',fmt(active)+' j');
+    const hero=el('stDays'); if(hero) hero.textContent=fmt(active)+' j';
+    put('ghStreak',fmt(streak)+' j');
+    put('ghBest',fmt(best));
+    box.hidden=false;
+  }
+
+  /* Ce que les dépôts contiennent, en langages : compté sur le flux, pas écrit
+     à la main — la liste suit donc ce que je publie réellement. */
+  function renderLangs(repos){
+    const box=el('ghLangs'); if(!box) return;
+    const tally={};
+    repos.forEach(r=>{ if(r.lang) tally[r.lang]=(tally[r.lang]||0)+1; });
+    const rows=Object.keys(tally).sort((a,b)=>tally[b]-tally[a]||a.localeCompare(b));
+    if(!rows.length) return;
+    const fb=langFallback();
+    box.innerHTML='';
+    rows.forEach(lang=>{
+      const sp=document.createElement('span');
+      const dot=document.createElement('i'); dot.style.background=LANGC[lang]||fb;
+      const b=document.createElement('b'); b.textContent=lang;
+      sp.appendChild(dot); sp.appendChild(b);
+      sp.appendChild(document.createTextNode(' '+tally[lang]));
+      box.appendChild(sp);
+    });
+    box.hidden=false;
+  }
+
   function renderRepos(repos){
     const log=el('ghLog'); if(!log) return;
     log.innerHTML='';
@@ -580,15 +683,20 @@
       log.appendChild(row);
     });
     const cnt=el('ghRepoCount'); if(cnt) cnt.textContent=repos.length+' repos';
+    renderLangs(repos);
   }
 
   fetch('data/github.json',{cache:'no-cache'}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(g=>{
     window.fcbGitHub=g;
     const c=g.contributions||{};
-    if(c.total!=null){ const t=el('ghTotal'); if(t){ const obs=new IntersectionObserver((es)=>{
-      es.forEach(e=>{ if(e.isIntersecting){ animateCount(t,c.total); obs.disconnect(); } }); },{threshold:.4});
-      obs.observe(t); } }
-    if(Array.isArray(c.days)&&c.days.length) renderCal(c.days);
+    if(c.total!=null){
+      const t=el('ghTotal'); if(t){ const obs=new IntersectionObserver((es)=>{
+        es.forEach(e=>{ if(e.isIntersecting){ animateCount(t,c.total); obs.disconnect(); } }); },{threshold:.4});
+        obs.observe(t); }
+      /* la tuile du héros, elle, est déjà passée quand on arrive : pas d'animation */
+      const h=el('stGh'); if(h) h.textContent=fmt(c.total);
+    }
+    if(Array.isArray(c.days)&&c.days.length){ renderCal(c.days); renderKpis(c.days); }
     if(Array.isArray(g.repos)) renderRepos(g.repos);
     if(g.generated_at){ const gen=el('ghGen'); if(gen){
       try{ gen.textContent='MAJ '+new Date(g.generated_at).toLocaleDateString('fr-BE',{day:'2-digit',month:'2-digit',year:'numeric'}); }catch(e){} } }
