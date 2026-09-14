@@ -46,6 +46,9 @@
 
 <link rel="canonical" href="https://www.fafchamps.be/">
 <link rel="alternate" type="application/rss+xml" title="Jérôme Fafchamps — Publications" href="/blog/feed.xml">
+<!-- rel=me : dit explicitement que le compte GitHub et ce site sont la même
+     personne. C'est la façon standard de relier deux identités en ligne. -->
+<link rel="me" href="https://github.com/replicatorbe">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/img/favicon-192.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
@@ -73,6 +76,7 @@
 {
   "@context": "https://schema.org",
   "@type": "Person",
+  "@id": "https://www.fafchamps.be/#jerome",
   "name": "Jérôme Fafchamps",
   "alternateName": "sMug",
   "url": "https://www.fafchamps.be/",
@@ -80,7 +84,24 @@
   "email": "mailto:jerome@fafchamps.be",
   "address": { "@type": "PostalAddress", "addressCountry": "BE" },
   "knowsAbout": ["DevOps","Administration système","Réseau","Cybersécurité","Sûreté","Vidéosurveillance","Contrôle d'accès","Salles de contrôle","Gestion de projet","Analyse fonctionnelle","PHP","Java","C#","JavaScript","Flutter","SQL"],
-  "sameAs": ["https://github.com/replicatorbe","https://www.wolfplex.be/"]
+  "knowsLanguage": ["fr","en"],
+  "sameAs": ["https://github.com/replicatorbe"],
+  "memberOf": { "@type": "Organization", "name": "Wolfplex", "url": "https://www.wolfplex.be/" },
+  "mainEntityOfPage": "https://www.fafchamps.be/"
+}
+</script>
+<!-- Le blog, déclaré depuis la page d'accueil et rattaché à la même personne
+     par son @id : les deux pages parlent bien du même auteur. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "@id": "https://www.fafchamps.be/blog/#blog",
+  "name": "Publications — Jérôme Fafchamps",
+  "description": "Notes techniques et retours d'expérience publiés depuis 2007 — infrastructure, réseau, DevOps, domotique et sûreté.",
+  "url": "https://www.fafchamps.be/blog/",
+  "inLanguage": "fr-BE",
+  "author": { "@id": "https://www.fafchamps.be/#jerome" }
 }
 </script>
 
@@ -128,7 +149,6 @@
   --thumb-2:#0c0f15;
   --thumb-grid:rgba(126,148,178,.07);  /* quadrillage posé par-dessus */
   --scroll-thumb:#1c222d;
-  --shot-mat:#fff;                     /* passe-partout des captures d'archives */
 
   /* Mur de contributions : site.js pose data-lv="0".."4" sur chaque case et la
      peinture se fait ici. Un style inline, lui, ne se surchargerait pas — le
@@ -482,6 +502,10 @@ section{position:relative;padding:120px 0;scroll-margin-top:44px}
 .stat .n .u{color:var(--amber);font-size:.5em;vertical-align:super}
 .stat .l{font-family:var(--ff-mono);font-size:10px;letter-spacing:.14em;color:var(--text-dim);
   text-transform:uppercase;margin-top:4px}
+/* Trois des quatre tuiles mènent à la section qui démontre le chiffre. */
+a.stat--lk{display:block;color:inherit;text-decoration:none;transition:background .18s,color .18s}
+a.stat--lk:hover,a.stat--lk:focus-visible{background:color-mix(in srgb,var(--amber) 7%,transparent)}
+a.stat--lk:hover .l,a.stat--lk:focus-visible .l{color:var(--amber)}
 @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}
   .stat:nth-child(2){border-right:0}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}}
 
@@ -530,49 +554,31 @@ section{position:relative;padding:120px 0;scroll-margin-top:44px}
 /* ============================================================= *
  *  COMPETENCES                                                   *
  * ============================================================= */
-.comp__grid{display:grid;grid-template-columns:1fr 1fr;gap:50px}
-@media(max-width:900px){.comp__grid{grid-template-columns:1fr;gap:42px}}
-.bars{display:flex;flex-direction:column;gap:22px}
-.bar__top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
-.bar__top .name{font-family:var(--ff-display);font-size:15px;color:var(--text)}
-.bar__top .pct{font-family:var(--ff-mono);font-size:12px;color:var(--amber)}
-.bar__top .pct.grow{color:var(--cyan);font-size:10.5px;letter-spacing:.04em}
-.bar__track{height:7px;background:var(--track);position:relative;overflow:hidden}
-.bar__fill{position:absolute;left:0;top:0;bottom:0;width:0;
-  background:linear-gradient(90deg,var(--amber),var(--amber-soft));
-  box-shadow:0 0 12px rgba(255,177,61,.4);transition:width 1.3s var(--ease)}
-.bar__fill::after{content:"";position:absolute;inset:0;
-  background:repeating-linear-gradient(90deg,transparent,transparent 7px,var(--bar-notch) 7px,var(--bar-notch) 8px)}
-
-.invest-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:560px){.invest-list{grid-template-columns:1fr}}
-.invest{padding:15px 16px;border:1px solid var(--line);background:var(--panel);
-  display:flex;flex-direction:column;gap:6px;transition:.3s var(--ease)}
-.invest:hover{border-color:var(--line-bright);transform:translateY(-3px);
-  background:var(--panel-2)}
-.invest .h{display:flex;align-items:center;gap:9px;font-family:var(--ff-display);
-  font-size:15px;color:var(--text)}
-.invest .h .ic{color:var(--cyan);font-family:var(--ff-mono);font-size:13px}
-.invest p{font-size:13px;color:var(--text-dim);line-height:1.65;margin:0}
-
 /* ============================================================= *
- *  STACK                                                         *
+ *  CAPACITÉS — trois strates, pas une liste de cases cochées     *
+ *  Une jauge « 96 % » ne se vérifie pas et se périme dès qu'on   *
+ *  arrête de pratiquer ; une date, si.                           *
  * ============================================================= */
-.stack-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
-  background:var(--line);border:1px solid var(--line)}
-@media(max-width:820px){.stack-cols{grid-template-columns:repeat(2,1fr)}}
-.stack-col{background:var(--bg);padding:26px 22px}
-.stack-col h4{font-family:var(--ff-mono);font-size:11px;letter-spacing:.16em;
-  color:var(--amber);text-transform:uppercase;margin-bottom:18px;
-  display:flex;align-items:center;gap:8px}
-.stack-col h4 .idx{color:var(--text-faint)}
-.stack-col ul{list-style:none;display:flex;flex-direction:column;gap:11px}
-.stack-col li{font-family:var(--ff-mono);font-size:13px;color:var(--text-dim);
-  display:flex;align-items:center;gap:10px;transition:color .25s}
-.stack-col li::before{content:"";width:5px;height:5px;background:var(--text-faint);
-  transform:rotate(45deg);transition:.25s}
-.stack-col li:hover{color:var(--text)}
-.stack-col li:hover::before{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.strates{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:980px){.strates{grid-template-columns:1fr}}
+.strate{padding:26px 24px;display:flex;flex-direction:column}
+.strate__hd{display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+  padding-bottom:14px;margin-bottom:18px;border-bottom:1px solid var(--line)}
+.strate__hd .lab{font-family:var(--ff-mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--cyan)}
+.strate__hd .when{font-family:var(--ff-mono);font-size:10px;letter-spacing:.1em;
+  color:var(--text-faint);white-space:nowrap}
+.strate--now .strate__hd .lab{color:var(--green)}
+.strate--next .strate__hd .lab{color:var(--amber)}
+.strate ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:22px}
+.strate li{font-family:var(--ff-mono);font-size:12.5px;line-height:1.55;color:var(--text-dim);
+  padding-left:15px;position:relative}
+.strate li::before{content:"";width:5px;height:5px;background:var(--text-faint);
+  position:absolute;left:0;top:.55em}
+.strate li b{color:var(--text);font-weight:500}
+.strate li i{font-style:normal;color:var(--text-faint)}
+.strate__note{margin-top:auto;padding-top:16px;border-top:1px dashed var(--line);
+  font-size:13px;line-height:1.7;color:var(--text-dim)}
 
 /* ============================================================= *
  *  PARCOURS (frise chronologique)                                *
@@ -711,22 +717,6 @@ section{position:relative;padding:120px 0;scroll-margin-top:44px}
 .dossier--wide .dossier__tags.more span{color:var(--text-dim);
   border-color:var(--line-bright);font-size:11px;padding:5px 11px}
 
-/* ---------- archives visuelles (galerie) ---------- */
-.archive-head{margin-top:68px;margin-bottom:26px}
-.gallery{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-@media(max-width:780px){.gallery{grid-template-columns:1fr}}
-.shot{display:flex;flex-direction:column;padding:0;overflow:hidden}
-.shot__bar{display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:10px 14px;border-bottom:1px solid var(--line);font-family:var(--ff-mono);
-  font-size:10.5px;letter-spacing:.12em;color:var(--text-dim);text-transform:uppercase}
-.shot__bar .tag{color:var(--cyan)}
-.shot__img{position:relative;background:var(--shot-mat);line-height:0}
-.shot__img img{display:block;width:100%;height:auto;filter:saturate(.96)}
-.shot__img::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:repeating-linear-gradient(to bottom,transparent 0,transparent 2px,rgba(10,12,16,.07) 3px,rgba(10,12,16,.07) 3px)}
-.shot figcaption{padding:14px 15px 16px;font-size:13px;color:var(--text-dim);line-height:1.65;max-width:70ch}
-.shot figcaption b{color:var(--text);font-family:var(--ff-display);font-weight:600}
-
 /* ---------- bloc fonction (rôle) ---------- */
 .role-block{padding:26px 26px 24px;margin-bottom:18px}
 .role-block__hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 16px;margin-bottom:14px}
@@ -791,6 +781,23 @@ section{position:relative;padding:120px 0;scroll-margin-top:44px}
   font-family:var(--ff-mono);font-size:10px;letter-spacing:.06em;color:var(--text-faint)}
 .gh-foot .live{color:var(--green)}
 
+/* --- chiffres recalculés à partir du mur --- */
+.gh-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 18px;margin-top:18px;
+  padding-top:16px;border-top:1px solid var(--line)}
+.gh-kpi b{display:block;font-family:var(--ff-display);font-weight:700;font-size:23px;
+  line-height:1.05;color:var(--green)}
+.gh-kpi small{display:block;margin-top:4px;font-family:var(--ff-mono);font-size:10px;
+  letter-spacing:.08em;color:var(--text-faint);line-height:1.45}
+@media(max-width:520px){.gh-kpis{grid-template-columns:1fr 1fr}}
+
+/* --- répartition des langages des dépôts --- */
+.gh-langs{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:9px 18px;font-family:var(--ff-mono);font-size:10.5px;
+  letter-spacing:.06em;color:var(--text-faint)}
+.gh-langs span{display:inline-flex;align-items:center;gap:7px}
+.gh-langs i{width:9px;height:9px;border-radius:50%;display:inline-block;flex:0 0 9px}
+.gh-langs b{color:var(--text);font-weight:500}
+
 /* --- git log (repos) --- */
 .gh-log{font-family:var(--ff-mono)}
 .gh-log__row{display:grid;grid-template-columns:auto 1fr auto;gap:4px 14px;
@@ -817,18 +824,6 @@ section{position:relative;padding:120px 0;scroll-margin-top:44px}
 /* ============================================================= *
  *  FORMATION / VEILLE                                            *
  * ============================================================= */
-.learn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-@media(max-width:820px){.learn-grid{grid-template-columns:1fr}}
-.learn{padding:26px 24px}
-.learn .lab{font-family:var(--ff-mono);font-size:10px;letter-spacing:.18em;
-  color:var(--text-faint);text-transform:uppercase}
-.learn h4{font-family:var(--ff-display);font-size:22px;color:var(--text-strong);margin:8px 0 12px;
-  display:flex;align-items:center;gap:10px}
-.learn h4 .ic{color:var(--amber)}
-.learn p{font-size:14px;color:var(--text-dim);max-width:70ch}
-.learn a.lk{display:inline-flex;align-items:center;gap:7px;margin-top:14px;
-  font-family:var(--ff-mono);font-size:11px;letter-spacing:.1em;color:var(--cyan)}
-.learn a.lk:hover{color:var(--amber)}
 
 /* ============================================================= *
  *  CONTACT                                                       *
@@ -897,6 +892,30 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   background:rgba(255,177,61,.07);
   background:color-mix(in srgb,var(--amber) 7%,transparent);
   letter-spacing:.1em;text-transform:uppercase}
+/* Bandeau de chiffres : la durée et l'ampleur, que quelques titres récents
+   ne montrent pas à eux seuls. Alimenté par data/blog.json. */
+.pub-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:26px;
+  border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.pub-stat{padding:16px 18px;border-right:1px solid var(--line)}
+.pub-stat:last-child{border-right:0}
+.pub-stat b{display:block;font-family:var(--ff-display);font-weight:700;font-size:clamp(20px,3vw,27px);
+  line-height:1.05;color:var(--text-strong)}
+.pub-stat small{display:block;margin-top:5px;font-family:var(--ff-mono);font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint)}
+@media(max-width:680px){.pub-stats{grid-template-columns:1fr 1fr}
+  .pub-stat:nth-child(2){border-right:0}
+  .pub-stat:nth-child(1),.pub-stat:nth-child(2){border-bottom:1px solid var(--line)}}
+
+/* Pastilles de catégories : chacune ouvre son index — la profondeur du sujet
+   se voit au compteur, pas au discours. */
+.pub-chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:26px}
+.pub-chips a{display:inline-flex;align-items:baseline;gap:7px;padding:7px 13px;
+  border:1px solid var(--line-bright);border-radius:999px;font-family:var(--ff-mono);
+  font-size:11px;letter-spacing:.06em;color:var(--text-dim);text-decoration:none;
+  transition:border-color .18s,color .18s}
+.pub-chips a:hover,.pub-chips a:focus-visible{border-color:var(--amber);color:var(--amber)}
+.pub-chips a i{font-style:normal;color:var(--amber);font-size:10px}
+
 .pub-nav{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:38px}
 @media(max-width:620px){
   .pub{grid-template-columns:1fr auto}
@@ -938,7 +957,6 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   --thumb-2:#e4e0d5;
   --thumb-grid:rgba(35,38,44,.07);
   --scroll-thumb:#cfc9bb;
-  --shot-mat:#fffdf8;
 
   /* Mur de contributions : l'échelle claire n'est pas la transposition linéaire
      de la sombre — la case vide passe d'une ardoise à un gris papier, et les
@@ -959,17 +977,12 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 :root[data-read="on"] body::after{background:none}
 :root[data-read="on"] .grain,
 :root[data-read="on"] .scanlines{display:none}
-/* Idem pour le balayage CRT posé sur les captures d'archives. */
-:root[data-read="on"] .shot__img::after{background:none}
-
 /* Halos. Un « 0 0 Npx » ne brille que parce qu'il y a du noir autour : posé sur
    le papier il ne produit qu'une bavure grise qui épaissit le trait. Arbitrage
    assumé — on les coupe tous plutôt que de chercher un équivalent clair. */
 :root[data-read="on"] .scrollprog,
 :root[data-read="on"] .brand__mono,
-:root[data-read="on"] .bar__fill,
 :root[data-read="on"] .tl__item--now .tl__body::before,
-:root[data-read="on"] .stack-col li:hover::before,
 :root[data-read="on"] .dossier__st::before,
 :root[data-read="on"] .gh-d.lv4,
 :root[data-read="on"] .gh-d[data-lv="4"]{box-shadow:none}
@@ -1048,10 +1061,10 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
     <a href="#parcours" data-sec="parcours"><span class="num">02</span>Parcours</a>
     <a href="#realisations" data-sec="realisations"><span class="num">03</span>Réalisations</a>
     <a href="#code" data-sec="code"><span class="num">04</span>Le code</a>
-    <a href="#profil" data-sec="profil"><span class="num">05</span>Profil</a>
-    <a href="#competences" data-sec="competences"><span class="num">06</span>Compétences</a>
-    <a href="#projets" data-sec="projets"><span class="num">07</span>Projets</a>
-    <a href="#publications" data-sec="publications"><span class="num">08</span>Publications</a>
+    <a href="#publications" data-sec="publications"><span class="num">05</span>Publications</a>
+    <a href="#profil" data-sec="profil"><span class="num">06</span>Profil</a>
+    <a href="#competences" data-sec="competences"><span class="num">07</span>Compétences</a>
+    <a href="#projets" data-sec="projets"><span class="num">08</span>Projets</a>
     <a href="#contact" data-sec="contact"><span class="num">09</span>Contact</a>
   </nav>
   <!-- Bascule du thème. Dans la barre à toutes les largeurs : le mode clair est
@@ -1070,10 +1083,10 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   <a href="#parcours" data-sec="parcours"><span class="label">Parcours</span><span class="num">02</span><span class="tick"></span></a>
   <a href="#realisations" data-sec="realisations"><span class="label">Réalisations</span><span class="num">03</span><span class="tick"></span></a>
   <a href="#code" data-sec="code"><span class="label">Le code</span><span class="num">04</span><span class="tick"></span></a>
-  <a href="#profil" data-sec="profil"><span class="label">Profil</span><span class="num">05</span><span class="tick"></span></a>
-  <a href="#competences" data-sec="competences"><span class="label">Compétences</span><span class="num">06</span><span class="tick"></span></a>
-  <a href="#projets" data-sec="projets"><span class="label">Projets</span><span class="num">07</span><span class="tick"></span></a>
-  <a href="#publications" data-sec="publications"><span class="label">Publications</span><span class="num">08</span><span class="tick"></span></a>
+  <a href="#publications" data-sec="publications"><span class="label">Publications</span><span class="num">05</span><span class="tick"></span></a>
+  <a href="#profil" data-sec="profil"><span class="label">Profil</span><span class="num">06</span><span class="tick"></span></a>
+  <a href="#competences" data-sec="competences"><span class="label">Compétences</span><span class="num">07</span><span class="tick"></span></a>
+  <a href="#projets" data-sec="projets"><span class="label">Projets</span><span class="num">08</span><span class="tick"></span></a>
   <a href="#contact" data-sec="contact"><span class="label">Contact</span><span class="num">09</span><span class="tick"></span></a>
 </nav>
 
@@ -1083,10 +1096,10 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   <a href="#parcours"><span class="num">02</span>Parcours</a>
   <a href="#realisations"><span class="num">03</span>Réalisations</a>
   <a href="#code"><span class="num">04</span>Le code</a>
-  <a href="#profil"><span class="num">05</span>Profil</a>
-  <a href="#competences"><span class="num">06</span>Compétences</a>
-  <a href="#projets"><span class="num">07</span>Projets</a>
-  <a href="#publications"><span class="num">08</span>Publications</a>
+  <a href="#publications"><span class="num">05</span>Publications</a>
+  <a href="#profil"><span class="num">06</span>Profil</a>
+  <a href="#competences"><span class="num">07</span>Compétences</a>
+  <a href="#projets"><span class="num">08</span>Projets</a>
   <a href="#contact"><span class="num">09</span>Contact</a>
 </nav>
 
@@ -1124,11 +1137,15 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       </div>
     </div>
 
+    <!-- Quatre chiffres, dont trois qu'on peut aller vérifier soi-même : ils
+         sortent des mêmes flux que les sections « Le code » et « Publications »
+         et pointent dessus. Les valeurs écrites en dur sont le repli si le flux
+         ne répond pas — elles ne mentent pas, elles datent. -->
     <div class="stats">
       <div class="stat reveal"><div class="n" data-count="20"><span class="counter">0</span><span class="u">+ ANS</span></div><div class="l">D'informatique</div></div>
-      <div class="stat reveal d1"><div class="n"><span class="counter" data-count="25">0</span></div><div class="l">Projets livrés</div></div>
-      <div class="stat reveal d2"><div class="n"><span class="counter" data-count="6">0</span></div><div class="l">Langages maîtrisés</div></div>
-      <div class="stat reveal d3"><div class="n">∞</div><div class="l">Veille cyber active</div></div>
+      <a class="stat stat--lk reveal d1" href="#code"><div class="n"><span id="stGh">2&thinsp;877</span></div><div class="l">Contributions GitHub</div></a>
+      <a class="stat stat--lk reveal d2" href="#code"><div class="n"><span id="stDays">216 j</span></div><div class="l">De code sur 12 mois</div></a>
+      <a class="stat stat--lk reveal d3" href="#publications"><div class="n"><span id="stPosts">29</span></div><div class="l">Articles publiés</div></a>
     </div>
   </div>
 </section>
@@ -1441,7 +1458,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
     <div class="sec-head reveal">
       <div class="sec-meta"><span class="idx">04</span><span>// ACTIVITÉ GITHUB</span><span class="ln"></span></div>
       <h2 class="sec-title">Le code <em>parle</em></h2>
-      <p class="sec-sub">Vingt ans plus tard, j'écris toujours du code presque tous les jours — en dehors des heures de bureau. Flux synchronisé chaque jour depuis <a href="https://github.com/replicatorbe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">@replicatorbe</a> : contributions des 12 derniers mois et dépôts publics récents.</p>
+      <p class="sec-sub">Vingt ans plus tard, j'écris toujours du code presque tous les jours — en dehors des heures de bureau. Plugins de domotique, robot de modération IRC, outillage système : du code lisible, documenté, sous licence libre. Flux synchronisé chaque jour depuis <a href="https://github.com/replicatorbe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">@replicatorbe</a> — rien de saisi à la main sur cette page.</p>
     </div>
 
     <div class="gh-panels">
@@ -1450,13 +1467,20 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
         <div class="gh-panel__bar"><span class="dots"><i></i><i></i><i></i></span> contributions — github.com/replicatorbe<span class="grow"></span><a href="https://github.com/replicatorbe" target="_blank" rel="noopener">voir le profil →</a></div>
         <div class="gh-panel__body">
           <div class="gh-contrib__top">
-            <div class="gh-num"><span id="ghTotal">2&thinsp;601</span> <span class="u">contrib.</span></div>
+            <div class="gh-num"><span id="ghTotal">2&thinsp;877</span> <span class="u">contrib.</span></div>
             <div class="gh-num__lab">sur les <b>12 derniers mois</b> — une pratique quotidienne du code.</div>
           </div>
           <div class="gh-cal-wrap"><div class="gh-cal" id="ghCal">
             <div class="gh-loading">chargement du mur de contributions <span class="bk">_</span></div>
           </div></div>
           <div class="gh-legend" id="ghLegend" hidden>Moins <i data-lv="0"></i><i data-lv="1"></i><i data-lv="2"></i><i data-lv="3"></i><i data-lv="4"></i> Plus</div>
+          <!-- Trois chiffres recalculés à partir du même tableau de jours que le
+               mur : rien n'est saisi à la main, donc rien ne peut se périmer. -->
+          <div class="gh-kpis" id="ghKpis" hidden>
+            <div class="gh-kpi"><b id="ghDays">—</b><small>jours avec au moins un commit</small></div>
+            <div class="gh-kpi"><b id="ghStreak">—</b><small>plus longue série d'affilée</small></div>
+            <div class="gh-kpi"><b id="ghBest">—</b><small>contributions en une journée</small></div>
+          </div>
           <div class="gh-foot"><span><span class="live">●</span> synchronisation quotidienne</span><span id="ghGen"></span></div>
         </div>
       </div>
@@ -1466,8 +1490,46 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
         <div class="gh-panel__bar"><span class="dots"><i></i><i></i><i></i></span> git log --oneline · dépôts publics<span class="grow"></span><span id="ghRepoCount"></span></div>
         <div class="gh-panel__body">
           <div class="gh-log" id="ghLog"><div class="gh-loading">git log <span class="bk">_</span></div></div>
+          <!-- Ce que ces dépôts contiennent, en langages — déduit du flux. -->
+          <div class="gh-langs" id="ghLangs" hidden></div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PUBLICATIONS ===================== -->
+<section id="publications">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-meta"><span class="idx">05</span><span>// PUBLICATIONS</span><span class="ln"></span></div>
+      <h2 class="sec-title">Ce que j'<em>écris</em></h2>
+      <p class="sec-sub">Des notes techniques et des retours d'expérience, publiés depuis 2007 et remis en ligne à leur date d'origine : lecture de capture réseau, durcissement de serveur, domotique, modération à l'échelle. J'écris ce que j'ai réellement démonté. Pas de commentaires, pas de pistage : un <a href="/blog/feed.xml" style="color:var(--cyan);text-decoration:underline">flux RSS</a>, et c'est tout.</p>
+    </div>
+
+    <div class="pub-stats reveal" id="pubStats" hidden>
+      <div class="pub-stat"><b id="pubCount">—</b><small>articles publiés</small></div>
+      <div class="pub-stat"><b id="pubSpan">—</b><small>d'écriture</small></div>
+      <div class="pub-stat"><b id="pubCats">—</b><small>domaines couverts</small></div>
+      <div class="pub-stat"><b id="pubMin">—</b><small>de lecture au total</small></div>
+    </div>
+
+    <div class="frame gh-panel reveal">
+      <div class="gh-panel__bar"><span class="dots"><i></i><i></i><i></i></span> ls -lt /blog<span class="grow"></span><a href="/blog/">tout voir →</a></div>
+      <div class="gh-panel__body">
+        <div class="publist" id="pubList">
+          <div class="gh-loading">chargement des publications <span class="bk">_</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- une pastille par catégorie, avec son nombre d'articles -->
+    <div class="pub-chips reveal" id="pubChips" hidden></div>
+
+    <div class="pub-nav reveal">
+      <a href="/blog/" class="btn">Toutes les publications <span class="ar">→</span></a>
+      <a href="/blog/archives/" class="btn btn--ghost">Par date</a>
+      <a href="/blog/categorie/" class="btn btn--ghost">Par catégorie</a>
     </div>
   </div>
 </section>
@@ -1476,7 +1538,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <section id="profil">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">05</span><span>// DOSSIER</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">06</span><span>// DOSSIER</span><span class="ln"></span></div>
       <h2 class="sec-title">À propos du <em>sujet</em></h2>
       <p class="sec-sub">Passionné d'informatique depuis l'enfance, autodidacte revendiqué, bâtisseur de communautés en ligne — devenu concepteur et pilote de systèmes de sûreté, à la croisée de l'IT et de la sécurité.</p>
     </div>
@@ -1520,7 +1582,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
           <div class="idrow"><span class="k">BASE</span><span class="v">🇧🇪</span></div>
           <div class="idrow"><span class="k">SPÉCIALITÉ</span><span class="v">Infra, réseau, scripting</span></div>
           <div class="idrow"><span class="k">EN COURS</span><span class="v">Cybersécurité & forensic</span></div>
-          <div class="idrow"><span class="k">TERRAIN DE JEU</span><span class="v">Wolfplex · CTF · TryHackMe</span></div>
+          <div class="idrow"><span class="k">TERRAIN DE JEU</span><span class="v">Wolfplex · Charleroi</span></div>
           <div class="idrow"><span class="k">DISPONIBILITÉ</span><span class="v green">● ouverte aux échanges</span></div>
         </div>
       </div>
@@ -1532,58 +1594,53 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <section id="competences">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">06</span><span>// CAPACITÉS</span><span class="ln"></span></div>
-      <h2 class="sec-title">Matrice de <em>compétences</em></h2>
-      <p class="sec-sub">Un socle IT généraliste très large, affûté sur 20 ans — du code à l'infra. Et des domaines plus spécialisés, comme l'investigation numérique, en développement actif : prêts à être approfondis en contexte professionnel.</p>
+      <div class="sec-meta"><span class="idx">07</span><span>// CAPACITÉS</span><span class="ln"></span></div>
+      <h2 class="sec-title">Ce qui tourne, <em>et depuis quand</em></h2>
+      <p class="sec-sub">Je me méfie des listes de technologies « maîtrisées » : ce qu'on ne pratique plus s'en va, et l'annoncer quand même ne résiste pas à la première question précise. Voici donc autre chose — ce qui tourne chez moi cette semaine, ce que j'ai tenu assez longtemps en production pour le rallumer, et ce que j'apprends en ce moment.</p>
     </div>
 
-    <div class="comp__grid">
-      <div class="reveal">
-        <p class="mono-tag" style="margin-bottom:24px">[ NIVEAU OPÉRATIONNEL ]</p>
-        <div class="bars">
-          <div class="bar"><div class="bar__top"><span class="name">Développement</span><span class="pct">96%</span></div><div class="bar__track"><div class="bar__fill" data-w="96"></div></div></div>
-          <div class="bar"><div class="bar__top"><span class="name">Réseau</span><span class="pct">90%</span></div><div class="bar__track"><div class="bar__fill" data-w="90"></div></div></div>
-          <div class="bar"><div class="bar__top"><span class="name">DevOps & Automatisation</span><span class="pct">90%</span></div><div class="bar__track"><div class="bar__fill" data-w="90"></div></div></div>
-          <div class="bar"><div class="bar__top"><span class="name">Administration système</span><span class="pct">84%</span></div><div class="bar__track"><div class="bar__fill" data-w="84"></div></div></div>
-          <div class="bar"><div class="bar__top"><span class="name">Forensic & investigation</span><span class="pct grow">en montée ↗</span></div><div class="bar__track"><div class="bar__fill" data-w="55"></div></div></div>
-        </div>
+    <div class="strates">
+      <div class="frame strate strate--now reveal">
+        <div class="strate__hd"><span class="lab">En service</span><span class="when">cette semaine</span></div>
+        <ul>
+          <li><b>Linux (Debian)</b> <i>— mes serveurs, celui-ci compris</i></li>
+          <li><b>Docker &amp; Compose</b> <i>— tout y tourne</i></li>
+          <li><b>nginx</b> <i>— reverse proxy, TLS, en-têtes</i></li>
+          <li><b>PHP</b> <i>— dont le générateur de ces pages</i></li>
+          <li><b>Bash</b> <i>— cron, outillage, sauvegardes</i></li>
+          <li><b>Git</b> · <b>MySQL / MariaDB</b></li>
+          <li><b>Réseau</b> <i>— TCP/IP, DNS, VPN, VLAN, pare-feu</i></li>
+          <li><b>Home Assistant · Jeedom · ESPHome</b></li>
+        </ul>
+        <p class="strate__note">Ce que j'ouvre sans y penser. La trace est publique : les dépôts d'à côté, et cette page elle-même.</p>
       </div>
 
-      <div class="reveal d1">
-        <p class="mono-tag" style="margin-bottom:24px">[ SÉCURITÉ & ANALYSE ]</p>
-        <div class="invest-list">
-          <div class="invest"><div class="h"><span class="ic">›</span>Analyse réseau</div><p>Capture, inspection de trafic, lecture de logs.</p></div>
-          <div class="invest"><div class="h"><span class="ic">›</span>Forensic système</div><p>Linux/Windows internals, traces & artefacts.</p></div>
-          <div class="invest"><div class="h"><span class="ic">›</span>OSINT</div><p>Recherche & recoupement en sources ouvertes.</p></div>
-          <div class="invest"><div class="h"><span class="ic">›</span>Scripting</div><p>Bash, automatisation et outillage maison.</p></div>
-          <div class="invest"><div class="h"><span class="ic">›</span>Compréhension des menaces</div><p>Vecteurs d'attaque, malware, vulnérabilités.</p></div>
-          <div class="invest"><div class="h"><span class="ic">›</span>Traçabilité</div><p>Journalisation, intégrité, méthode rigoureuse.</p></div>
-        </div>
+      <div class="frame strate strate--past reveal d1">
+        <div class="strate__hd"><span class="lab">Tenu en production</span><span class="when">à rallumer</span></div>
+        <ul>
+          <li><b>Java</b> <i>— Spring, Hibernate · 2009 → 2012</i></li>
+          <li><b>C#</b> <i>— pilotage caméras et alarmes · 2016</i></li>
+          <li><b>Flutter / Dart</b> <i>— appli iOS &amp; Android · 2020</i></li>
+          <li><b>ActionScript 3 / Flex</b> <i>— clients de chat · 2002 → 2012</i></li>
+          <li><b>Red5</b> <i>— streaming webcam · 2007 → 2012</i></li>
+          <li><b>Vera / Luup</b> <i>— domotique, avant Jeedom · 2015</i></li>
+        </ul>
+        <p class="strate__note">Je ne les écris plus de tête et je ne vais pas prétendre le contraire. Mais un langage tenu des années en production, on ne le réapprend pas : on le rallume. Ça se compte en jours.</p>
+      </div>
+
+      <div class="frame strate strate--next reveal d2">
+        <div class="strate__hd"><span class="lab">En cours</span><span class="when">maintenant</span></div>
+        <ul>
+          <li><b>Analyse de capture</b> <i>— Wireshark, tcpdump</i></li>
+          <li><b>Forensic système</b> <i>— artefacts Linux et Windows</i></li>
+          <li><b>OSINT</b> <i>— recherche et recoupement en sources ouvertes</i></li>
+          <li><b>Durcissement</b> <i>— retirer plutôt qu'empiler</i></li>
+        </ul>
+        <p class="strate__note">Pas de pourcentage ici, il serait inventé. Ce qu'il y a : des articles datés et des machines résolues.</p>
       </div>
     </div>
 
-    <!-- STACK -->
-    <div class="sec-head reveal" style="margin-top:84px;margin-bottom:32px">
-      <div class="sec-meta"><span class="idx">06.B</span><span>// ARSENAL TECHNIQUE</span><span class="ln"></span></div>
-    </div>
-    <div class="stack-cols reveal">
-      <div class="stack-col">
-        <h4><span class="idx">/01</span>LANGAGES</h4>
-        <ul><li>PHP</li><li>Java</li><li>C#</li><li>JavaScript</li><li>Flutter / Dart</li><li>SQL</li><li>Bash</li></ul>
-      </div>
-      <div class="stack-col">
-        <h4><span class="idx">/02</span>SYSTÈMES & RÉSEAU</h4>
-        <ul><li>Linux (Debian)</li><li>Docker</li><li>Nginx / Apache</li><li>MySQL / MariaDB</li><li>TCP/IP · DNS · VPN</li><li>Pare-feu / VLAN</li></ul>
-      </div>
-      <div class="stack-col">
-        <h4><span class="idx">/03</span>DEVOPS</h4>
-        <ul><li>CI/CD</li><li>Git</li><li>Monitoring</li><li>Scripting / Cron</li><li>Reverse proxy</li><li>Hébergement</li></ul>
-      </div>
-      <div class="stack-col">
-        <h4><span class="idx">/04</span>SÉCURITÉ</h4>
-        <ul><li>Wireshark</li><li>Nmap</li><li>Burp / recon</li><li>Hardening</li><li>Forensic (en cours)</li><li>OSINT tooling</li></ul>
-      </div>
-    </div>
+    <p class="tl__foot reveal">Quatorze piles traversées en vingt ans. <b>Ce qui ne s'oublie pas</b>, c'est de savoir lire un log, une capture et une documentation — et de vérifier plutôt que de croire.</p>
   </div>
 </section>
 
@@ -1591,7 +1648,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <section id="projets">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">07</span><span>// ARCHIVES</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">08</span><span>// ARCHIVES</span><span class="ln"></span></div>
       <h2 class="sec-title">Projets <em>perso & communautaires</em></h2>
       <p class="sec-sub">Deux décennies de plateformes communautaires, de réseaux, de domotique et d'expérimentations. Sélection.</p>
     </div>
@@ -1612,13 +1669,13 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       <div class="frame proj proj--shot reveal d2">
         <div class="proj__thumb"><img src="img/espace-irc-banniere.png" alt="Bannière du réseau Espace-IRC" width="741" height="293" loading="lazy" decoding="async"><span class="yr">2007</span><span class="glyph">I</span></div>
         <div class="proj__body"><h4>Espace-IRC <span class="st">ARCHIVÉ</span></h4>
-          <p>Chat et réseau IRC avec un client riche en Flash/Flex/AS3 et serveur Red5 (webcam), bots et sécurité du chan. <a href="/blog/espace-irc-kesako/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Le récit complet →</a>  Rendu obsolète par la fin de Flash Player — la relève moderne, c'est Baboon.fr. <a href="https://web.archive.org/web/*/espace-irc.org" target="_blank" rel="noopener">Voir sur archive.org ↗</a></p>
+          <p>Chat et réseau IRC avec un client riche en Flash/Flex/AS3 et serveur Red5 (webcam), bots et sécurité du chan. <a href="/blog/espace-irc-kesako/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Le récit complet →</a> Le robot de modération qui tenait le réseau est <a href="https://github.com/replicatorbe/IRCBook" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">sur GitHub, en Java ↗</a>.  Rendu obsolète par la fin de Flash Player — la relève moderne, c'est Baboon.fr. <a href="https://web.archive.org/web/*/espace-irc.org" target="_blank" rel="noopener">Voir sur archive.org ↗</a></p>
           <div class="proj__tags"><span>IRC</span><span>Flash / AS3</span><span>Flex</span><span>Red5</span></div></div>
       </div>
       <div class="frame proj proj--shot reveal">
         <div class="proj__thumb"><img src="img/domotique-plan.jpg" alt="Plan de la maison sous Vera : éclairages, températures, humidité, détecteurs de fumée et station météo" width="1100" height="531" loading="lazy" decoding="async"><span class="yr">2015 → ∞</span><span class="glyph">⌂</span></div>
         <div class="proj__body"><h4>Domotique maison <span class="st">PERSO</span></h4>
-          <p>Maison connectée auto-hébergée, principalement sous Home Assistant, avec Jeedom toujours en service : modules Shelly, microcontrôleurs ESP32, capteurs en réseau et automatisations sur mesure. <a href="/blog/sonde-de-temperature-banggood-433-mhz-station-meteo-sans-fil-et-capteur-d-humidite/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Les débuts, en 433 MHz →</a></p>
+          <p>Maison connectée auto-hébergée, principalement sous Home Assistant, avec Jeedom toujours en service : modules Shelly, microcontrôleurs ESP32, capteurs en réseau et automatisations sur mesure. Ce qui manquait, je l'ai écrit — plugins Jeedom <a href="https://github.com/replicatorbe/jeedom-plugin-dahua" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">caméras Dahua</a>, <a href="https://github.com/replicatorbe/jeedom-plugin-sncbnmbs" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">trains SNCB</a> et <a href="https://github.com/replicatorbe/jeedom-plugin-hygeabe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">collectes de déchets</a>, tous publics. <a href="/blog/sonde-de-temperature-banggood-433-mhz-station-meteo-sans-fil-et-capteur-d-humidite/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Les débuts, en 433 MHz →</a></p>
           <div class="proj__tags"><span>Home Assistant</span><span>Shelly</span><span>ESP32</span></div></div>
       </div>
       <div class="frame proj proj--shot reveal d1">
@@ -1630,7 +1687,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       <div class="frame proj reveal d2">
         <div class="proj__thumb"><span class="yr">2004 → ∞</span><span class="glyph">★</span></div>
         <div class="proj__body"><h4>fafchamps.be <span class="st on">● ACTIF</span></h4>
-          <p>Mon espace personnel depuis 2004, refondu au fil des ans — vous y êtes (refonte 2026, façon terminal). <a href="https://web.archive.org/web/*/fafchamps.be" target="_blank" rel="noopener">Toutes les versions sur archive.org ↗</a></p>
+          <p>Mon espace personnel depuis 2004, refondu au fil des ans — vous y êtes (refonte 2026, façon terminal). <a href="https://github.com/replicatorbe/fafchamps.be" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Le code de cette page est public ↗</a> <a href="https://web.archive.org/web/*/fafchamps.be" target="_blank" rel="noopener">Toutes les versions sur archive.org ↗</a></p>
           <div class="proj__tags"><span>HTML/CSS</span><span>Design</span><span>Archive.org</span></div></div>
       </div>
       <div class="frame proj proj--shot reveal">
@@ -1641,81 +1698,8 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       </div>
     </div>
 
-    <div class="sec-head reveal archive-head">
-      <div class="sec-meta"><span class="idx">07.B</span><span>// ARCHIVES VISUELLES</span><span class="ln"></span></div>
-      <p class="sec-sub" style="margin-top:4px">Quelques captures d'époque — parce que le web du début des années 2000 mérite qu'on s'en souvienne.</p>
-    </div>
-    <div class="gallery">
-      <figure class="frame shot reveal">
-        <div class="shot__bar"><span>adosbox · 2006 → 2012</span><span class="tag">PERSO</span></div>
-        <div class="shot__img"><img src="img/adosbox-evolution.jpg" alt="Évolution du site Adosbox de 2006 à 2012" loading="lazy" width="1497" height="768"></div>
-        <figcaption><b>Adosbox</b> — communauté & chat pour ados que j'ai développée et administrée de bout en bout (code, infra, modération). Trois générations d'interface, plus la page Facebook.</figcaption>
-      </figure>
-      <figure class="frame shot reveal d1">
-        <div class="shot__bar"><span>chat.fr · 2002 → 2007</span><span class="tag">DEV &amp; GESTION</span></div>
-        <div class="shot__img"><img src="img/chatfr-evolution.jpg" alt="Six versions de l'interface Chat.fr de 2002 à 2007" loading="lazy" width="1497" height="762"></div>
-        <figcaption><b>Chat.fr</b> — six versions, 2002 → 2007. J'en ai assuré le développement et la gestion (jusqu'à 700+ connectés en soirée) ; la plateforme appartenait à un tiers, qui l'a revendue en 2007.</figcaption>
-      </figure>
-    </div>
-
     <div style="text-align:center;margin-top:42px" class="reveal">
       <a href="https://github.com/replicatorbe" target="_blank" rel="noopener" class="btn">Tout voir sur GitHub <span class="ar">→</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== FORMATION ===================== -->
-<section id="formation">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">07.C</span><span>// ENTRAÎNEMENT CONTINU</span><span class="ln"></span></div>
-      <h2 class="sec-title">Veille & <em>montée en compétence</em></h2>
-    </div>
-    <div class="learn-grid">
-      <div class="frame learn reveal">
-        <div class="lab">PLATEFORME</div>
-        <h4><span class="ic">⬢</span>TryHackMe</h4>
-        <p>Labs pratiques en sécurité offensive et défensive, forensic et réseau. Progression régulière sur des parcours guidés.</p>
-        <a class="lk" href="https://tryhackme.com/" target="_blank" rel="noopener">accéder ↗</a>
-      </div>
-      <div class="frame learn reveal d1">
-        <div class="lab">COMPÉTITION</div>
-        <h4><span class="ic">⚑</span>CTF</h4>
-        <p>Capture The Flag : crypto, web, forensic, réseau. La meilleure école pour penser comme un attaquant et raisonner méthodiquement.</p>
-        <a class="lk" href="https://ctftime.org/" target="_blank" rel="noopener">en savoir + ↗</a>
-      </div>
-      <div class="frame learn reveal d2">
-        <div class="lab">COMMUNAUTÉ</div>
-        <h4><span class="ic">⬡</span>Wolfplex</h4>
-        <p>Hackerspace de Charleroi. Projets collectifs, électronique, partage de savoir et culture du hack au sens noble.</p>
-        <a class="lk" href="https://www.wolfplex.be/" target="_blank" rel="noopener">wolfplex.be ↗</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== PUBLICATIONS ===================== -->
-<section id="publications">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">08</span><span>// PUBLICATIONS</span><span class="ln"></span></div>
-      <h2 class="sec-title">Ce que j'<em>écris</em></h2>
-      <p class="sec-sub">Notes techniques et retours d'expérience — infrastructure, réseau, DevOps et sûreté. Pas de commentaires, pas de pistage : un <a href="/blog/feed.xml" style="color:var(--cyan);text-decoration:underline">flux RSS</a>, et c'est tout.</p>
-    </div>
-
-    <div class="frame gh-panel reveal">
-      <div class="gh-panel__bar"><span class="dots"><i></i><i></i><i></i></span> ls -lt /blog<span class="grow"></span><a href="/blog/">tout voir →</a></div>
-      <div class="gh-panel__body">
-        <div class="publist" id="pubList">
-          <div class="gh-loading">chargement des publications <span class="bk">_</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="pub-nav reveal">
-      <a href="/blog/" class="btn">Toutes les publications <span class="ar">→</span></a>
-      <a href="/blog/archives/" class="btn btn--ghost">Par date</a>
-      <a href="/blog/categorie/" class="btn btn--ghost">Par catégorie</a>
     </div>
   </div>
 </section>
@@ -1755,7 +1739,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   </div>
 </footer>
 
-<script src="assets/site.js?v=9"></script>
+<script src="assets/site.js?v=13"></script>
 
 </body>
 </html>
