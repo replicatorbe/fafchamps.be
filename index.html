@@ -533,8 +533,12 @@ a.stat--lk:hover .l,a.stat--lk:focus-visible .l{color:var(--amber)}
  * ============================================================= */
 .profil__grid{display:grid;grid-template-columns:1fr 1fr;gap:50px}
 @media(max-width:900px){.profil__grid{grid-template-columns:1fr;gap:30px}}
-.profil p{color:var(--text-dim);font-size:16px;margin-bottom:16px;max-width:70ch}
-.profil p strong{color:var(--text);font-weight:500}
+/* Ces deux règles visaient « .profil », une classe que rien ne porte : la
+   section est un id, et la grille une classe distincte. Elles ne s'appliquaient
+   donc à rien, et avec le reset « *{margin:0} » les quatre paragraphes du
+   portrait se retrouvaient collés en un seul pavé. On vise la grille. */
+.profil__grid p{color:var(--text-dim);font-size:16px;margin-bottom:16px;max-width:70ch}
+.profil__grid p strong{color:var(--text);font-weight:500}
 .idcard{padding:0}
 .idcard__hd{display:flex;align-items:center;gap:16px;padding:22px 24px;border-bottom:1px solid var(--line)}
 .idcard__ph{width:64px;height:64px;flex:0 0 auto;overflow:hidden;
