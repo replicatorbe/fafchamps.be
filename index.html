@@ -2,25 +2,30 @@
 <html lang="fr" dir="ltr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Jérôme Fafchamps · sMug — IT & Sûreté · DevOps, Réseau, Salles de contrôle</title>
-<meta name="description" content="Jérôme Fafchamps (sMug) — 20 ans à l'intersection de l'IT et de la sûreté : DevOps, administration système & réseau, développement, et conception, supervision & pilotage de systèmes de sécurité (salles de contrôle, vidéosurveillance, contrôle d'accès). Belgique.">
-<meta name="keywords" content="Jérôme Fafchamps, sMug, Responsable IT, Responsable sûreté, Gardiennage, DevOps, SysAdmin, Réseau, Développeur, PHP, Java, Cybersécurité, Sécurité informatique, Sûreté, Vidéosurveillance, CCTV, Contrôle d'accès, Salles de contrôle, Gestion de projet, Belgique, Wolfplex">
+<meta name="description" content="Jérôme Fafchamps (sMug) — plus de vingt ans à l'intersection de l'IT et de la sûreté : DevOps, administration système & réseau, développement, et conception, supervision & pilotage de systèmes de sécurité (salles de contrôle, vidéosurveillance, contrôle d'accès). Belgique.">
 <meta name="author" content="Jérôme Fafchamps">
 <meta name="theme-color" content="#0a0c10">
-<!-- Mode lecture (thème clair). Servi en ligne et non depuis assets/site.js
-     pour deux raisons : le thème doit être posé AVANT le premier rendu, sinon
-     la page clignote en sombre ; et c'est la seule sortie du mode clair — si
-     elle dépendait d'un fichier, une requête bloquée enfermerait le visiteur
-     dans un thème qu'il n'aurait plus aucun moyen de quitter. Placé avant la
-     feuille de style : un script en ligne placé après elle devrait d'abord
-     en attendre le chargement.
-     La préférence (clé fcb_read) est partagée avec /blog/. -->
+<!-- Deux choses que seul un script en ligne, placé ici, peut faire.
+     1. Le mode lecture (thème clair) : il doit être posé AVANT le premier
+        rendu, sinon la page clignote en sombre. Et c'est la seule sortie du
+        thème clair — si elle dépendait d'un fichier, une requête bloquée
+        enfermerait le visiteur dans un thème qu'il ne pourrait plus quitter.
+        La préférence (clé fcb_read) est partagée avec /blog/.
+     2. La classe « js » sur <html> : tout le CSS d'apparition en est
+        désormais dépendant, de sorte que la page soit lisible même sans
+        JavaScript (voir .reveal plus bas).
+     Placé avant la feuille de style : un script en ligne placé après elle
+     devrait d'abord en attendre le chargement. -->
 <script>
 (function(){
   var r=document.documentElement, m=document.querySelector('meta[name="theme-color"]');
+  /* « JavaScript tourne ici » : l'état masqué des blocs .reveal est
+     conditionné à cette classe. Sans elle ils restent visibles, ce qui est
+     le bon défaut — une page sans JS doit se lire, pas rester blanche. */
+  r.classList.add('js');
   function lu(){ try{ return localStorage.getItem('fcb_read')==='1'; }catch(e){ return false; } }
   function paint(on){
     if(on){ r.setAttribute('data-read','on'); } else { r.removeAttribute('data-read'); }
@@ -55,21 +60,25 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Jérôme Fafchamps — IT & Sûreté · DevOps, Réseau, Salles de contrôle">
-<meta property="og:description" content="20 ans à l'intersection de l'IT et de la sûreté : infrastructure, réseau, développement et systèmes de sécurité (salles de contrôle, vidéosurveillance, contrôle d'accès). Belgique.">
+<meta property="og:description" content="Plus de vingt ans à l'intersection de l'IT et de la sûreté : infrastructure, réseau, développement et systèmes de sécurité (salles de contrôle, vidéosurveillance, contrôle d'accès). Belgique.">
 <meta property="og:url" content="https://www.fafchamps.be/">
 <meta property="og:locale" content="fr_BE">
-<meta property="og:image" content="https://www.fafchamps.be/img/og-fafchamps.png">
+<meta property="og:image" content="https://www.fafchamps.be/img/og-fafchamps.jpg">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Jérôme Fafchamps — sMug @ replicatorbe — IT &amp; Sûreté">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- Polices servies depuis ce domaine (voir assets/fonts.css) : plus de
+     préconnexion à deux origines tierces, ni de feuille de style bloquante
+     chez Google. Même fichier que /blog/. -->
+<link rel="stylesheet" href="/assets/fonts.css">
 
-<!-- Fallback : si JS est désactivé, on retire l'écran de boot pour ne pas masquer le site -->
-<noscript><style>.boot{display:none!important}</style></noscript>
+<!-- Ceinture par-dessus la bretelle : l'état masqué des blocs .reveal dépend
+     déjà de la classe « js », que le script ci-dessus est seul à poser. Si ce
+     script ne s'exécute pas du tout, cette règle finit le travail. -->
+<noscript><style>.reveal,:root.js .reveal{opacity:1!important;transform:none!important}</style></noscript>
 
 <!-- Données structurées -->
 <script type="application/ld+json">
@@ -81,7 +90,7 @@
   "alternateName": "sMug",
   "url": "https://www.fafchamps.be/",
   "jobTitle": "IT & Sûreté · DevOps, Réseau & Salles de contrôle",
-  "email": "mailto:jerome@fafchamps.be",
+  "email": "jerome@fafchamps.be",
   "address": { "@type": "PostalAddress", "addressCountry": "BE" },
   "knowsAbout": ["DevOps","Administration système","Réseau","Cybersécurité","Sûreté","Vidéosurveillance","Contrôle d'accès","Salles de contrôle","Gestion de projet","Analyse fonctionnelle","PHP","Java","C#","JavaScript","Flutter","SQL"],
   "knowsLanguage": ["fr","en"],
@@ -221,33 +230,7 @@ a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
 ::-webkit-scrollbar-thumb:hover{background:var(--amber)}
 
 /* ============================================================= *
- *  BOOT LOADER                                                  *
- * ============================================================= */
-.boot{
-  position:fixed;inset:0;z-index:10000;background:var(--bg);
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--ff-mono);font-size:13px;
-  transition:opacity .6s var(--ease),visibility .6s;
-}
-.boot.done{opacity:0;visibility:hidden}
-.boot__inner{width:min(560px,86vw)}
-.boot__bar{display:flex;justify-content:space-between;color:var(--text-faint);
-  font-size:10.5px;letter-spacing:.18em;margin-bottom:18px;
-  border-bottom:1px solid var(--line-bright);padding-bottom:10px}
-.boot__line{opacity:0;transform:translateY(4px);white-space:nowrap;overflow:hidden;
-  animation:bootline .35s var(--ease) forwards;color:var(--text-dim);margin:3px 0}
-.boot__line .ok{color:var(--green)}
-.boot__line .run{color:var(--amber)}
-.boot__line.grant{color:var(--amber);font-weight:700;letter-spacing:.05em;margin-top:14px}
-@keyframes bootline{to{opacity:1;transform:none}}
-/* couper l'animation ne suffit pas : l'état de repos est opacity:0, il faut
-   restituer l'état final sinon l'écran de boot reste noir. */
-@media (prefers-reduced-motion:reduce){.boot__line{animation:none;opacity:1;transform:none}}
-.boot__skip{margin-top:22px;color:var(--text-faint);font-size:10px;letter-spacing:.2em}
-.boot__skip b{color:var(--text-dim)}
-
-/* ============================================================= *
- *  HUD CHROME (top status bar + side rail)                      *
+ *  HUD CHROME (barre de statut en haut)                         *
  * ============================================================= */
 /* ---------- Barre de navigation ---------- */
 /* z-index au-dessus de .mobile-nav : le bouton burger vit dans la barre,
@@ -324,25 +307,6 @@ body{padding-top:56px}
   .readtoggle{font-size:9.5px;letter-spacing:.1em;gap:7px;padding:6px 9px;min-width:128px}
 }
 
-/* side nav rail */
-.rail{
-  position:fixed;top:50%;right:26px;transform:translateY(-50%);z-index:901;
-  display:flex;flex-direction:column;gap:4px;
-}
-.rail a{
-  display:flex;align-items:center;gap:10px;justify-content:flex-end;
-  font-family:var(--ff-mono);font-size:10px;letter-spacing:.12em;color:var(--text-faint);
-  padding:5px 2px;transition:color .3s;
-}
-.rail a .num{opacity:.5}
-.rail a .label{opacity:0;transform:translateX(8px);transition:.3s var(--ease);
-  text-transform:uppercase;white-space:nowrap}
-.rail a .tick{width:22px;height:1px;background:currentColor;transition:width .3s,background .3s}
-.rail a:hover,.rail a.active{color:var(--amber)}
-.rail a:hover .label,.rail a.active .label{opacity:1;transform:none}
-.rail a.active .tick{width:34px;height:2px}
-.rail{display:none}  /* remplacé par la barre de navigation en haut */
-
 /* mobile nav */
 /* le bouton est un enfant de .topbar : sans position il n'aurait pas de
    z-index propre, c'est la barre qui le fait passer devant l'overlay. */
@@ -372,7 +336,19 @@ body{padding-top:56px}
 /* ============================================================= *
  *  LAYOUT PRIMITIVES                                            *
  * ============================================================= */
+/* ---------- lien d'évitement ----------
+   Premier élément focusable de la page : une tabulation depuis la barre
+   d'adresse et l'on saute par-dessus les neuf entrées de navigation, au lieu
+   de les traverser sur chaque page. Hors focus, il ne se voit pas. */
+.skip{position:fixed;left:-9999px;top:0;z-index:906;
+  font-family:var(--ff-mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+  background:var(--amber);color:#0a0c10;padding:12px 18px;border:0}
+.skip:focus{left:10px;top:10px}
+
 main{position:relative;z-index:1}
+/* cible du lien d'évitement : focalisable au clavier sans cerner toute la
+   page d'un liseré */
+main:focus{outline:none}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
 section{position:relative;padding:120px 0;scroll-margin-top:44px}
 @media(max-width:680px){section{padding:84px 0}.wrap{padding:0 18px}}
@@ -441,6 +417,12 @@ section{position:relative;padding:120px 0;scroll-margin-top:44px}
 .btn .ar{transition:transform .3s}
 .btn:hover .ar{transform:translateX(4px)}
 
+/* Ce que je cherche : une ligne, en retrait, sous l'accroche. */
+.hero__seek{margin-top:20px;max-width:560px;padding-left:15px;
+  border-left:2px solid var(--line-bright);font-family:var(--ff-mono);
+  font-size:12.5px;line-height:1.75;color:var(--text-faint)}
+.hero__seek b{color:var(--text-dim);font-weight:500}
+
 /* hero console panel */
 .console{padding:0;font-family:var(--ff-mono)}
 .console__bar{display:flex;align-items:center;gap:8px;padding:11px 14px;
@@ -472,18 +454,6 @@ section{position:relative;padding:120px 0;scroll-margin-top:44px}
 .term__sep{color:var(--text-dim)}
 .term__input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--text);
   font-family:var(--ff-mono);font-size:12.5px;caret-color:var(--amber);padding:0}
-
-/* konami easter egg */
-.konami{position:fixed;inset:0;z-index:10001;display:none;background:rgba(6,8,11,.94)}
-.konami.on{display:block}
-.konami canvas{position:absolute;inset:0;display:block}
-.konami__msg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
-  text-align:center;padding:26px 36px;background:rgba(10,12,16,.72);border:1px solid var(--amber);
-  box-shadow:0 0 50px rgba(255,177,61,.35);backdrop-filter:blur(2px)}
-.konami__msg .konami__ttl{font-family:var(--ff-display);font-weight:700;font-size:clamp(22px,4vw,34px);
-  color:var(--amber);letter-spacing:.04em;text-shadow:0 0 24px rgba(255,177,61,.5)}
-.konami__msg p{font-family:var(--ff-mono);font-size:12px;color:var(--cyan);margin-top:10px;letter-spacing:.1em}
-.konami__msg small{display:block;margin-top:16px;font-family:var(--ff-mono);font-size:10px;color:var(--text-dim);letter-spacing:.12em}
 
 /* stat strip */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:64px;
@@ -841,12 +811,41 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   display:inline-flex;align-items:center;gap:8px;letter-spacing:.12em;transition:color .3s}
 .totop:hover{color:var(--amber)}
 
-/* ---------- reveal animation ---------- */
-.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
-.reveal.in{opacity:1;transform:none}
+/* ============================================================= *
+ *  QUELQUES RÈGLES QUI REMPLACENT DES ATTRIBUTS style="…"        *
+ *  Rien de neuf à l'écran : ce sont exactement les déclarations
+ *  qui étaient écrites à la main dans le corps de la page. Mais un
+ *  attribut de style est précisément ce qui obligerait la CSP à
+ *  garder « style-src 'unsafe-inline' » même après avoir sorti
+ *  cette feuille du HTML.
+ * ============================================================= */
+.hero__lead strong{color:var(--amber)}
+.console__foot b{color:var(--cyan)}
+.sec-sub .faint{color:var(--text-faint)}
+.sec-head--tight{margin-bottom:42px}
+/* liens posés dans un paragraphe de frise ou un chapeau de section */
+.tl__txt a,.sec-sub a{color:var(--cyan);text-decoration:underline;text-underline-offset:2px}
+.tl__txt a:hover,.sec-sub a:hover{color:var(--amber)}
+/* le bouton centré qui clôt une section, et sa note en dessous */
+.ctr{text-align:center;margin-top:44px}
+.ctr-note{margin-top:16px;font-family:var(--ff-mono);font-size:11px;
+  letter-spacing:.06em;color:var(--text-faint)}
+
+/* ---------- apparition au défilement ----------
+   Le défaut est VISIBLE. L'état masqué n'est posé que si <html> porte la
+   classe « js », et cette classe n'est posée que par le script en ligne du
+   <head> — donc uniquement là où un JavaScript tourne et pourra la lever.
+   Avant cette inversion, les quelque 70 blocs en .reveal partaient à
+   opacity:0 et seul l'IntersectionObserver de site.js les découvrait : sans
+   JS, ou si le fichier ne se chargeait pas, la page était blanche.
+   Les sélecteurs porteurs de « .in » doivent rester au moins aussi
+   spécifiques que « :root.js .reveal », sinon ils ne lèveraient rien. */
+.reveal{transition:opacity .8s var(--ease),transform .8s var(--ease)}
+:root.js .reveal{opacity:0;transform:translateY(26px)}
+.reveal.in,:root.js .reveal.in{opacity:1;transform:none}
 .reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}
 .reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}
-@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+@media(prefers-reduced-motion:reduce){.reveal,:root.js .reveal{opacity:1;transform:none;transition:none}}
 /* ============================================================= *
  *  PUBLICATIONS — teaser alimenté par data/blog.json            *
  * ============================================================= */
@@ -892,6 +891,25 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   transition:border-color .18s,color .18s}
 .pub-chips a:hover,.pub-chips a:focus-visible{border-color:var(--amber);color:var(--amber)}
 .pub-chips a i{font-style:normal;color:var(--amber);font-size:10px}
+
+/* ---------- articles épinglés ----------
+   Trois titres écrits dans la page, au-dessus de la liste chargée depuis
+   data/blog.json : trois sujets lisibles valent mieux qu'un compteur, et ils
+   restent là si le flux ne répond pas. */
+.pins__lab{margin-bottom:14px}
+.pins{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:30px}
+@media(max-width:900px){.pins{grid-template-columns:1fr}}
+.pin{display:flex;flex-direction:column;padding:20px 20px 18px;
+  transition:transform .3s var(--ease)}
+.pin:hover{transform:translateY(-4px)}
+.pin__meta{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.1em;margin-bottom:12px}
+.pin__date{color:var(--amber)}
+.pin__rt{color:var(--text-faint)}
+.pin__title{font-family:var(--ff-display);font-size:17px;font-weight:600;
+  color:var(--text-strong);line-height:1.3;margin-bottom:9px;transition:color .2s var(--ease)}
+.pin:hover .pin__title{color:var(--amber)}
+.pin__sum{font-size:13.5px;color:var(--text-dim);line-height:1.6;margin:0}
 
 .pub-nav{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:38px}
 @media(max-width:620px){
@@ -981,25 +999,13 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
    le #f4f1ea du fond y serait trop proche. Même valeur que blog.css.
    Le bouton fantôme est exclu : il n'a pas de fond ambre pour porter ce clair. */
 :root[data-read="on"] .btn:hover:not(.btn--ghost),
-:root[data-read="on"] .mailbtn:hover{color:#fffdf8}
+:root[data-read="on"] .mailbtn:hover,
+:root[data-read="on"] .skip{color:#fffdf8}
 :root[data-read="on"] ::selection{background:var(--amber);color:#fffdf8}
 
 /* Le gris bleuté du survol vire au froid sur le papier (même correction que
    .postrow:hover dans blog.css). */
 :root[data-read="on"] .pub:hover{background:rgba(35,38,44,.04)}
-/* L'œuf de Pâques garde son fond noir dans les deux thèmes : sa pluie de
-   caractères est peinte sur un canvas, hors de portée du CSS. Mais son encre,
-   elle, suivait le thème — ambre et cyan « papier » sur voile noir tombaient à
-   2,8:1. On lui réimpose donc la palette terminal, localement. */
-:root[data-read="on"] .konami{
-  --amber:#ffb13d; --amber-soft:#ffca74; --cyan:#48d6cf; --green:#62e08a;
-  --text-strong:#eef1f6; --text:#c4ccd8; --text-dim:#8e99ab; --text-faint:#7a8396;
-}
-
-
-/* La séquence Konami reste sombre en mode lecture, volontairement : son fond
-   est une pluie de caractères verts peinte sur <canvas> par site.js, hors de
-   portée du CSS. Éclaircir le seul cartouche l'aurait posé sur du noir. */
 </style>
 </head>
 
@@ -1009,36 +1015,19 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <div class="grain" aria-hidden="true"></div>
 <div class="scanlines" aria-hidden="true"></div>
 <div class="scrollprog" id="scrollprog" aria-hidden="true"></div>
-<div class="konami" id="konami" aria-hidden="true">
-  <canvas id="konamiCanvas"></canvas>
-  <div class="konami__msg">
-    <!-- Titre décoratif de l'easter egg : volontairement pas un titre de niveau,
-         pour ne pas trouer le plan des sections. -->
-    <div class="konami__ttl">ACCÈS ROOT DÉBLOQUÉ</div>
-    <p>// sMug@replicatorbe says hi 👋</p>
-    <small>[ clic ou Échap pour fermer ]</small>
-  </div>
-</div>
-
-<!-- ===================== BOOT ===================== -->
-<div class="boot" id="boot">
-  <div class="boot__inner">
-    <div class="boot__bar"><span>FAFCHAMPS-OS // SECURE TERMINAL</span><span>v3.0</span></div>
-    <div id="bootLines"></div>
-    <div class="boot__skip">[ <b>cliquez</b> ou faites défiler pour accéder ]</div>
-  </div>
-</div>
-
 <!-- ===================== HUD CHROME ===================== -->
+<a class="skip" href="#contenu">Aller au contenu</a>
 <div class="topbar">
-  <a class="brand" href="#accueil" aria-label="Accueil">
+  <!-- pas d'aria-label ici : il remplacerait « sMug@replicatorbe », le texte
+       visible du lien, dans les commandes vocales (WCAG 2.5.3). -->
+  <a class="brand" href="#accueil">
   <span class="brand__mono"><img src="img/avatar-smug.png" alt="" width="128" height="128" decoding="async"></span>
   <span class="brand__txt">sMug@replicatorbe</span>
 </a>
-  <nav class="topnav" aria-label="Navigation">
+  <nav class="topnav" aria-label="Navigation principale">
     <a href="#accueil" data-sec="accueil"><span class="num">01</span>Accueil</a>
-    <a href="#parcours" data-sec="parcours"><span class="num">02</span>Parcours</a>
-    <a href="#realisations" data-sec="realisations"><span class="num">03</span>Réalisations</a>
+    <a href="#realisations" data-sec="realisations"><span class="num">02</span>Réalisations</a>
+    <a href="#parcours" data-sec="parcours"><span class="num">03</span>Parcours</a>
     <a href="#code" data-sec="code"><span class="num">04</span>Le code</a>
     <a href="#publications" data-sec="publications"><span class="num">05</span>Publications</a>
     <a href="#profil" data-sec="profil"><span class="num">06</span>Profil</a>
@@ -1057,23 +1046,11 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   <button class="burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mnav"><span></span><span></span><span></span></button>
 </div>
 
-<nav class="rail" aria-label="Navigation">
-  <a href="#accueil" data-sec="accueil"><span class="label">Accueil</span><span class="num">01</span><span class="tick"></span></a>
-  <a href="#parcours" data-sec="parcours"><span class="label">Parcours</span><span class="num">02</span><span class="tick"></span></a>
-  <a href="#realisations" data-sec="realisations"><span class="label">Réalisations</span><span class="num">03</span><span class="tick"></span></a>
-  <a href="#code" data-sec="code"><span class="label">Le code</span><span class="num">04</span><span class="tick"></span></a>
-  <a href="#publications" data-sec="publications"><span class="label">Publications</span><span class="num">05</span><span class="tick"></span></a>
-  <a href="#profil" data-sec="profil"><span class="label">Profil</span><span class="num">06</span><span class="tick"></span></a>
-  <a href="#competences" data-sec="competences"><span class="label">Compétences</span><span class="num">07</span><span class="tick"></span></a>
-  <a href="#projets" data-sec="projets"><span class="label">Projets</span><span class="num">08</span><span class="tick"></span></a>
-  <a href="#contact" data-sec="contact"><span class="label">Contact</span><span class="num">09</span><span class="tick"></span></a>
-</nav>
-
 <!-- overlay du menu mobile : masqué aux technologies d'assistance tant qu'il est fermé (visibility:hidden) -->
 <nav class="mobile-nav" id="mnav" aria-label="Menu mobile">
   <a href="#accueil"><span class="num">01</span>Accueil</a>
-  <a href="#parcours"><span class="num">02</span>Parcours</a>
-  <a href="#realisations"><span class="num">03</span>Réalisations</a>
+  <a href="#realisations"><span class="num">02</span>Réalisations</a>
+  <a href="#parcours"><span class="num">03</span>Parcours</a>
   <a href="#code"><span class="num">04</span>Le code</a>
   <a href="#publications"><span class="num">05</span>Publications</a>
   <a href="#profil"><span class="num">06</span>Profil</a>
@@ -1082,7 +1059,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   <a href="#contact"><span class="num">09</span>Contact</a>
 </nav>
 
-<main>
+<main id="contenu" tabindex="-1">
 
 <!-- ===================== HERO ===================== -->
 <section id="accueil" class="hero">
@@ -1092,14 +1069,19 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
         <h1 class="reveal d1">Jérôme<br><span class="last">Fafchamps</span></h1>
         <div class="hero__role reveal d2"><span class="pre">&gt; rôle:&nbsp;</span><span id="typed"></span><span class="cursor"></span></div>
         <p class="hero__lead reveal d3">
-          20 ans à bâtir, sécuriser et piloter des systèmes — côté <strong style="color:var(--amber)">IT</strong>
-          (développement, DevOps, administration système &amp; réseau) comme côté <strong style="color:var(--amber)">sûreté</strong>
-          (salles de contrôle, vidéosurveillance, contrôle d'accès). Mon métier : faire le pont entre les deux,
-          de la technique au pilotage — avec la cybersécurité en fil rouge.
+          Plus de vingt ans à bâtir et à piloter des systèmes — côté <strong>IT</strong>
+          (développement, DevOps, administration système &amp; réseau) comme côté <strong>sûreté</strong>
+          (salles de contrôle, vidéosurveillance, contrôle d'accès). Du serveur au poste opérateur.
+          Ce qui ne s'est pas périmé en chemin : savoir lire un log, une capture et une
+          documentation — et vérifier plutôt que croire.
+        </p>
+        <p class="hero__seek reveal d3">
+          Ce que je cherche : les postes où il faut <b>comprendre ce qui s'est passé</b> —
+          analyse d'incidents, traces, systèmes de sûreté.
         </p>
         <div class="hero__cta reveal d4">
-          <a href="#parcours" class="btn">Mon parcours <span class="ar">→</span></a>
-          <a href="#realisations" class="btn btn--ghost">Ce que j'ai livré</a>
+          <a href="#realisations" class="btn">Ce que j'ai livré <span class="ar">→</span></a>
+          <a href="#parcours" class="btn btn--ghost">Mon parcours</a>
         </div>
       </div>
 
@@ -1112,7 +1094,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
             <input id="termInput" class="term__input" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-label="Terminal interactif — tapez help">
           </div>
         </div>
-        <div class="console__foot"><span class="live">●</span> session interactive · tape <b style="color:var(--cyan)">help</b> · uptime <span id="uptime">--</span></div>
+        <div class="console__foot"><span class="live">●</span> session interactive · tape <b>help</b> · uptime <span id="uptime">--</span></div>
       </div>
     </div>
 
@@ -1121,158 +1103,11 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
          et pointent dessus. Les valeurs écrites en dur sont le repli si le flux
          ne répond pas — elles ne mentent pas, elles datent. -->
     <div class="stats">
-      <div class="stat reveal"><div class="n" data-count="20"><span class="counter">0</span><span class="u">+ ANS</span></div><div class="l">D'informatique</div></div>
-      <a class="stat stat--lk reveal d1" href="#code"><div class="n"><span id="stGh">2&thinsp;877</span></div><div class="l">Contributions GitHub</div></a>
+      <div class="stat reveal"><div class="n" data-count="24"><span class="counter">0</span><span class="u">&nbsp;ANS</span></div><div class="l">D'informatique</div></div>
+      <a class="stat stat--lk reveal d1" href="#code"><div class="n"><span id="stGh">2&thinsp;906</span></div><div class="l">Contributions GitHub</div></a>
       <a class="stat stat--lk reveal d2" href="#code"><div class="n"><span id="stDays">216 j</span></div><div class="l">De code sur 12 mois</div></a>
-      <a class="stat stat--lk reveal d3" href="#publications"><div class="n"><span id="stPosts">29</span></div><div class="l">Articles publiés</div></a>
+      <a class="stat stat--lk reveal d3" href="#publications"><div class="n"><span id="stPosts">32</span></div><div class="l">Articles publiés</div></a>
     </div>
-  </div>
-</section>
-
-<!-- ===== 02 · PARCOURS (frise chronologique) ===== -->
-<section id="parcours">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">02</span><span>// TRAJECTOIRE</span><span class="ln"></span></div>
-      <h2 class="sec-title">Vingt ans <em>sans décrocher</em></h2>
-      <p class="sec-sub">Les technologies changent tous les trois ou quatre ans. Ce qui ne change pas, c'est la méthode : comprendre le système en entier, puis le construire. Et parfois ce n'est pas le langage qui change, c'est la façon de travailler : la virtualisation, les conteneurs, l'IA. Voici les piles que j'ai traversées, et ce que j'en ai fait.</p>
-    </div>
-
-    <div class="tl__meta reveal">
-      <span><b>2002 → 2026</b> · première ligne de code publiée</span>
-      <span><b>14</b> virages technologiques</span>
-      <span><b>0</b> année sans écrire de code</span>
-    </div>
-
-    <ol class="tl">
-      <li class="tl__item reveal">
-        <div class="tl__year">2002</div>
-        <div class="tl__body">
-          <div class="tl__stack">IRC · ActionScript · Red5</div>
-          <p class="tl__txt"><b>Chat.fr</b> — développement et gestion d'un des plus gros chats francophones, jusqu'à 700 connectés en soirée. Premier contact avec l'échelle : modération, charge serveur, abus.</p>
-          <div class="tl__tags"><span>IRC</span><span>AS3</span><span>Red5</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item reveal">
-        <div class="tl__year">2004</div>
-        <div class="tl__body">
-          <div class="tl__stack">PHP · Linux · LAMP</div>
-          <p class="tl__txt"><b>fafchamps.be</b> — mon premier espace à moi, et le début de l'administration système pour de bon : serveur, DNS, messagerie, sauvegardes. Tout apprendre en cassant, tout réparer soi-même.</p>
-          <div class="tl__tags"><span>PHP</span><span>Linux</span><span>LAMP</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item reveal">
-        <div class="tl__year">2006</div>
-        <div class="tl__body">
-          <div class="tl__stack">PHP à l'échelle · MySQL · infrastructure</div>
-          <p class="tl__txt"><b>Adosbox</b> — communauté et chat pour ados, développée et administrée de bout en bout : code, serveurs, réseau, modération. Des milliers d'utilisateurs, et la responsabilité qui va avec.</p>
-          <div class="tl__tags"><span>PHP</span><span>MySQL</span><span>Infra</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item reveal">
-        <div class="tl__year">2007</div>
-        <div class="tl__body">
-          <div class="tl__stack">Flex · ActionScript 3 · streaming</div>
-          <p class="tl__txt"><b><a href="/blog/espace-irc-kesako/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Espace-IRC</a></b> — client riche en Flash/Flex, serveur Red5 pour la webcam, bots et sécurité du chan. Une pile entière rendue obsolète par la fin de Flash : la première leçon sur la durée de vie d'une technologie.</p>
-          <div class="tl__tags"><span>Flex</span><span>AS3</span><span>Red5</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item reveal">
-        <div class="tl__year">2008</div>
-        <div class="tl__body">
-          <div class="tl__stack">Virtualisation · Xen · VMware · Proxmox</div>
-          <p class="tl__txt">Fin du serveur physique unique, à l'époque des hyperviseurs Xen proposés par OVH : chaque service dans sa propre machine virtuelle. On isole, on clone, on restaure un instantané au lieu de réinstaller tout un week-end. <b>Le premier vrai changement de méthode</b>, pas seulement de langage.</p>
-          <div class="tl__tags"><span>Xen</span><span>VMware</span><span>Proxmox</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item reveal">
-        <div class="tl__year">2009</div>
-        <div class="tl__body">
-          <div class="tl__stack">Java · Spring · Hibernate</div>
-          <p class="tl__txt">Java découvert en cours en 2008, réellement maîtrisé l'année suivante : architecture MVC, <a href="/blog/hibernate-mapping-ne-pas-oublier-les-getteurs-et-setteurs/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">persistance</a>, tests. Le moment où l'autodidacte apprend les conventions des autres — et comprend à quoi elles servent.</p>
-          <div class="tl__tags"><span>Java</span><span>Spring</span><span>Hibernate</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item reveal">
-        <div class="tl__year">2015</div>
-        <div class="tl__body">
-          <div class="tl__stack">Conteneurs · Docker · Compose · reverse proxy</div>
-          <p class="tl__txt">Le conteneur ne remplace pas la machine virtuelle, il s'y ajoute. La VM pour cloisonner et pour ce qui doit survivre ; le conteneur pour déployer, reconstruire et jeter. <b>Aujourd'hui je fais tourner les deux</b>, chacun pour ce qu'il fait le mieux — et ce site en est un exemple.</p>
-          <div class="tl__tags"><span>Docker</span><span>Compose</span><span>nginx</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item reveal">
-        <div class="tl__year">2015 →</div>
-        <div class="tl__body">
-          <div class="tl__stack">Domotique · Vera, puis Jeedom · Z-Wave · 433 MHz</div>
-          <p class="tl__txt">Tout ce qui pilote la maison tourne chez moi, pas chez un fabricant. Une box Vera d'abord, puis <a href="/blog/premiere-impression-jeedom-vs-vera/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Jeedom début 2016</a> quand la première a saturé : capteurs Z-Wave et 433 MHz, alarme, lecteur de badge, automatisations sur mesure. La même chose qu'au travail, mais à l'échelle d'une maison — et sans budget.</p>
-          <div class="tl__tags"><span>Vera</span><span>Jeedom</span><span>Z-Wave</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item reveal">
-        <div class="tl__year">2016</div>
-        <div class="tl__body">
-          <div class="tl__stack">C# · PHP/JS · API · sûreté</div>
-          <p class="tl__txt">Changement d'échelle : conception et pilotage de systèmes de sûreté pour un opérateur d'infrastructure ferroviaire. Le code cesse d'afficher des pages — il pilote des caméras, des alarmes et des véhicules.</p>
-          <div class="tl__tags"><span>C#</span><span>API</span><span>CCTV</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item reveal">
-        <div class="tl__year">2018</div>
-        <div class="tl__body">
-          <div class="tl__stack">Électronique · ESP32 · Shelly · Zigbee</div>
-          <p class="tl__txt">Descente d'un étage : microcontrôleurs et modules programmés soi-même — lecteur de badge maison, capteurs de température, relais pilotés. <b>Ne plus seulement configurer du matériel, mais en fabriquer.</b></p>
-          <div class="tl__tags"><span>ESP32</span><span>Shelly</span><span>Zigbee</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item reveal">
-        <div class="tl__year">2020</div>
-        <div class="tl__body">
-          <div class="tl__stack">Flutter/Dart · mobile · visioconférence</div>
-          <p class="tl__txt"><b>Baboon.fr</b> — application mobile iOS et Android, client web repensé, visioconférence intégrée. Vingt ans après l'IRC, le même service rendu, une pile entièrement neuve et deux magasins d'applications à satisfaire.</p>
-          <div class="tl__tags"><span>Flutter</span><span>Dart</span><span>Jitsi</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item reveal">
-        <div class="tl__year">2023</div>
-        <div class="tl__body">
-          <div class="tl__stack">IA · LLM · modération assistée · assistants de code</div>
-          <p class="tl__txt"><b>Le vecteur de changement le plus rapide que j'aie vu en vingt ans.</b> Quelques mois après l'ouverture publique de ChatGPT. En production : la modération de chat assistée par LLM sur Baboon, avec ce qu'elle attrape et ce qu'elle rate. Au quotidien : lecture de code, scripts, documentation. Un outil de plus — à condition de savoir vérifier ce qu'il produit.</p>
-          <div class="tl__tags"><span>LLM</span><span>Modération IA</span><span>Assistants</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item reveal">
-        <div class="tl__year">2025</div>
-        <div class="tl__body">
-          <div class="tl__stack">Home Assistant · Jeedom · ESPHome</div>
-          <p class="tl__txt">Migration de Jeedom vers <b>Home Assistant</b> — troisième socle en dix ans, aujourd'hui presque terminée : capteurs, automatisations, intégrations, HA a repris l'essentiel. Jeedom reste allumé pour autant, et pas par nostalgie — plus simple, plus calme, il ne réclame pas une mise à jour par semaine. L'ouverture de l'un se paie en rythme d'entretien ; l'autre, on le laisse tourner. Les deux cohabitent, et ça me va.</p>
-          <div class="tl__tags"><span>Home Assistant</span><span>Jeedom</span><span>ESPHome</span></div>
-        </div>
-      </li>
-
-      <li class="tl__item tl__item--now reveal">
-        <div class="tl__year">2026</div>
-        <div class="tl__body">
-          <div class="tl__stack">PHP CLI · statique · durcissement</div>
-          <p class="tl__txt">Retour au minimalisme : ce site est généré en ligne de commande et servi en HTML statique. Pas de base de données, pas d'administration, rien de dynamique exposé. La sécurité par la soustraction.</p>
-          <div class="tl__tags"><span>Statique</span><span>nginx</span><span>Hardening</span></div>
-        </div>
-      </li>
-    </ol>
-
-    <p class="tl__foot reveal">Du serveur physique au conteneur, de l'IRC au LLM. <b>Aucune année sans écrire de code.</b></p>
   </div>
 </section>
 
@@ -1280,9 +1115,9 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <section id="realisations">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">03</span><span>// DOSSIERS OPÉRATIONNELS</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">02</span><span>// DOSSIERS OPÉRATIONNELS</span><span class="ln"></span></div>
       <h2 class="sec-title">Réalisations <em>professionnelles</em></h2>
-      <p class="sec-sub">Plus de dix ans à concevoir, piloter et déployer des systèmes de sûreté et de supervision pour un opérateur d'infrastructure ferroviaire majeur en Belgique. De l'analyse du besoin à la réception : cahiers des charges, marchés publics, pilotage de sous-traitants et formation des équipes. <span style="color:var(--text-faint)">// détails anonymisés</span></p>
+      <p class="sec-sub">Plus de dix ans à concevoir, piloter et déployer des systèmes de sûreté et de supervision pour un opérateur d'infrastructure ferroviaire majeur en Belgique. De l'analyse du besoin à la réception : cahiers des charges, marchés publics, pilotage de sous-traitants et formation des équipes. <span class="faint">// détails anonymisés</span></p>
     </div>
 
     <div class="frame role-block reveal">
@@ -1290,7 +1125,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
         <span class="mono-tag">// FONCTION</span>
         <span class="ttl">Le pont entre les opérations de sûreté et l'IT</span>
       </div>
-      <p>Au sein du service de sécurité corporate d'un opérateur ferroviaire majeur, je conçois et je supporte les <strong>salles de contrôle</strong> (centre d'opérations, salles régionales et leurs back-ups) ainsi que la <strong>gestion des accès & badges</strong> sur des dizaines de sites. Je traduis les besoins opérationnels en <strong>analyses fonctionnelles</strong> exploitables par l'IT, je définis l'existant et la cible, j'établis les <strong>roadmaps</strong> et j'accompagne les arbitrages budgétaires — en pilotant les contrats-cadres, les équipes IT et les sous-traitants.</p>
+      <p>Au sein du service de sécurité corporate d'un opérateur ferroviaire majeur, je conçois et je supporte les <strong>salles de contrôle</strong> (centre d'opérations de sûreté — un SOC physique, pas un centre de cyberdéfense —, salles régionales et leurs back-ups) ainsi que la <strong>gestion des accès & badges</strong> sur des dizaines de sites. Je traduis les besoins opérationnels en <strong>analyses fonctionnelles</strong> exploitables par l'IT, je définis l'existant et la cible, j'établis les <strong>roadmaps</strong> et j'accompagne les arbitrages budgétaires — en pilotant les contrats-cadres, les équipes IT et les sous-traitants.</p>
       <div class="role-block__resp">
         <span>Analyses fonctionnelles</span>
         <span>Roadmap & budget</span>
@@ -1309,9 +1144,9 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
       <article class="frame dossier dossier--flag reveal">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // RÉSEAU</span><span class="dossier__st">LIVRÉ</span></div>
-        <div class="flag-fig"><b>72&nbsp;h</b><small>d'autonomie en intervention,<br>en lien temps réel avec le SOC</small></div>
+        <div class="flag-fig"><b>72&nbsp;h</b><small>d'autonomie visée en conception,<br>en lien temps réel avec le centre d'opérations</small></div>
         <h3>CommandCar — poste de commandement mobile</h3>
-        <div class="role">RÔLE // Conception intégrale · CSC · réception · formation</div>
+        <div class="role">RÔLE // Conception intégrale · CSC (cahier spécial des charges) · réception · formation</div>
         <p>Poste de commandement mobile conçu de A à Z, communiquant en temps réel avec le centre fixe : module de communication sur-mesure (4G/APN dédié, 802.1x/Radius), accès vidéo complet, alarmes intrusion/CO/incendie, le tout pilotable à distance. Cahier des charges, tests et réception du véhicule, procédures et formation des intervenants pour les scénarios de crise.</p>
         <div class="flag-proof"><span class="mono-tag">// CE QUE ÇA A DEMANDÉ</span>Du réseau opérateur (APN dédié, authentification 802.1x/Radius), un marché public, la réception d'un véhicule, et la formation d'équipes à des scénarios de crise. Quatre métiers, un seul projet.</div>
         <div class="dossier__tags"><span>Réseau</span><span>802.1x</span><span>CSC</span><span>Terrain</span></div>
@@ -1319,10 +1154,10 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
       <article class="frame dossier dossier--flag reveal d1">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // SÛRETÉ</span><span class="dossier__st">LIVRÉ</span></div>
-        <div class="flag-fig"><b>14&nbsp;j</b><small>sans alimentation secteur —<br>le marché plafonnait à 3-5 jours</small></div>
+        <div class="flag-fig"><b>14&nbsp;j</b><small>d'autonomie visée en conception —<br>le marché plafonnait à 3-5 jours</small></div>
         <h3>Valise de surveillance autonome</h3>
         <div class="role">RÔLE // Conception sur-mesure · CSC · attribution de marché</div>
-        <p>Aucune solution du marché ne dépassait 3 à 5 jours d'autonomie sans secteur. En optimisant la consommation de chaque composant, conception d'une valise atteignant 14 jours — GPS, 3G/4G, analyse intelligente et zoom. Rédaction du cahier des charges et attribution du marché au fournisseur.</p>
+        <p>Aucune solution du marché ne dépassait 3 à 5 jours d'autonomie sans secteur. En mesurant la consommation de chaque composant, conception d'une valise dimensionnée pour 14 jours — GPS, 3G/4G, analyse intelligente et zoom. Rédaction du cahier des charges et attribution du marché au fournisseur.</p>
         <div class="flag-proof"><span class="mono-tag">// CE QUE ÇA A DEMANDÉ</span>Mesurer la consommation de chaque composant, puis réécrire le cahier des charges autour de cette contrainte — au lieu d'accepter ce que proposaient les catalogues.</div>
         <div class="dossier__tags"><span>Autonomie</span><span>Sur-mesure</span><span>CSC</span></div>
       </article>
@@ -1340,7 +1175,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       <article class="frame dossier dossier--flag reveal d1">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // PLATEFORME</span><span class="dossier__st prog">EN PRODUCTION</span></div>
         <div class="flag-fig"><b>50 → 1</b><small>logiciels métiers remplacés<br>par une interface unique</small></div>
-        <h3>Hypervisor — supervision unifiée des alarmes</h3>
+        <h3>Hypervisor (PSIM) — supervision unifiée des alarmes</h3>
         <div class="role">RÔLE // Intégration &amp; déploiement transverse</div>
         <p>Déploiement d'une plateforme unifiant la gestion des alarmes, toutes technologies confondues — intrusion, incendie, ascenseurs, tunnels, ventilation… Une seule interface en remplacement d'une cinquantaine de logiciels métiers : moins d'erreurs, formation simplifiée, supervision homogène.</p>
         <div class="flag-proof"><span class="mono-tag">// CE QUE ÇA A DEMANDÉ</span>Faire coexister des technologies qui ne se parlaient pas, puis convaincre des opérateurs de renoncer aux outils qu'ils connaissaient par cœur.</div>
@@ -1355,9 +1190,9 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
       <div class="frame dossier reveal">
         <div class="dossier__top"><span class="dossier__cls">DOSSIER // INFRA</span><span class="dossier__st">LIVRÉ</span></div>
-        <h3>Security Operation Center — nouvelle génération</h3>
+        <h3>Security Operations Center — nouvelle génération</h3>
         <div class="role">RÔLE // Pilotage de A à Z · marché public · principal + repli</div>
-        <p>Conception et déploiement d'un nouveau centre d'opérations de sûreté et de son site de repli. De l'analyse du besoin à la réception : cahier des charges, ergonomie des postes opérateurs, continuité d'activité — chaque choix validé sur le terrain avec les agents.</p>
+        <p>Conception et déploiement d'un nouveau centre d'opérations de sûreté (SOC physique) et de son site de repli. De l'analyse du besoin à la réception : cahier des charges, ergonomie des postes opérateurs, continuité d'activité — chaque choix validé sur le terrain avec les agents.</p>
         <div class="dossier__tags"><span>SOC</span><span>Continuité</span><span>Ergonomie</span></div>
       </div>
 
@@ -1424,10 +1259,156 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 
     </div>
 
-    <div style="text-align:center;margin-top:44px" class="reveal">
+    <div class="ctr reveal">
       <a href="mailto:jerome@fafchamps.be?subject=Demande%20de%20dossier%20d%C3%A9taill%C3%A9" class="btn">Dossier détaillé sur demande <span class="ar">→</span></a>
-      <p style="margin-top:16px;font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;color:var(--text-faint)">Réalisations présentées de façon anonymisée · dossier complet communiqué sur demande, sous accord de confidentialité.</p>
+      <p class="ctr-note">Réalisations présentées de façon anonymisée · dossier complet communiqué sur demande, sous accord de confidentialité.</p>
     </div>
+  </div>
+</section>
+
+<!-- ===== 03 · PARCOURS (frise chronologique) ===== -->
+<section id="parcours">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-meta"><span class="idx">03</span><span>// TRAJECTOIRE</span><span class="ln"></span></div>
+      <h2 class="sec-title">Plus de vingt ans <em>sans décrocher</em></h2>
+      <p class="sec-sub">Les technologies changent tous les trois ou quatre ans. Ce qui ne change pas, c'est la méthode : comprendre le système en entier, puis le construire. Et parfois ce n'est pas le langage qui change, c'est la façon de travailler : la virtualisation, les conteneurs, l'IA. Voici les piles que j'ai traversées, et ce que j'en ai fait.</p>
+    </div>
+
+    <div class="tl__meta reveal">
+      <span><b>2002 → 2026</b> · première ligne de code publiée</span>
+      <span><b>14</b> virages technologiques</span>
+    </div>
+
+    <ol class="tl">
+      <li class="tl__item reveal">
+        <div class="tl__year">2002</div>
+        <div class="tl__body">
+          <div class="tl__stack">IRC · ActionScript · Red5</div>
+          <p class="tl__txt"><b>Chat.fr</b> — développement et gestion d'un chat francophone, jusqu'à 700 connectés en soirée. Plateforme tierce, revendue par son propriétaire en 2007. Premier contact avec l'échelle : modération, charge serveur, abus.</p>
+          <div class="tl__tags"><span>IRC</span><span>AS3</span><span>Red5</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2004</div>
+        <div class="tl__body">
+          <div class="tl__stack">PHP · Linux · LAMP</div>
+          <p class="tl__txt"><b>fafchamps.be</b> — mon premier espace à moi, et le début de l'administration système pour de bon : serveur, DNS, messagerie, sauvegardes. Tout apprendre en cassant, tout réparer soi-même.</p>
+          <div class="tl__tags"><span>PHP</span><span>Linux</span><span>LAMP</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2006</div>
+        <div class="tl__body">
+          <div class="tl__stack">PHP à l'échelle · MySQL · infrastructure</div>
+          <p class="tl__txt"><b>Adosbox</b> — plateforme communautaire francophone, développée et administrée de bout en bout : code, serveurs, réseau. Côté modération : une charte écrite, une équipe de modérateurs formés sur une procédure, le traitement des signalements et le retrait des contenus illicites.</p>
+          <div class="tl__tags"><span>PHP</span><span>MySQL</span><span>Infra</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2007</div>
+        <div class="tl__body">
+          <div class="tl__stack">Flex · ActionScript 3 · streaming</div>
+          <p class="tl__txt"><b><a href="/blog/espace-irc-kesako/">Espace-IRC</a></b> — client riche en Flash/Flex, serveur Red5 pour la webcam, bots et sécurité du chan. Le robot de modération qui tenait le réseau est <a href="https://github.com/replicatorbe/IRCBook" target="_blank" rel="noopener">sur GitHub, en Java ↗</a>. Une pile entière rendue obsolète par la fin de Flash : la première leçon sur la durée de vie d'une technologie.</p>
+          <div class="tl__tags"><span>Flex</span><span>AS3</span><span>Red5</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2008</div>
+        <div class="tl__body">
+          <div class="tl__stack">Virtualisation · Xen · VMware · Proxmox</div>
+          <p class="tl__txt">Fin du serveur physique unique, à l'époque des hyperviseurs Xen proposés par OVH : chaque service dans sa propre machine virtuelle. On isole, on clone, on restaure un instantané au lieu de réinstaller tout un week-end. <b>Le premier vrai changement de méthode</b>, pas seulement de langage.</p>
+          <div class="tl__tags"><span>Xen</span><span>VMware</span><span>Proxmox</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2009</div>
+        <div class="tl__body">
+          <div class="tl__stack">Java · Spring · Hibernate</div>
+          <p class="tl__txt">Java découvert en cours en 2008, réellement maîtrisé l'année suivante : architecture MVC, <a href="/blog/hibernate-mapping-ne-pas-oublier-les-getteurs-et-setteurs/">persistance</a>, tests. Le moment où l'autodidacte apprend les conventions des autres — et comprend à quoi elles servent.</p>
+          <div class="tl__tags"><span>Java</span><span>Spring</span><span>Hibernate</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2015</div>
+        <div class="tl__body">
+          <div class="tl__stack">Conteneurs · Docker · Compose · reverse proxy</div>
+          <p class="tl__txt">Le conteneur ne remplace pas la machine virtuelle, il s'y ajoute. La VM pour cloisonner et pour ce qui doit survivre ; le conteneur pour déployer, reconstruire et jeter. <b>Aujourd'hui je fais tourner les deux</b>, chacun pour ce qu'il fait le mieux — et ce site en est un exemple.</p>
+          <div class="tl__tags"><span>Docker</span><span>Compose</span><span>nginx</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2015 →</div>
+        <div class="tl__body">
+          <div class="tl__stack">Domotique · Vera, puis Jeedom · Z-Wave · 433 MHz</div>
+          <p class="tl__txt">Tout ce qui pilote la maison tourne chez moi, pas chez un fabricant. Une box Vera d'abord, puis <a href="/blog/premiere-impression-jeedom-vs-vera/">Jeedom début 2016</a> quand la première a saturé : capteurs Z-Wave et 433 MHz, alarme, lecteur de badge, automatisations sur mesure. La même chose qu'au travail, mais à l'échelle d'une maison — et sans budget.</p>
+          <div class="tl__tags"><span>Vera</span><span>Jeedom</span><span>Z-Wave</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2016</div>
+        <div class="tl__body">
+          <div class="tl__stack">C# · PHP/JS · API · sûreté</div>
+          <p class="tl__txt">Changement d'échelle : conception et pilotage de systèmes de sûreté pour un opérateur d'infrastructure ferroviaire. Le code cesse d'afficher des pages — il pilote des caméras, des alarmes et des véhicules.</p>
+          <div class="tl__tags"><span>C#</span><span>API</span><span>CCTV</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2018</div>
+        <div class="tl__body">
+          <div class="tl__stack">Électronique · ESP32 · Shelly · Zigbee</div>
+          <p class="tl__txt">Descente d'un étage : microcontrôleurs et modules programmés soi-même — lecteur de badge maison, capteurs de température, relais pilotés. <b>Ne plus seulement configurer du matériel, mais en fabriquer.</b></p>
+          <div class="tl__tags"><span>ESP32</span><span>Shelly</span><span>Zigbee</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2020</div>
+        <div class="tl__body">
+          <div class="tl__stack">Flutter/Dart · mobile · visioconférence</div>
+          <p class="tl__txt"><b>Baboon.fr</b> — application mobile iOS et Android, client web repensé, visioconférence intégrée. Vingt ans après l'IRC, le même service rendu, une pile entièrement neuve et deux magasins d'applications à satisfaire.</p>
+          <div class="tl__tags"><span>Flutter</span><span>Dart</span><span>Jitsi</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2023</div>
+        <div class="tl__body">
+          <div class="tl__stack">IA · LLM · modération assistée · assistants de code</div>
+          <p class="tl__txt"><b>Le vecteur de changement le plus rapide que j'aie vu en vingt ans.</b> Quelques mois après l'ouverture publique de ChatGPT. En production : la modération de chat assistée par LLM sur Baboon, avec ce qu'elle attrape et ce qu'elle rate. Au quotidien : lecture de code, scripts, documentation. Un outil de plus — à condition de savoir vérifier ce qu'il produit.</p>
+          <div class="tl__tags"><span>LLM</span><span>Modération IA</span><span>Assistants</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item reveal">
+        <div class="tl__year">2025</div>
+        <div class="tl__body">
+          <div class="tl__stack">Home Assistant · Jeedom · ESPHome</div>
+          <p class="tl__txt">Migration de Jeedom vers <b>Home Assistant</b> — troisième socle en dix ans, aujourd'hui presque terminée : capteurs, automatisations, intégrations, HA a repris l'essentiel. Jeedom reste allumé pour autant, et pas par nostalgie — plus simple, plus calme, il ne réclame pas une mise à jour par semaine. L'ouverture de l'un se paie en rythme d'entretien ; l'autre, on le laisse tourner. Les deux cohabitent, et ça me va.</p>
+          <div class="tl__tags"><span>Home Assistant</span><span>Jeedom</span><span>ESPHome</span></div>
+        </div>
+      </li>
+
+      <li class="tl__item tl__item--now reveal">
+        <div class="tl__year">2026</div>
+        <div class="tl__body">
+          <div class="tl__stack">PHP CLI · statique · durcissement</div>
+          <p class="tl__txt">Retour au minimalisme : ce site est généré en ligne de commande et servi en HTML statique. Pas de base de données, pas d'administration, rien de dynamique exposé. La sécurité par la soustraction.</p>
+          <div class="tl__tags"><span>Statique</span><span>nginx</span><span>Hardening</span></div>
+        </div>
+      </li>
+    </ol>
+
+    <p class="tl__foot reveal">Du serveur physique au conteneur, de l'IRC au LLM. <b>Aucune année sans écrire de code.</b></p>
   </div>
 </section>
 
@@ -1437,7 +1418,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
     <div class="sec-head reveal">
       <div class="sec-meta"><span class="idx">04</span><span>// ACTIVITÉ GITHUB</span><span class="ln"></span></div>
       <h2 class="sec-title">Le code <em>parle</em></h2>
-      <p class="sec-sub">Vingt ans plus tard, j'écris toujours du code presque tous les jours — en dehors des heures de bureau. Plugins de domotique, robot de modération IRC, outillage système : du code lisible, documenté, sous licence libre. Flux synchronisé chaque jour depuis <a href="https://github.com/replicatorbe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">@replicatorbe</a> — rien de saisi à la main sur cette page.</p>
+      <p class="sec-sub">Vingt-quatre ans plus tard, j'écris toujours du code presque tous les jours — en dehors des heures de bureau. Ce ne sont pas des démonstrations : ces dépôts tournent en production depuis des années, chez moi et chez des tiers que je ne connais pas, qui ouvrent des tickets et proposent des correctifs. Lisible, documenté, sous licence libre. Flux synchronisé chaque jour depuis <a href="https://github.com/replicatorbe" target="_blank" rel="noopener">@replicatorbe</a> — rien de saisi à la main sur cette page.</p>
     </div>
 
     <div class="gh-panels">
@@ -1483,7 +1464,29 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
     <div class="sec-head reveal">
       <div class="sec-meta"><span class="idx">05</span><span>// PUBLICATIONS</span><span class="ln"></span></div>
       <h2 class="sec-title">Ce que j'<em>écris</em></h2>
-      <p class="sec-sub">Des notes techniques et des retours d'expérience, publiés depuis 2007 et remis en ligne à leur date d'origine : lecture de capture réseau, durcissement de serveur, domotique, modération à l'échelle. J'écris ce que j'ai réellement démonté. Pas de commentaires, pas de pistage : un <a href="/blog/feed.xml" style="color:var(--cyan);text-decoration:underline">flux RSS</a>, et c'est tout.</p>
+      <p class="sec-sub">Des notes techniques et des retours d'expérience, publiés depuis 2007 et remis en ligne à leur date d'origine : lecture de capture réseau, durcissement de serveur, domotique, modération à l'échelle. J'écris ce que j'ai réellement démonté. Pas de commentaires, pas de pistage : un <a href="/blog/feed.xml">flux RSS</a>, et c'est tout.</p>
+    </div>
+
+    <!-- Trois titres écrits dans la page, avant la liste chargée depuis
+         data/blog.json. Ils ne dépendent d'aucun flux : si le JSON ne répond
+         pas, il reste trois sujets lisibles plutôt qu'un compteur. -->
+    <div class="mono-tag pins__lab reveal">// À lire en premier</div>
+    <div class="pins">
+      <a class="frame pin reveal" href="/blog/lire-un-pcap-quand-l-alarme-a-deja-sonne/">
+        <span class="pin__meta"><span class="pin__date">2022.06.08</span><span class="pin__rt">2 min</span></span>
+        <h3 class="pin__title">Lire un pcap quand l'alarme a déjà sonné</h3>
+        <p class="pin__sum">Quatre passes pour tirer quelque chose d'utile d'une capture de plusieurs gigaoctets, sans se noyer dans l'interface graphique.</p>
+      </a>
+      <a class="frame pin reveal d1" href="/blog/une-camera-est-un-ordinateur-avec-une-horloge-fausse/">
+        <span class="pin__meta"><span class="pin__date">2024.12.19</span><span class="pin__rt">18 min</span></span>
+        <h3 class="pin__title">Une caméra est un ordinateur avec une horloge fausse</h3>
+        <p class="pin__sum">NVR, ONVIF, PoE, débit montant : le composant qui décide de la valeur d'une installation, le jour où on en a besoin, c'est l'horloge.</p>
+      </a>
+      <a class="frame pin reveal d2" href="/blog/reconnaitre-quelqu-un-qui-revient/">
+        <span class="pin__meta"><span class="pin__date">2025.10.08</span><span class="pin__rt">19 min</span></span>
+        <h3 class="pin__title">Reconnaître quelqu'un qui revient</h3>
+        <p class="pin__sum">Un banni revient en quarante secondes, autre pseudo, autre adresse. Ce que chaque indice vaut pris seul, et pourquoi c'est leur constellation qui parle.</p>
+      </a>
     </div>
 
     <div class="pub-stats reveal" id="pubStats" hidden>
@@ -1517,8 +1520,8 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <section id="profil">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">06</span><span>// DOSSIER</span><span class="ln"></span></div>
-      <h2 class="sec-title">À propos du <em>sujet</em></h2>
+      <div class="sec-meta"><span class="idx">06</span><span>// PORTRAIT</span><span class="ln"></span></div>
+      <h2 class="sec-title">Qui <em>je suis</em></h2>
       <p class="sec-sub">Passionné d'informatique depuis l'enfance, autodidacte revendiqué, bâtisseur de communautés en ligne — devenu concepteur et pilote de systèmes de sûreté, à la croisée de l'IT et de la sécurité.</p>
     </div>
     <div class="profil__grid">
@@ -1533,18 +1536,15 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
           Automatiser, déployer, surveiller, durcir. J'aime quand l'infrastructure tourne toute seule —
           et savoir exactement quoi faire quand ce n'est pas le cas.
         </p>
+        <!-- Le détail du rôle est dans le bloc « // FONCTION » de la section 02 ;
+             deux phrases suffisent ici. -->
         <p>
-          Puis j'ai changé d'échelle. Au sein du service de sécurité corporate d'un opérateur ferroviaire
-          majeur, je suis passé de l'exécution à la <strong>conception et au pilotage</strong> : penser les
-          salles de contrôle et le contrôle d'accès de dizaines de sites, traduire les besoins opérationnels
-          en analyses fonctionnelles, définir la cible, tenir les roadmaps et les budgets,
-          piloter les équipes IT comme les sous-traitants. Le rôle de celui qui <strong>conçoit, arbitre et
-          coordonne</strong> — à la croisée de la sûreté et de l'IT. Mais jamais enfermé dans un bureau :
-          je reste <strong>au plus près du terrain</strong> — voir les projets se déployer pour de vrai,
-          écouter les intervenants, ajuster avec eux. Mes analyses partent du réel et y retournent.
+          Puis j'ai changé d'échelle : au service de sécurité corporate d'un opérateur ferroviaire
+          majeur, je suis passé de l'exécution à la <strong>conception et au pilotage</strong>.
+          Sans quitter le terrain pour autant — mes analyses partent du réel et y retournent.
         </p>
         <p>
-          En dehors du clavier, je traîne à <strong>Wolfplex</strong>, le hackerspace de Charleroi, où l'on
+          En dehors du clavier, je participe à <strong>Wolfplex</strong>, le hackerspace de Charleroi, où l'on
           partage projets, électronique et culture de la bidouille. La curiosité, c'est le carburant.
         </p>
       </div>
@@ -1558,11 +1558,9 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
         </div>
         <div class="idcard__body">
           <div class="idrow"><span class="k">FONCTION</span><span class="v">Sûreté ↔ IT · DevOps</span></div>
-          <div class="idrow"><span class="k">BASE</span><span class="v">🇧🇪</span></div>
+          <div class="idrow"><span class="k">BASE</span><span class="v">Belgique 🇧🇪</span></div>
           <div class="idrow"><span class="k">SPÉCIALITÉ</span><span class="v">Infra, réseau, scripting</span></div>
-          <div class="idrow"><span class="k">EN COURS</span><span class="v">Cybersécurité & forensic</span></div>
-          <div class="idrow"><span class="k">TERRAIN DE JEU</span><span class="v">Wolfplex · Charleroi</span></div>
-          <div class="idrow"><span class="k">DISPONIBILITÉ</span><span class="v green">● ouverte aux échanges</span></div>
+          <div class="idrow"><span class="k">EN COURS</span><span class="v">Analyse de captures, artefacts système, OSINT</span></div>
         </div>
       </div>
     </div>
@@ -1587,6 +1585,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
           <li><b>nginx</b> <i>— reverse proxy, TLS, en-têtes</i></li>
           <li><b>PHP</b> <i>— dont le générateur de ces pages</i></li>
           <li><b>Bash</b> <i>— cron, outillage, sauvegardes</i></li>
+          <li><b>PowerShell</b> <i>— parcs Windows en RMM · 2026</i></li>
           <li><b>Git</b> · <b>MySQL / MariaDB</b></li>
           <li><b>Réseau</b> <i>— TCP/IP, DNS, VPN, VLAN, pare-feu</i></li>
           <li><b>Home Assistant · Jeedom · ESPHome</b></li>
@@ -1619,7 +1618,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       </div>
     </div>
 
-    <p class="tl__foot reveal">Quatorze piles traversées en vingt ans. <b>Ce qui ne s'oublie pas</b>, c'est de savoir lire un log, une capture et une documentation — et de vérifier plutôt que de croire.</p>
+    <p class="tl__foot reveal">Trois strates, et rien de plus à annoncer : ce qui tourne, ce qui a tourné, ce que j'apprends. <b>Tout y est daté</b> — c'est ce qui rend la liste discutable.</p>
   </div>
 </section>
 
@@ -1627,57 +1626,33 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <section id="projets">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">08</span><span>// ARCHIVES</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">08</span><span>// CE QUI TOURNE ENCORE</span><span class="ln"></span></div>
       <h2 class="sec-title">Projets <em>perso & communautaires</em></h2>
-      <p class="sec-sub">Deux décennies de plateformes communautaires, de réseaux, de domotique et d'expérimentations. Sélection.</p>
+      <p class="sec-sub">Trois projets menés en dehors des heures de bureau : deux qui tournent aujourd'hui, et celui qui a occupé dix-huit ans avant de s'arrêter. Les autres — Chat.fr, Adosbox, Espace-IRC — sont racontés dans la frise, et mieux.</p>
     </div>
 
     <div class="proj-grid">
       <div class="frame proj proj--shot reveal">
-        <div class="proj__thumb"><img src="img/adosbox-accueil.png" alt="Page d'accueil d'Adosbox : rubriques, articles de la communauté et photos des membres" width="500" height="300" loading="lazy" decoding="async"><span class="yr">2006–2010</span><span class="glyph">A</span></div>
-        <div class="proj__body"><h3>Adosbox <span class="st">ARCHIVÉ</span></h3>
-          <p>Communauté et chat pour ados — modération, infra et développement complet à grande échelle. <a href="https://web.archive.org/web/*/adosbox.com" target="_blank" rel="noopener">Voir sur archive.org ↗</a></p>
-          <div class="proj__tags"><span>PHP</span><span>Chat</span><span>Communauté</span></div></div>
-      </div>
-      <div class="frame proj proj--shot reveal d1">
-        <div class="proj__thumb"><img src="img/baboon-app.png" alt="Trois écrans de l'application Baboon : accueil, salon de discussion avec signalement, et filtres du profil" width="1008" height="526" loading="lazy" decoding="async"><span class="yr">2008 → 2026</span><span class="glyph">B</span></div>
-        <div class="proj__body"><h3>Baboon.fr <span class="st on">● PROJET PHARE</span></h3>
-          <p>Mon chat IRC historique entièrement remis au goût du jour : appli mobile Flutter/Dart (iOS &amp; Android), client web KiwiIRC profondément modifié, visio Jitsi Meet et modération de chat assistée par IA. Mon dernier gros projet perso — fermeture en 2026.</p>
+        <div class="proj__thumb"><img src="img/baboon-app-766.webp" alt="Trois écrans de l'application Baboon : accueil, salon de discussion avec signalement, et filtres du profil" width="766" height="216" loading="lazy" decoding="async"><span class="yr">2008 → 2026</span><span class="glyph">B</span></div>
+        <div class="proj__body"><h3>Baboon.fr <span class="st">ARRÊTÉ EN 2026</span></h3>
+          <p>Mon chat IRC historique entièrement remis au goût du jour : appli mobile Flutter/Dart (iOS &amp; Android), client web KiwiIRC profondément modifié, visio Jitsi Meet et modération de chat assistée par IA. Dix-huit ans de service, arrêté en 2026.</p>
           <div class="proj__tags"><span>Flutter/Dart</span><span>KiwiIRC</span><span>Modération IA</span><span>Jitsi</span></div></div>
       </div>
-      <div class="frame proj proj--shot reveal d2">
-        <div class="proj__thumb"><img src="img/espace-irc-banniere.png" alt="Bannière du réseau Espace-IRC" width="741" height="293" loading="lazy" decoding="async"><span class="yr">2007</span><span class="glyph">I</span></div>
-        <div class="proj__body"><h3>Espace-IRC <span class="st">ARCHIVÉ</span></h3>
-          <p>Chat et réseau IRC avec un client riche en Flash/Flex/AS3 et serveur Red5 (webcam), bots et sécurité du chan. <a href="/blog/espace-irc-kesako/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Le récit complet →</a> Le robot de modération qui tenait le réseau est <a href="https://github.com/replicatorbe/IRCBook" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">sur GitHub, en Java ↗</a>.  Rendu obsolète par la fin de Flash Player — la relève moderne, c'est Baboon.fr. <a href="https://web.archive.org/web/*/espace-irc.org" target="_blank" rel="noopener">Voir sur archive.org ↗</a></p>
-          <div class="proj__tags"><span>IRC</span><span>Flash / AS3</span><span>Flex</span><span>Red5</span></div></div>
-      </div>
-      <div class="frame proj proj--shot reveal">
-        <div class="proj__thumb"><img src="img/domotique-plan.jpg" alt="Plan de la maison sous Vera : éclairages, températures, humidité, détecteurs de fumée et station météo" width="1100" height="531" loading="lazy" decoding="async"><span class="yr">2015 → ∞</span><span class="glyph">⌂</span></div>
-        <div class="proj__body"><h3>Domotique maison <span class="st">PERSO</span></h3>
-          <p>Maison connectée auto-hébergée, principalement sous Home Assistant, avec Jeedom toujours en service : modules Shelly, microcontrôleurs ESP32, capteurs en réseau et automatisations sur mesure. Ce qui manquait, je l'ai écrit — plugins Jeedom <a href="https://github.com/replicatorbe/jeedom-plugin-dahua" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">caméras Dahua</a>, <a href="https://github.com/replicatorbe/jeedom-plugin-sncbnmbs" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">trains SNCB</a> et <a href="https://github.com/replicatorbe/jeedom-plugin-hygeabe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">collectes de déchets</a>, tous publics. <a href="/blog/sonde-de-temperature-banggood-433-mhz-station-meteo-sans-fil-et-capteur-d-humidite/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Les débuts, en 433 MHz →</a></p>
-          <div class="proj__tags"><span>Home Assistant</span><span>Shelly</span><span>ESP32</span></div></div>
-      </div>
       <div class="frame proj proj--shot reveal d1">
-        <div class="proj__thumb"><img src="img/mastermind.png" alt="Écran titre du jeu MasterMind : menu Jouer, Score, Configuration, Crédit" width="500" height="300" loading="lazy" decoding="async"><span class="yr">2009</span><span class="glyph">M</span></div>
-        <div class="proj__body"><h3>MasterMind GUI <span class="st">PERSO</span></h3>
-          <p>Jeu MasterMind en Java : interface Swing, persistance Hibernate, architecture Spring MVC. <a href="/blog/hibernate-mapping-ne-pas-oublier-les-getteurs-et-setteurs/" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Le mapping Hibernate →</a></p>
-          <div class="proj__tags"><span>Java</span><span>Spring</span><span>Hibernate</span></div></div>
+        <div class="proj__thumb"><img src="img/domotique-plan-766.webp" alt="Plan de la maison sous Vera : éclairages, températures, humidité, détecteurs de fumée et station météo" width="766" height="216" loading="lazy" decoding="async"><span class="yr">2015 → ∞</span><span class="glyph">⌂</span></div>
+        <div class="proj__body"><h3>Domotique maison <span class="st">PERSO</span></h3>
+          <p>Maison connectée auto-hébergée, principalement sous Home Assistant, avec Jeedom toujours en service : modules Shelly, microcontrôleurs ESP32, capteurs en réseau et automatisations sur mesure. Ce qui manquait, je l'ai écrit — plugins Jeedom <a href="https://github.com/replicatorbe/jeedom-plugin-dahua" target="_blank" rel="noopener">caméras Dahua</a>, <a href="https://github.com/replicatorbe/jeedom-plugin-sncbnmbs" target="_blank" rel="noopener">trains SNCB</a> et <a href="https://github.com/replicatorbe/jeedom-plugin-hygeabe" target="_blank" rel="noopener">collectes de déchets</a>, tous publics. <a href="/blog/sonde-de-temperature-banggood-433-mhz-station-meteo-sans-fil-et-capteur-d-humidite/">Les débuts, en 433 MHz →</a></p>
+          <div class="proj__tags"><span>Home Assistant</span><span>Shelly</span><span>ESP32</span></div></div>
       </div>
       <div class="frame proj reveal d2">
         <div class="proj__thumb"><span class="yr">2004 → ∞</span><span class="glyph">★</span></div>
         <div class="proj__body"><h3>fafchamps.be <span class="st on">● ACTIF</span></h3>
-          <p>Mon espace personnel depuis 2004, refondu au fil des ans — vous y êtes (refonte 2026, façon terminal). <a href="https://github.com/replicatorbe/fafchamps.be" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">Le code de cette page est public ↗</a> <a href="https://web.archive.org/web/*/fafchamps.be" target="_blank" rel="noopener">Toutes les versions sur archive.org ↗</a></p>
+          <p>Mon espace personnel depuis 2004, refondu au fil des ans — vous y êtes (refonte 2026, façon terminal). <a href="https://github.com/replicatorbe/fafchamps.be" target="_blank" rel="noopener">Le code de cette page est public ↗</a> <a href="https://web.archive.org/web/*/fafchamps.be" target="_blank" rel="noopener">Toutes les versions sur archive.org ↗</a></p>
           <div class="proj__tags"><span>HTML/CSS</span><span>Design</span><span>Archive.org</span></div></div>
-      </div>
-      <div class="frame proj proj--shot reveal">
-        <div class="proj__thumb"><img src="img/chatfr-evolution.jpg" alt="Six versions de l'interface Chat.fr, de 2002 à 2007" width="1497" height="762" loading="lazy" decoding="async"><span class="yr">2002–2007</span><span class="glyph">C</span></div>
-        <div class="proj__body"><h3>Chat.fr <span class="st">DEV &amp; GESTION</span></h3>
-          <p>Développement et gestion d'un des plus gros chats francophones (700+ connectés en soirée) : interface AS3, serveur Red5 webcam. Plateforme tierce, revendue par son propriétaire en 2007. <a href="https://web.archive.org/web/*/chat.fr" target="_blank" rel="noopener">Voir sur archive.org ↗</a></p>
-          <div class="proj__tags"><span>PHP</span><span>AS3</span><span>Red5</span></div></div>
       </div>
     </div>
 
-    <div style="text-align:center;margin-top:42px" class="reveal">
+    <div class="ctr reveal">
       <a href="https://github.com/replicatorbe" target="_blank" rel="noopener" class="btn">Tout voir sur GitHub <span class="ar">→</span></a>
     </div>
   </div>
@@ -1686,13 +1661,13 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <!-- ===================== CONTACT ===================== -->
 <section id="contact" class="contact">
   <div class="wrap">
-    <div class="sec-head reveal" style="margin-bottom:42px">
-      <div class="sec-meta"><span class="idx">09</span><span>// CANAL</span><span class="ln"></span></div>
+    <div class="sec-head sec-head--tight reveal">
+      <div class="sec-meta"><span class="idx">09</span><span>// CONTACT</span><span class="ln"></span></div>
     </div>
     <div class="contact__grid">
       <div class="reveal">
-        <h2>Ouvrons un <em>canal sécurisé</em>.</h2>
-        <p>Un projet, une opportunité, une collaboration ou simplement envie d'échanger sur l'infra et la sécurité ? Le terminal est ouvert.</p>
+        <h2>Prenons <em>contact</em>.</h2>
+        <p>Un poste où il faut comprendre ce qui s'est passé — analyse d'incidents, traces, systèmes de sûreté —, un projet à cadrer, ou une question précise sur ce que vous lisez ici : c'est la bonne adresse.</p>
         <a class="mailbtn" href="mailto:jerome@fafchamps.be">jerome@fafchamps.be <span class="ar">↗</span></a>
       </div>
       <div class="frame chan reveal d1">
@@ -1718,7 +1693,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   </div>
 </footer>
 
-<script src="assets/site.js?v=13"></script>
+<script src="assets/site.js?v=14"></script>
 
 </body>
 </html>

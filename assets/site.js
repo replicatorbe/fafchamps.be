@@ -1,49 +1,39 @@
-/* ---------- BOOT SEQUENCE ---------- */
-(function(){
-  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  const boot = document.getElementById('boot');
-  const host = document.getElementById('bootLines');
-  const lines = [
-    "<span class='ok'>[ OK ]</span> initialisation des modules noyau",
-    "<span class='ok'>[ OK ]</span> montage de /dev/evidence",
-    "<span class='ok'>[ OK ]</span> chargement de la boîte à outils forensic",
-    "<span class='run'>[ .. ]</span> établissement du canal sécurisé … <span class='ok'>AES-256</span>",
-    "<span class='ok'>[ OK ]</span> déchiffrement du profil :: J. FAFCHAMPS",
-  ];
-  const SEEN='fcb_boot_seen';
-  function finish(){ try{sessionStorage.setItem(SEEN,'1');}catch(e){} boot.classList.add('done'); document.body.style.overflow=''; }
-  let seen=false; try{ seen=!!sessionStorage.getItem(SEEN); }catch(e){}
-  if(reduce || seen){ finish(); return; }
-  document.body.style.overflow='hidden';
-  lines.forEach((l,i)=>{
-    const d=document.createElement('div');
-    d.className='boot__line'; d.style.animationDelay=(i*0.26)+'s'; d.innerHTML=l;
-    host.appendChild(d);
-  });
-  const g=document.createElement('div');
-  g.className='boot__line grant'; g.style.animationDelay=(lines.length*0.26+0.15)+'s';
-  g.textContent='> ACCÈS AUTORISÉ';
-  host.appendChild(g);
-  const t=setTimeout(finish, lines.length*260 + 1150);
-  function skip(){ clearTimeout(t); finish(); }
-  boot.addEventListener('click',skip);
-  window.addEventListener('wheel',skip,{once:true,passive:true});
-  window.addEventListener('touchmove',skip,{once:true,passive:true});
-})();
+/* ============================================================= *
+ *  fafchamps.be — comportements de la page d'accueil
+ *
+ *  Chaque bloc ci-dessous est une fonction immédiate ENROBÉE d'un
+ *  try/catch : sans lui, une seule exception — un flux mal formé, une
+ *  API absente — interrompait l'exécution du fichier entier, et le
+ *  terminal, le mur GitHub et la liste d'articles tombaient ensemble.
+ *  Un bloc qui échoue échoue maintenant seul.
+ * ============================================================= */
+
+/* Deux API sont appelées un peu partout ici et peuvent manquer (très vieux
+   navigateur, environnement de test, extension qui les retire). On ne les
+   touche qu'à travers ces deux points d'entrée, qui répondent quelque chose
+   d'exploitable quand l'API n'existe pas. */
+function fcbMM(q){
+  try{ if(typeof matchMedia==='function'){ var m=matchMedia(q); if(m) return m; } }catch(e){}
+  return {matches:false};
+}
+var fcbHasIO=(function(){ try{ return typeof IntersectionObserver==='function'; }catch(e){ return false; } })();
 
 /* ---------- ANNÉE + UPTIME ---------- */
-(function(){
+(function(){ try{
   const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();
-  const start=new Date('2004-01-01');
+  /* même point de départ que la frise et que la tuile « ANS » de l'accueil :
+     2002, première ligne de code publiée. */
+  const start=new Date('2002-01-01');
   const yrs=((Date.now()-start)/(365.25*24*3600*1000)).toFixed(1);
   const u=document.getElementById('uptime'); if(u) u.textContent=yrs+' ans';
-})();
+}catch(e){ if(window.console&&window.console.warn) window.console.warn('fafchamps.be :',e); } })();
 
 /* ---------- TYPEWRITER ---------- */
-(function(){
+(function(){ try{
   const el=document.getElementById('typed');
-  const items=['DevOps · SysAdmin · Développeur','Sûreté & salles de contrôle','Administration réseau & sécurité','Passionné de cybersécurité'];
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches){ el.textContent=items[0]; return; }
+  if(!el) return;
+  const items=['DevOps · SysAdmin · Développeur','Sûreté & salles de contrôle','Administration réseau & sécurité','Conception & pilotage de projets'];
+  if(fcbMM('(prefers-reduced-motion:reduce)').matches){ el.textContent=items[0]; return; }
   let i=0,j=0,del=false;
   function loop(){
     const w=items[i];
@@ -54,10 +44,10 @@
     setTimeout(loop,s);
   }
   setTimeout(loop,1300);
-})();
+}catch(e){ if(window.console&&window.console.warn) window.console.warn('fafchamps.be :',e); } })();
 
 /* ---------- TERMINAL INTERACTIF ---------- */
-(function(){
+(function(){ try{
   const out=document.getElementById('termOut');
   const inp=document.getElementById('termInput');
   const term=document.getElementById('term');
@@ -70,9 +60,9 @@
   const FS={type:'dir',children:{
     'about.txt':{type:'file',content:[
       'Jérôme Fafchamps — alias sMug@replicatorbe','',
-      "20+ ans d'informatique. DevOps, sysadmin et développeur.",
-      'Bâtisseur de communautés en ligne, bidouilleur, passionné',
-      'de cybersécurité et de réseau. Basé en Belgique.',
+      "Plus de vingt ans d'informatique. DevOps, sysadmin et développeur.",
+      'Bâtisseur de communautés en ligne, bidouilleur. Réseau,',
+      'systèmes et sûreté. Basé en Belgique.',
       'Membre du hackerspace Wolfplex (Charleroi).'].join('\n')},
     'parcours.txt':{type:'file',content:[
       '2002   IRC, ActionScript, Red5 ..... Chat.fr, 700+ connectes',
@@ -90,11 +80,10 @@
       '2025   Home Assistant, ESPHome .... migration depuis Jeedom',
       '2026   PHP CLI, statique ........... ce site',
       '',
-      'Du serveur physique au conteneur, de l\'IRC au LLM.',
-      'Aucune annee sans ecrire de code.'].join('\n')},
+      'Du serveur physique au conteneur, de l\'IRC au LLM.'].join('\n')},
     'skills.txt':{type:'file',content:[
       'EN SERVICE (cette semaine)',
-      '  Linux (Debian), Docker, nginx, PHP, Bash, Git, MySQL',
+      '  Linux (Debian), Docker, nginx, PHP, Bash, PowerShell, Git, MySQL',
       '  Réseau : TCP/IP, DNS, VPN, VLAN, pare-feu',
       '  Home Assistant, Jeedom, ESPHome',
       '',
@@ -110,32 +99,29 @@
       'E-mail   : jerome@fafchamps.be','GitHub   : github.com/replicatorbe',
       'Wolfplex : wolfplex.be'].join('\n')},
     'projets':{type:'dir',children:{
-      'adosbox.md':{type:'file',content:'# Adosbox (2006-2010)\nCommunauté & chat pour ados. PHP, modération, infra complète.\narchive : web.archive.org/web/*/adosbox.com'},
-      'chat.fr.md':{type:'file',content:'# Chat.fr (2002-2007)\nDev & gestion d\'un gros chat FR (700+ connectés). AS3, Red5 webcam.\nPlateforme tierce, revendue par son propriétaire en 2007.\narchive : web.archive.org/web/*/chat.fr'},
-      'baboon.md':{type:'file',content:'# Baboon.fr (2008 → 2026)\nChat IRC remis au goût du jour : appli Flutter/Dart (iOS/Android), KiwiIRC modifié, visio Jitsi Meet, modération IA.\nDernier gros projet perso, fermé en 2026.'},
+      'adosbox.md':{type:'file',content:'# Adosbox (2006-2010)\nPlateforme communautaire francophone. PHP, infra complète.\nModération : charte écrite, modérateurs formés, traitement des signalements.\narchive : web.archive.org/web/*/adosbox.com'},
+      'chat.fr.md':{type:'file',content:'# Chat.fr (2002-2007)\nDev & gestion d\'un chat FR (700+ connectés en soirée). AS3, Red5 webcam.\nPlateforme tierce, revendue par son propriétaire en 2007.\narchive : web.archive.org/web/*/chat.fr'},
+      'baboon.md':{type:'file',content:'# Baboon.fr (2008 → 2026)\nChat IRC remis au goût du jour : appli Flutter/Dart (iOS/Android), KiwiIRC modifié, visio Jitsi Meet, modération IA.\nDix-huit ans de service, arrêté en 2026.'},
       'espace-irc.md':{type:'file',content:'# Espace-IRC (2007)\nChat IRC en Flash/Flex/AS3 + Red5 (webcam), bots & sécurité du chan.\nObsolète avec la fin de Flash Player ; relève moderne = Baboon.fr.\narchive : web.archive.org/web/*/espace-irc.org'},
       'domotique.md':{type:'file',content:'# Domotique maison (2015 -> maintenant)\nAuto-hébergée sous Home Assistant. Modules Shelly, ESP32 (lecteur de badge, capteurs température), automatisations maison.'},
       'mastermind.md':{type:'file',content:'# MasterMind GUI (2009)\nJeu Java — Swing, Hibernate, Spring MVC.'},
       'fafchamps.be.md':{type:'file',content:'# fafchamps.be (2004 -> maintenant)\nMon espace perso depuis 2004, refondu au fil des ans. Refonte 2026 façon terminal.\narchive : web.archive.org/web/*/fafchamps.be'}
     }},
     'realisations':{type:'dir',children:{
-      'soc.md':{type:'file',content:'# SOC nouvelle génération\nCentre d\'opérations de sûreté + site de repli. Ergonomie, continuité d\'activité, tests avec les agents.'},
+      'soc.md':{type:'file',content:'# SOC nouvelle génération\nCentre d\'opérations de sûreté (SOC physique, pas un centre de cyberdéfense) + site de repli. Ergonomie, continuité d\'activité, tests avec les agents.'},
       'control-rooms.md':{type:'file',content:'# Control Rooms techniques\nSupervision unifiée (CCTV, intrusion, incendie, contrôle d\'accès) sur postes opérateurs.'},
-      'commandcar.md':{type:'file',content:'# CommandCar — PC mobile\nPoste de commandement mobile, lien temps réel au SOC. 4G/802.1x/Radius, 72h d\'autonomie, pilotage à distance.'},
+      'commandcar.md':{type:'file',content:'# CommandCar — PC mobile\nPoste de commandement mobile, lien temps réel au centre d\'opérations. 4G/802.1x/Radius, 72 h d\'autonomie visée en conception, pilotage à distance.'},
       'flotte-mobile.md':{type:'file',content:'# Flotte surveillance mobile\n21 unités autonomes sur remorque. Appli PHP/JS de pilotage de tout le parc via API.'},
       'flotte-v2.md':{type:'file',content:'# Surveillance mobile — gen. 2\n4K zoom 32x, batterie lithium-ion, GPS, 3G/4G. CSC de transformation. Exit l\'analogique.'},
-      'hypervisor.md':{type:'file',content:'# Hypervisor\nSupervision unifiée des alarmes (intrusion, incendie, ascenseurs, tunnels...). ~50 logiciels -> 1 interface.'},
+      'hypervisor.md':{type:'file',content:'# Hypervisor (PSIM)\nSupervision unifiée des alarmes (intrusion, incendie, ascenseurs, tunnels...). ~50 logiciels -> 1 interface.'},
       'cctv-rames.md':{type:'file',content:'# CCTV embarquée\nCaméras dans les nouvelles rames + logiciel de récupération d\'images à distance (cellulaire/WiFi).'},
-      'valise-14j.md':{type:'file',content:'# Valise de surveillance\nAutonomie 14 jours sans secteur (vs 3-5 j du marché). Optimisation conso de chaque composant.'},
+      'valise-14j.md':{type:'file',content:'# Valise de surveillance\nDimensionnée pour 14 jours sans secteur (vs 3-5 j du marché). Consommation mesurée composant par composant, puis CSC écrit autour de cette contrainte.'},
       'anti-vol.md':{type:'file',content:'# Traçage anti-vol de câbles\nTests labo + conditions réelles, formation des opérateurs Control Rooms.'}
     }},
     'stack':{type:'dir',children:{
-      'langages.txt':{type:'file',content:"Écrits au quotidien : PHP, Bash, SQL, JavaScript.\nTenus en production autrefois : Java, C#, Flutter/Dart, ActionScript 3.\nCe qu'on ne pratique plus s'oublie — et se rallume."},
+      'langages.txt':{type:'file',content:"Écrits au quotidien : PHP, Bash, PowerShell, SQL, JavaScript.\nTenus en production autrefois : Java, C#, Flutter/Dart, ActionScript 3.\nCe qu'on ne pratique plus s'oublie — et se rallume."},
       'systemes.txt':{type:'file',content:'Linux (Debian), Docker/Compose, nginx, MySQL/MariaDB, VLAN, VPN'},
       'securite.txt':{type:'file',content:'Wireshark, tcpdump, nmap, durcissement, OSINT, analyse réseau & logs'}
-    }},
-    '.secret':{type:'dir',children:{
-      'flag.txt':{type:'file',content:'Bien joué, fouineur. 🕵\nIndice : le code Konami -> haut haut bas bas gauche droite gauche droite B A'}
     }}
   }};
   let cwd=[];
@@ -153,18 +139,18 @@
 
   const C={
     help:()=>['Commandes disponibles :',
-      '  <span class="cyan">ls [-a]</span>    lister le dossier courant',
+      '  <span class="cyan">ls</span>         lister le dossier courant',
       '  <span class="cyan">cd</span> &lt;dir&gt;     entrer (.. pour remonter, ~ racine)',
       '  <span class="cyan">cat</span> &lt;file&gt;  afficher un fichier',
       '  <span class="cyan">pwd</span>        chemin courant',
       '  <span class="cyan">whoami · skills · stack · work · projects · github · blog</span>',
-      '  <span class="cyan">social · contact · date · matrix · clear · sudo</span>',
+      '  <span class="cyan">social · contact · date · clear</span>',
       'astuce : <span class="green">Tab</span> complète · <span class="green">ls</span> · <span class="green">cat about.txt</span> · <span class="green">cd projets</span>'].join('\n'),
     whoami:()=>['<b>Jérôme Fafchamps</b> · alias <span class="cyan">sMug@replicatorbe</span>',
-      'DevOps · SysAdmin · Développeur — <span class="amber">20+ ans</span> d\'informatique',
-      'Belgique · focus : cybersécurité & réseau'].join('\n'),
+      'DevOps · SysAdmin · Développeur — <span class="amber">plus de vingt ans</span> d\'informatique',
+      'Belgique · réseau, systèmes et sûreté'].join('\n'),
     skills:()=>['<span class="green">[ EN SERVICE ]</span> cette semaine',
-      '  Linux (Debian) · Docker · nginx · PHP · Bash · Git · MySQL',
+      '  Linux (Debian) · Docker · nginx · PHP · Bash · PowerShell · Git · MySQL',
       '  Réseau : TCP/IP, DNS, VPN, VLAN, pare-feu',
       '  Home Assistant · Jeedom · ESPHome',
       '<span class="amber">[ TENU EN PRODUCTION ]</span> à rallumer',
@@ -180,7 +166,7 @@
       '<b>Sécurité</b> : Wireshark, tcpdump, nmap, durcissement',
       '<b>Écrits ici</b> : PHP et Bash — le reste, voir <span class="cyan">skills</span>'].join('\n'),
     projects:()=>['<span class="amber">[2002-2007]</span> Chat.fr       dev & gestion (700+ connectés)',
-      '<span class="amber">[2006-2010]</span> Adosbox       communauté & chat (PHP)',
+      '<span class="amber">[2006-2010]</span> Adosbox       plateforme communautaire (PHP)',
       '<span class="amber">[2008-2026]</span> Baboon.fr     chat IRC modernisé (Flutter/IA/Jitsi)',
       '<span class="amber">[2007]     </span> Espace-IRC    chat IRC Flash/AS3/Red5 (pré-Baboon)',
       '<span class="amber">[2015-∞]   </span> Domotique     Home Assistant / Shelly / ESP32',
@@ -190,10 +176,10 @@
     work:()=>['<span class="amber">[ DOSSIERS PRO ]</span> opérateur ferroviaire (BE) — <span class="green">anonymisé</span>',
       'SOC nouvelle gen .... centre d\'opérations de sûreté + repli',
       'Control Rooms ....... supervision unifiée CCTV/intrusion/incendie',
-      'CommandCar .......... PC mobile · 4G/802.1x · 72h autonomie',
+      'CommandCar .......... PC mobile · 4G/802.1x · 72 h visées',
       'Flotte mobile ....... 21 unités · appli <span class="cyan">PHP/JS</span> via API',
-      'Hypervisor .......... ~50 logiciels -> 1 interface (toutes alarmes)',
-      'Valise 14 j ......... surveillance autonome sans secteur',
+      'Hypervisor (PSIM) ... ~50 logiciels -> 1 interface (toutes alarmes)',
+      'Valise 14 j ......... cible de conception, sans secteur',
       '+ CCTV rames, anti-vol câbles, Product Owner mobile…',
       '-> détails : <span class="cyan">cd realisations</span> puis <span class="cyan">ls</span>'].join('\n'),
     social:()=>['GitHub   : <a href="https://github.com/replicatorbe" target="_blank" rel="noopener">github.com/replicatorbe</a>',
@@ -264,11 +250,9 @@
       if(!node) return 'cat: '+esc(arg)+' : fichier introuvable';
       if(node.type==='dir') return 'cat: '+esc(arg)+' : est un dossier';
       return esc(node.content);
-    },
-    matrix:()=>{ if(window.fcbUnlock){ window.fcbUnlock(); return '<span class="green">décryptage…</span> 🔓  (Échap pour fermer)'; } return 'effet indisponible.'; },
-    sudo:()=>'<span class="red">[sudo]</span> mot de passe pour visitor : ****\n<span class="red">Désolé</span>, visitor n\'est pas dans le fichier sudoers. Cet incident sera rapporté. 🙂'
+    }
   };
-  const alias={projets:'projects','compétences':'skills',competences:'skills',cls:'clear',aide:'help','?':'help',man:'help',dir:'ls',konami:'matrix',hack:'matrix',rain:'matrix',realisations:'work','réalisations':'work',pro:'work',career:'work',boulot:'work',activity:'github',gh:'github',git:'github',contributions:'github','activité':'github',articles:'blog',posts:'blog',publications:'blog',rss:'blog','écrits':'blog',ecrits:'blog'};
+  const alias={projets:'projects','compétences':'skills',competences:'skills',cls:'clear',aide:'help','?':'help',man:'help',dir:'ls',realisations:'work','réalisations':'work',pro:'work',career:'work',boulot:'work',activity:'github',gh:'github',git:'github',contributions:'github','activité':'github',articles:'blog',posts:'blog',publications:'blog',rss:'blog','écrits':'blog',ecrits:'blog'};
   const hist=[]; let hi=-1;
   function run(raw){
     const cmd=(raw||'').trim(); echo(cmd);
@@ -320,86 +304,61 @@
   print('<span class="cyan">fafchamps.be</span> — terminal interactif <span class="amber">v1.1</span>','res');
   echo('whoami'); print(C.whoami());
   print('Tape <span class="cyan">help</span>, ou explore : <span class="cyan">ls</span> · <span class="cyan">cd</span> · <span class="cyan">cat</span>.','res');
-})();
-
-/* ---------- KONAMI ---------- */
-(function(){
-  const seq=['arrowup','arrowup','arrowdown','arrowdown','arrowleft','arrowright','arrowleft','arrowright','b','a'];
-  let pos=0,running=false,raf,ctx,cols,drops;
-  const el=document.getElementById('konami'), cv=document.getElementById('konamiCanvas');
-  if(!el||!cv) return;
-  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  const fs=16, chars='アカサタナハマヤラ0123456789ABCDEF#$%&@/<>'.split('');
-  function resize(){ cv.width=innerWidth; cv.height=innerHeight; cols=Math.ceil(cv.width/fs); drops=Array(cols).fill(0).map(()=>Math.random()*-40); }
-  /* Couleurs volontairement laissées en dur : cet overlay est un œuf de Pâques
-     plein écran, pas un morceau de la page. Il pose son propre fond opaque en
-     CSS (.konami) par-dessus toute la fenêtre, donc la « pluie » verte reste
-     lisible et cohérente quel que soit le thème du site derrière. La rendre
-     claire n'aurait aucun sens : une Matrix sur fond blanc n'est plus Matrix.
-     Le voile de traînée ci-dessous recouvre bien cv.width × cv.height, soit la
-     fenêtre entière (cf. resize()), donc rien de la page ne transparaît. */
-  function draw(){
-    ctx.fillStyle='rgba(8,10,13,0.10)'; ctx.fillRect(0,0,cv.width,cv.height);
-    ctx.font=fs+'px monospace';
-    for(let i=0;i<cols;i++){
-      const x=i*fs, y=drops[i]*fs, r=Math.random();
-      ctx.fillStyle = r>0.93?'#ffb13d' : (r>0.5?'#48d6cf':'#62e08a');
-      ctx.fillText(chars[Math.floor(Math.random()*chars.length)],x,y);
-      if(y>cv.height && Math.random()>0.97) drops[i]=0;
-      drops[i]++;
-    }
-    raf=requestAnimationFrame(draw);
-  }
-  function open(){
-    if(running) return; running=true;
-    el.classList.add('on'); el.setAttribute('aria-hidden','false');
-    if(!reduce){ ctx=cv.getContext('2d'); resize(); addEventListener('resize',resize); draw(); }
-    clearTimeout(open._t); open._t=setTimeout(close,8000);
-  }
-  function close(){
-    if(!running) return; running=false;
-    el.classList.remove('on'); el.setAttribute('aria-hidden','true');
-    cancelAnimationFrame(raf); removeEventListener('resize',resize);
-  }
-  el.addEventListener('click',close);
-  window.fcbUnlock=open;
-  addEventListener('keydown',(e)=>{
-    if(running && e.key==='Escape'){ close(); return; }
-    const k=(e.key||'').toLowerCase();
-    pos = (k===seq[pos]) ? pos+1 : (k===seq[0]?1:0);
-    if(pos===seq.length){ pos=0; open(); }
-  });
-})();
+}catch(e){ if(window.console&&window.console.warn) window.console.warn('fafchamps.be :',e); } })();
 
 /* ---------- SCROLL PROGRESS ---------- */
-(function(){
+(function(){ try{
   const sp=document.getElementById('scrollprog'); if(!sp) return;
   const d=document.documentElement;
   function upd(){ const max=d.scrollHeight-d.clientHeight; sp.style.width=(max>0?(d.scrollTop/max*100):0)+'%'; }
   addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd,{passive:true}); upd();
-})();
+}catch(e){ if(window.console&&window.console.warn) window.console.warn('fafchamps.be :',e); } })();
 
 /* ---------- REVEAL + SKILLBARS + COUNTERS ---------- */
-(function(){
+(function(){ try{
+  const targets=[...document.querySelectorAll('.reveal')];
+  if(!targets.length) return;
+
+  /* Les compteurs sont lancés au moment où leur bloc se découvre ; sans
+     animation, ils affichent directement leur valeur cible. */
+  const noAnim=fcbMM('(prefers-reduced-motion:reduce)').matches;
+  function countUp(el){
+    el.querySelectorAll('.counter').forEach(c=>{
+      const goal=+c.dataset.count||+c.parentElement.dataset.count||0;
+      if(!goal||c.dataset.done) return; c.dataset.done=1;
+      if(noAnim){ c.textContent=goal; return; }
+      let n=0; const step=Math.max(1,Math.round(goal/34));
+      const iv=setInterval(()=>{ n+=step; if(n>=goal){n=goal;clearInterval(iv);} c.textContent=n; },28);
+    });
+  }
+  function show(el){ el.classList.add('in'); countUp(el); }
+
+  /* Pas d'observateur d'intersection : on découvre tout d'un coup. L'état
+     masqué de .reveal n'a pas d'autre sortie — sans ce repli, une page
+     entièrement transparente. */
+  if(!fcbHasIO){ targets.forEach(show); return; }
+
   const io=new IntersectionObserver((es)=>{
     es.forEach(e=>{
       if(!e.isIntersecting) return;
-      e.target.classList.add('in');
-      e.target.querySelectorAll('.counter').forEach(c=>{
-        const goal=+c.dataset.count||+c.parentElement.dataset.count||0;
-        if(!goal||c.dataset.done) return; c.dataset.done=1;
-        let n=0; const step=Math.max(1,Math.round(goal/34));
-        const iv=setInterval(()=>{ n+=step; if(n>=goal){n=goal;clearInterval(iv);} c.textContent=n; },28);
-      });
+      show(e.target);
       io.unobserve(e.target);
     });
   },{threshold:.18});
-  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-})();
+  targets.forEach(el=>io.observe(el));
+}catch(e){
+  /* Dernier filet : ce bloc est le seul à pouvoir lever l'état masqué des
+     .reveal. S'il échoue, on retire la classe qui le pose — mieux vaut une
+     page sans animation qu'une page invisible. Aucune autre règle de la
+     feuille ne dépend de « :root.js ». */
+  try{ document.documentElement.classList.remove('js'); }catch(e2){}
+  if(window.console&&window.console.warn) window.console.warn('fafchamps.be :',e);
+} })();
 
 /* ---------- ACTIVE NAV ---------- */
-(function(){
+(function(){ try{
   const links=[...document.querySelectorAll('.topnav a')];
+  if(!links.length || !fcbHasIO) return;   /* le surlignage est un confort, pas une fonction */
   const map={}; links.forEach(l=>map[l.dataset.sec]=l);
   const io=new IntersectionObserver((es)=>{
     es.forEach(e=>{ if(e.isIntersecting){
@@ -407,17 +366,17 @@
       const id=e.target.id; if(map[id]) map[id].classList.add('active');
     }});
   },{rootMargin:'-45% 0px -50% 0px'});
-  ['accueil','parcours','realisations','code','profil','competences','projets','publications','contact'].forEach(id=>{
+  ['accueil','realisations','parcours','code','publications','profil','competences','projets','contact'].forEach(id=>{
     const s=document.getElementById(id); if(s) io.observe(s);
   });
-})();
+}catch(e){ if(window.console&&window.console.warn) window.console.warn('fafchamps.be :',e); } })();
 
 /* ---------- MOBILE NAV ---------- */
-(function(){
+(function(){ try{
   const b=document.getElementById('burger'), m=document.getElementById('mnav');
   if(!b||!m) return;
   const links=[...m.querySelectorAll('a')];
-  const large=matchMedia('(min-width:1141px)');   /* au-delà, le burger n'est plus affiché */
+  const large=fcbMM('(min-width:1141px)');   /* au-delà, le burger n'est plus affiché */
   let open=false;
 
   /* back : ne ramener le focus au bouton que lorsque la fermeture vient du
@@ -462,11 +421,11 @@
   /* retour au format large : l'overlay n'a plus de raison d'être ouvert */
   const reset=()=>{ if(large.matches) set(false); };
   if(large.addEventListener) large.addEventListener('change',reset);
-  else large.addListener(reset);   /* Safari < 14 */
-})();
+  else if(large.addListener) large.addListener(reset);   /* Safari < 14 */
+}catch(e){ if(window.console&&window.console.warn) window.console.warn('fafchamps.be :',e); } })();
 
 /* ---------- PUBLICATIONS (data/blog.json) ---------- */
-(function(){
+(function(){ try{
   const host=document.getElementById('pubList');
   if(!host) return;
   const gid=id=>document.getElementById(id);
@@ -539,10 +498,10 @@
   }).catch(()=>{
     host.innerHTML='<div class="gh-loading">flux indisponible — <a href="/blog/" style="color:var(--cyan);text-decoration:underline">ouvrir les publications →</a></div>';
   });
-})();
+}catch(e){ if(window.console&&window.console.warn) window.console.warn('fafchamps.be :',e); } })();
 
 /* ---------- ACTIVITÉ GITHUB (data/github.json) ---------- */
-(function(){
+(function(){ try{
   /* Les 5 niveaux du mur de contributions ne sont plus peints ici : chaque case
      reçoit un attribut data-lv="0".."4" et la feuille de style choisit la teinte
      via les jetons --gh-0 … --gh-4. Un style inline l'emporterait sur toute règle
@@ -556,7 +515,7 @@
     Shell:'#89e051',Tcl:'#e4cc98',Dockerfile:'#384d54','C++':'#f34b7d',C:'#555555','C#':'#178600',
     Java:'#b07219',Dart:'#00B4AB',HTML:'#e34c26',CSS:'#563d7c',Go:'#00ADD8',Ruby:'#701516',Rust:'#dea584'};
   const el=id=>document.getElementById(id);
-  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const reduce=fcbMM('(prefers-reduced-motion:reduce)').matches;
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const fmt=n=>Number(n).toLocaleString('fr-FR');
 
@@ -690,7 +649,9 @@
     window.fcbGitHub=g;
     const c=g.contributions||{};
     if(c.total!=null){
-      const t=el('ghTotal'); if(t){ const obs=new IntersectionObserver((es)=>{
+      const t=el('ghTotal');
+      if(t && !fcbHasIO){ t.textContent=fmt(c.total); }
+      else if(t){ const obs=new IntersectionObserver((es)=>{
         es.forEach(e=>{ if(e.isIntersecting){ animateCount(t,c.total); obs.disconnect(); } }); },{threshold:.4});
         obs.observe(t); }
       /* la tuile du héros, elle, est déjà passée quand on arrive : pas d'animation */
@@ -704,4 +665,4 @@
     const cal=el('ghCal'); if(cal) cal.innerHTML='<div class="gh-loading">flux indisponible — <a href="https://github.com/replicatorbe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">voir directement sur GitHub →</a></div>';
     const log=el('ghLog'); if(log) log.innerHTML='<div class="gh-loading"><a href="https://github.com/replicatorbe" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline">github.com/replicatorbe →</a></div>';
   });
-})();
+}catch(e){ if(window.console&&window.console.warn) window.console.warn('fafchamps.be :',e); } })();
