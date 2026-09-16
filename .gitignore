@@ -58,7 +58,6 @@ data/*.json
 
 # ----- Captures vidéo -----
 # Jamais dans le dépôt.
-#
 /cctv/
 
 # ----- Dumps, bases, archives -----
