@@ -526,6 +526,9 @@ a.stat--lk:hover .l,a.stat--lk:focus-visible .l{color:var(--amber)}
 .strate li i{font-style:normal;color:var(--text-faint)}
 .strate__note{margin-top:auto;padding-top:16px;border-top:1px dashed var(--line);
   font-size:13px;line-height:1.7;color:var(--text-dim)}
+.strate__grp{font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-faint);margin-bottom:12px}
+.strate ul+.strate__grp{margin-top:4px;padding-top:16px;border-top:1px dashed var(--line)}
 
 /* ============================================================= *
  *  PARCOURS (frise chronologique)                                *
@@ -1579,24 +1582,33 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
     <div class="sec-head reveal">
       <div class="sec-meta"><span class="idx">07</span><span>// CAPACITÉS</span><span class="ln"></span></div>
       <h2 class="sec-title">Ce qui tourne, <em>et depuis quand</em></h2>
-      <p class="sec-sub">Je me méfie des listes de technologies « maîtrisées » : ce qu'on ne pratique plus s'en va, et l'annoncer quand même ne résiste pas à la première question précise. Voici donc autre chose — ce qui tourne chez moi cette semaine, ce que j'ai tenu assez longtemps en production pour le rallumer, et ce que j'apprends en ce moment.</p>
+      <p class="sec-sub">Je me méfie des listes de technologies « maîtrisées » : ce qu'on ne pratique plus s'en va, et l'annoncer quand même ne résiste pas à la première question précise. Voici donc autre chose — ce qui tourne cette semaine, au travail comme chez moi, ce que j'ai tenu assez longtemps en production pour le rallumer, et ce que j'apprends en ce moment.</p>
     </div>
 
     <div class="strates">
       <div class="frame strate strate--now reveal">
         <div class="strate__hd"><span class="lab">En service</span><span class="when">cette semaine</span></div>
+        <p class="strate__grp">La prod, en administration communale</p>
+        <ul>
+          <li><b>Windows Server</b> <i>— Active Directory, GPO, RDS</i></li>
+          <li><b>Microsoft 365</b> <i>— dont Defender</i></li>
+          <li><b>Veeam</b> <i>— sauvegarde, et surtout restauration</i></li>
+          <li><b>NinjaOne</b> <i>— RMM, déploiement, PowerShell</i></li>
+          <li><b>Téléphonie VoIP</b></li>
+          <li><b>Applicatifs métier</b> <i>— exploitation et support</i></li>
+          <li><b>NIS2</b> <i>— mise en conformité</i></li>
+        </ul>
+        <p class="strate__grp">Chez moi, et sur ce serveur</p>
         <ul>
           <li><b>Linux (Debian)</b> <i>— mes serveurs, celui-ci compris</i></li>
           <li><b>Docker &amp; Compose</b> <i>— tout y tourne</i></li>
           <li><b>nginx</b> <i>— reverse proxy, TLS, en-têtes</i></li>
-          <li><b>PHP</b> <i>— dont le générateur de ces pages</i></li>
-          <li><b>Bash</b> <i>— cron, outillage, sauvegardes</i></li>
-          <li><b>PowerShell</b> <i>— parcs Windows en RMM · 2026</i></li>
+          <li><b>PHP</b> · <b>Bash</b> <i>— le générateur de ces pages, cron, sauvegardes</i></li>
           <li><b>Git</b> · <b>MySQL / MariaDB</b></li>
           <li><b>Réseau</b> <i>— TCP/IP, DNS, VPN, VLAN, pare-feu</i></li>
           <li><b>Home Assistant · Jeedom · ESPHome</b></li>
         </ul>
-        <p class="strate__note">Ce que j'ouvre sans y penser. La trace est publique : les dépôts d'à côté, et cette page elle-même.</p>
+        <p class="strate__note">Les deux moitiés du métier : un parc à tenir pour des utilisateurs qui comptent dessus, et un laboratoire où je casse ce que je veux. La seconde a une trace publique — les dépôts d'à côté, et cette page.</p>
       </div>
 
       <div class="frame strate strate--past reveal d1">
@@ -1699,7 +1711,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   </div>
 </footer>
 
-<script src="assets/site.js?v=14"></script>
+<script src="assets/site.js?v=15"></script>
 
 </body>
 </html>
