@@ -149,6 +149,42 @@ function parse_front_matter(string $raw): array {
 /* ============================== MARKDOWN ================================ */
 
 /** Rendu des éléments en ligne. Tout est échappé : pas de HTML brut. */
+/**
+ * Dimensions réelles d'un fichier image du site, ou null.
+ * Le chemin donné est celui écrit dans le HTML (« /media/x.png ») ; on le
+ * résout sous $ROOT. Sans width/height, le navigateur ne réserve pas la place
+ * de l'image et la page saute au chargement. On lit donc le fichier plutôt que
+ * de faire confiance à une valeur recopiée à la main.
+ */
+function img_size(string $src): ?array {
+    global $ROOT;
+    static $cache = [];
+    if (array_key_exists($src, $cache)) return $cache[$src];
+
+    $cache[$src] = null;
+    // On ne dimensionne que les fichiers locaux du site.
+    if (preg_match('~^[a-z][a-z0-9+.-]*:~i', $src) || str_starts_with($src, '//')) return null;
+
+    // Le chemin arrive déjà échappé par htmlspecialchars (un « & » y est « &amp; ») :
+    // on le remet en clair avant de toucher le disque.
+    $rel = ltrim(explode('?', explode('#', html_entity_decode($src, ENT_QUOTES, 'UTF-8'))[0])[0], '/');
+    if ($rel === '' || str_contains($rel, '..')) return null;
+
+    $file = $ROOT . '/' . rawurldecode($rel);
+    if (!is_file($file)) { warn('image introuvable, pas de dimensions : ' . $src); return null; }
+
+    $info = @getimagesize($file);
+    if (!is_array($info) || (int) $info[0] < 1 || (int) $info[1] < 1) return null;
+
+    return $cache[$src] = [(int) $info[0], (int) $info[1]];
+}
+
+/** Attributs width/height d'une balise <img>, ou chaîne vide si on ne sait pas. */
+function img_dims(string $src): string {
+    $d = img_size($src);
+    return $d === null ? '' : ' width="' . $d[0] . '" height="' . $d[1] . '"';
+}
+
 function md_inline(string $s): string {
     $codes = [];
     $tags  = [];
@@ -170,7 +206,9 @@ function md_inline(string $s): string {
         '/!\[([^\]]*)\]\(((?:[^()\s]|\([^()\s]*\))+)(?:\s+&quot;((?:(?!&quot;).)*)&quot;)?\)/',
         function ($m) use (&$tags) {
             $cap = $m[3] ?? '';
-            $img = '<img src="' . safe_url($m[2]) . '" alt="' . $m[1] . '" loading="lazy" decoding="async">';
+            $src = safe_url($m[2]);
+            $img = '<img src="' . $src . '" alt="' . $m[1] . '"' . img_dims($src)
+                 . ' loading="lazy" decoding="async">';
             $tags[] = $cap !== ''
                 ? '<figure>' . $img . '<figcaption>' . $cap . '</figcaption></figure>'
                 : $img;
@@ -543,7 +581,7 @@ function check_js_balance(): void {
 
 
 /**
- * La CSP (deploy/security-headers.inc) autorise les deux scripts de thème par
+ * La CSP (security-headers.inc) autorise les deux scripts de thème par
  * leur empreinte. Si l'un d'eux change sans que l'empreinte suive, le navigateur
  * le refuse : le thème ne se pose plus et la bascule devient un bouton mort —
  * sans le moindre message d'erreur visible. On compare donc à chaque génération.
@@ -552,9 +590,41 @@ function check_js_balance(): void {
  */
 function check_csp_hash(): void {
     global $ROOT;
-    $conf = $ROOT . '/deploy/security-headers.inc';
-    if (!is_file($conf)) return;
-    $csp = file_get_contents($conf);
+
+    // Deux fichiers, pas un : la copie du dépôt et celle que nginx sert réellement.
+    // Vérifier la première seule laisse passer le cas le plus probable — l'empreinte
+    // corrigée dans le dépôt, le `cp` oublié : le dépôt est juste, le navigateur
+    // refuse toujours le script, et rien ne le signale.
+    $copies = [
+        'deploy/security-headers.inc'              => $ROOT . '/deploy/security-headers.inc',
+        '/var/www/nginx/conf.d/security-headers.inc' => '/var/www/nginx/conf.d/security-headers.inc',
+    ];
+
+    $csp = [];
+    foreach ($copies as $quelle => $chemin) {
+        if (is_file($chemin) && is_readable($chemin)) $csp[$quelle] = file_get_contents($chemin);
+    }
+    if (!$csp) return;
+
+    // Les deux copies doivent être identiques. Si elles diffèrent, un déploiement
+    // n'est pas allé au bout, et le reste du contrôle ne veut plus dire grand-chose.
+    if (count($csp) === 2 && count(array_unique($csp)) !== 1) {
+        warn('la configuration déployée diffère de celle du dépôt.');
+        warn('  dépôt   : ' . $copies['deploy/security-headers.inc']);
+        warn('  déployée: ' . $copies['/var/www/nginx/conf.d/security-headers.inc']);
+        warn('  diff deploy/security-headers.inc /var/www/nginx/conf.d/security-headers.inc');
+    } elseif (count($csp) === 1) {
+        // Depuis le conteneur, /var/www/nginx/conf.d/ n'est pas monté : la copie
+        // déployée est alors invisible par construction, et le signaler à chaque
+        // génération ne ferait qu'apprendre à ignorer les avertissements. On ne
+        // parle que du cas anormal : le dossier est là, le fichier ne l'est pas.
+        $deployee = $copies['/var/www/nginx/conf.d/security-headers.inc'];
+        if (!isset($csp['/var/www/nginx/conf.d/security-headers.inc'])
+            && is_dir(dirname($deployee))) {
+            warn('la copie déployée est introuvable ou illisible : ' . $deployee);
+            warn('  le contrôle ne porte que sur celle du dépôt.');
+        }
+    }
 
     $home = $ROOT . '/index.html';
     $sources = ['le blog (inline_js)' => inline_js()];
@@ -563,9 +633,14 @@ function check_csp_hash(): void {
     foreach ($sources as $quoi => $html) {
         if (!preg_match('~<script>(.*?)</script>~s', $html, $m)) continue;
         $hash = 'sha256-' . base64_encode(hash('sha256', $m[1], true));
-        if (strpos($csp, $hash) !== false) continue;
 
-        warn("l'empreinte CSP du script de " . $quoi . " ne correspond plus.");
+        $manque = [];
+        foreach ($csp as $quelle => $contenu) {
+            if (strpos($contenu, $hash) === false) $manque[] = $quelle;
+        }
+        if (!$manque) continue;
+
+        warn("l'empreinte CSP du script de " . $quoi . " ne correspond plus dans : " . implode(', ', $manque));
         warn("  à coller dans deploy/security-headers.inc (script-src) :");
         warn("  '" . $hash . "'");
         warn("  puis : cp deploy/security-headers.inc /var/www/nginx/conf.d/ && \\");
@@ -657,9 +732,7 @@ function head_common(string $title, string $desc, string $canonical, string $ext
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/img/favicon-192.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/fonts.css">
 <link rel="stylesheet" href="/assets/blog.css?v=' . CSS_VER . '">
 ' . $extra . '</head>
 <body' . ($bodyClass !== '' ? ' class="' . $bodyClass . '"' : '') . '>
@@ -742,6 +815,17 @@ function render_post(array $p, ?array $prev, ?array $next): string {
     if ($p['tags'])  $ld['keywords'] = implode(', ', $p['tags']);
     if ($p['cover']) $ld['image']    = SITE_URL . '/' . ltrim($p['cover'], '/');
 
+    // Image de partage : la couverture de l'article, sinon le visuel par défaut —
+    // le même fichier que la page d'accueil, pour n'en avoir qu'un à garder en vie.
+    // Dimensions lues sur le fichier : sans elles, certains agrégateurs recadrent
+    // au petit bonheur ou n'affichent pas la carte du tout.
+    $ogImg  = $p['cover'] ?: 'img/og-fafchamps.jpg';
+    $ogDims = '';
+    if (($d = img_size($ogImg)) !== null) {
+        $ogDims = '<meta property="og:image:width" content="' . $d[0] . '">' . "\n"
+                . '<meta property="og:image:height" content="' . $d[1] . '">' . "\n";
+    }
+
     $extra = '<meta property="og:type" content="article">' . "\n"
         . '<meta property="og:title" content="' . e($p['title']) . '">' . "\n"
         . '<meta property="og:description" content="' . e($p['summary']) . '">' . "\n"
@@ -749,7 +833,9 @@ function render_post(array $p, ?array $prev, ?array $next): string {
         . '<meta property="og:locale" content="fr_BE">' . "\n"
         . '<meta property="article:published_time" content="' . $p['date']->format(DateTimeInterface::ATOM) . '">' . "\n"
         . ($p['updated'] ? '<meta property="article:modified_time" content="' . $mod->format(DateTimeInterface::ATOM) . '">' . "\n" : '')
-        . '<meta property="og:image" content="' . e($p['cover'] ? SITE_URL . '/' . ltrim($p['cover'], '/') : SITE_URL . '/img/og-fafchamps.png') . '">' . "\n"
+        . '<meta property="og:site_name" content="' . e(SITE_NAME) . '">' . "\n"
+        . '<meta property="og:image" content="' . e(SITE_URL . '/' . ltrim($ogImg, '/')) . '">' . "\n"
+        . $ogDims
         . '<meta name="twitter:card" content="summary_large_image">' . "\n" 
         . '<script type="application/ld+json">' . "\n"
         . json_encode($ld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n"
@@ -802,7 +888,7 @@ function render_post(array $p, ?array $prev, ?array $next): string {
 
       <div class="frame endcta">
         <div>
-          <h3>Une question, un projet&nbsp;?</h3>
+          <h2>Une question, un projet&nbsp;?</h2>
           <p>Infrastructure, réseau, sûreté ou cybersécurité — le canal est ouvert.</p>
         </div>
         <a class="btn" href="mailto:' . e(EMAIL) . '">' . e(EMAIL) . ' <span class="ar">↗</span></a>
@@ -879,7 +965,7 @@ function post_list(array $posts): string {
 function cta_rss(): string {
     return '  <div class="frame endcta">
     <div>
-      <h3>Suivre les publications</h3>
+      <h2>Suivre les publications</h2>
       <p>Flux RSS — aucun compte, aucun pistage.</p>
     </div>
     <a class="btn btn--ghost" href="/blog/feed.xml">S\'abonner au flux <span class="ar">→</span></a>
@@ -1277,14 +1363,19 @@ $rss = '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
      . "  <language>fr-be</language>\n"
      . '  <atom:link href="' . SITE_URL . '/blog/feed.xml" rel="self" type="application/rss+xml"/>' . "\n"
      . '  <lastBuildDate>' . (new DateTimeImmutable())->format(DateTimeInterface::RSS) . "</lastBuildDate>\n";
+$maintenant = new DateTimeImmutable();
 foreach (array_slice($listed, 0, 20) as $p) {
     $u = SITE_URL . '/blog/' . $p['slug'] . '/';
+    // pubDate = date DÉCLARÉE, jamais la date de génération — mais plafonnée à
+    // l'instant présent : un article dont l'heure déclarée est encore devant nous
+    // (publié le matin pour « ce soir 21h10 ») sortirait avec un pubDate futur, et
+    // plusieurs agrégateurs ignorent purement et simplement un item daté d'après.
+    $pub = $p['date'] > $maintenant ? $maintenant : $p['date'];
     $rss .= "  <item>\n"
          . '    <title>' . e($p['title']) . "</title>\n"
          . '    <link>' . e($u) . "</link>\n"
          . '    <guid isPermaLink="true">' . e($u) . "</guid>\n"
-         // pubDate = date DÉCLARÉE, jamais la date de génération
-         . '    <pubDate>' . $p['date']->format(DateTimeInterface::RSS) . "</pubDate>\n"
+         . '    <pubDate>' . $pub->format(DateTimeInterface::RSS) . "</pubDate>\n"
          . '    <description>' . e($p['summary']) . "</description>\n"
          . '    <category>' . e($p['cat']) . "</category>\n";
     foreach ($p['tags'] as $t) $rss .= '    <category>' . e($t) . "</category>\n";

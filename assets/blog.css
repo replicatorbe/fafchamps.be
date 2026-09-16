@@ -271,7 +271,7 @@ a:focus:not(:focus-visible){outline:none}
 
 .endcta{margin-top:64px;padding:34px;display:flex;flex-wrap:wrap;gap:20px;
   align-items:center;justify-content:space-between}
-.endcta h3{font-family:var(--ff-display);font-size:20px;font-weight:600}
+.endcta :is(h2,h3){font-family:var(--ff-display);font-size:20px;font-weight:600}
 .endcta p{color:var(--text-dim);font-size:14.5px;margin-top:6px}
 
 footer{border-top:1px solid var(--line-bright);margin-top:74px;padding-block:26px;

@@ -41,11 +41,55 @@ const UA        = 'fafchamps.be-activity/1.0 (+https://www.fafchamps.be)';
 
 $OUT_FILE    = dirname(__DIR__) . '/data/github.json';   // fafchamps.be/data/github.json
 $SECRET_FILE = __DIR__ . '/secret.php';                  // fafchamps.be/_cron/secret.php
+$LOG_FILE    = __DIR__ . '/update-github.log';           // cible du >> de la crontab
+
+const LOG_KEEP = 500;                                    // lignes conservées
 
 /* ----------------------------- HELPERS ---------------------------------- */
 function logmsg(string $m): void {
     fwrite(STDERR, '[' . date('Y-m-d H:i:s') . '] ' . $m . "\n");
 }
+
+/**
+ * Le cron ajoute la sortie de ce script au journal sans que rien ne le borne :
+ * le fichier grossit indéfiniment. On garde les LOG_KEEP dernières lignes.
+ *
+ * La troncature se fait **en place** (r+ puis ftruncate) et jamais par un fichier
+ * temporaire renommé : le shell du cron tient déjà ce fichier ouvert en écriture
+ * ajoutée, et un rename lui laisserait un descripteur sur l'ancien inode — les
+ * lignes de la session en cours partiraient dans un fichier déjà supprimé.
+ */
+function rotate_log(string $file, int $keep = LOG_KEEP): void {
+    if (!is_file($file) || !is_writable($file)) return;
+
+    $taille = @filesize($file);
+    if ($taille === false || $taille === 0) return;
+
+    $fh = @fopen($file, 'r+');
+    if (!$fh) return;
+    if (!flock($fh, LOCK_EX)) { fclose($fh); return; }
+
+    // Lecture bornée : on ne relit jamais plus que la queue du fichier.
+    $lire = (int) min($taille, 1 << 20);
+    fseek($fh, $taille - $lire);
+    $queue  = (string) stream_get_contents($fh);
+    $lignes = explode("\n", $queue);
+    if ($lire < $taille) array_shift($lignes);   // première ligne coupée au milieu
+
+    if ($lire >= $taille && count($lignes) <= $keep) {
+        flock($fh, LOCK_UN); fclose($fh); return;
+    }
+
+    $garde = implode("\n", array_slice($lignes, -$keep));
+    rewind($fh);
+    fwrite($fh, $garde);
+    ftruncate($fh, strlen($garde));
+    fflush($fh);
+    flock($fh, LOCK_UN);
+    fclose($fh);
+}
+
+rotate_log($LOG_FILE);
 
 /** Requête HTTP simple, renvoie [http_code, body|null]. */
 function http(string $url, array $headers = [], ?string $postBody = null): array {
