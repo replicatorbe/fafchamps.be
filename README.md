@@ -88,7 +88,7 @@ Si le fichier est absent ou illisible, la page affiche un lien de repli vers Git
 
 **Exécution manuelle :**
 ```bash
-docker exec shared-php php /var/www/fafchamps.be/_cron/update-github-fafchamps.php
+docker exec -u 1000:1000 shared-php php /var/www/fafchamps.be/_cron/update-github-fafchamps.php
 ```
 (chemin **dans** le conteneur : `/var/www/sites` du host = `/var/www` dans `shared-php`)
 
@@ -96,7 +96,7 @@ docker exec shared-php php /var/www/fafchamps.be/_cron/update-github-fafchamps.p
 d'hiver. Le serveur est en UTC ; le script force `Europe/Brussels` pour l'horodatage du log,
 d'où l'écart apparent entre la ligne de cron et les timestamps.
 ```cron
-30 6 * * * docker exec shared-php php /var/www/fafchamps.be/_cron/update-github-fafchamps.php >> /var/www/sites/fafchamps.be/_cron/update-github.log 2>&1
+30 6 * * * docker exec -u 1000:1000 shared-php php /var/www/fafchamps.be/_cron/update-github-fafchamps.php >> /var/www/sites/fafchamps.be/_cron/update-github.log 2>&1
 ```
 
 **Token (optionnel).** Sans token, le script utilise une source publique de secours et la page
@@ -110,9 +110,10 @@ de l'API officielle GitHub. Voir [`_cron/README.md`](_cron/README.md) — le tok
 
 - `_cron/` et `deploy/` sont refusés par le vhost, sans sensibilité à la casse :
   ```nginx
-  location ~* ^/(_cron|deploy)/ { deny all; }
-  location ~* ^/README\.md$    { deny all; }
+  location ~* ^/(_cron|deploy)/ { return 404; }
+  location ~* ^/README\.md$    { return 404; }
   ```
+  `return 404` plutôt que `deny all` : un 403 confirmerait que le fichier existe.
   Le script porte en plus une garde `PHP_SAPI !== 'cli'` : il est injoignable via le web.
 - Le vhost bloque également `.git`, `.env` et `.ht*`.
 - Aucun secret n'est versionné : `_cron/secret.php` est dans le `.gitignore`.

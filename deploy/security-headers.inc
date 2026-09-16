@@ -34,4 +34,4 @@ add_header Permissions-Policy "geolocation=(), microphone=(), camera=(), payment
 #   navigateur refuse le script, et le mode lecture devient inatteignable.
 #   style-src garde 'unsafe-inline' : tout le CSS est encore inline.
 #   data: sert au favicon SVG et à la texture de grain.
-add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'sha256-KyRX8yLdt8Ot0Nr6KyLMq2jy6cw567KnpYw9avnPh2A=' 'sha256-co5sw6VxZjrfaEV6BO4PXwYZrLJk1VAs9Ulm8OHbdSU='; connect-src 'self'" always;
+add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'sha256-KyRX8yLdt8Ot0Nr6KyLMq2jy6cw567KnpYw9avnPh2A=' 'sha256-ar6Uux62m2JNdC5SmsqJWWUZtvw3Ts35LHr3iQTHB5I='; connect-src 'self'" always;
