@@ -911,6 +911,34 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 .pin:hover .pin__title{color:var(--amber)}
 .pin__sum{font-size:13.5px;color:var(--text-dim);line-height:1.6;margin:0}
 
+/* ---------- Rail « dernière publication » dans le hero ----------
+   Même langage visuel que les .pin, mais plus large et plus bavard : un seul
+   titre à hauteur de regard, pas un chiffre. Alimenté par data/blog.json
+   (posts[0]) — le contenu écrit dans la page est un repli, qui vieillit
+   proprement si le flux ne répond pas. */
+.latest{display:block;margin-top:26px;padding:18px 22px 20px;text-decoration:none;color:inherit;
+  transition:transform .3s var(--ease),border-color .2s var(--ease)}
+.latest:hover{transform:translateY(-3px)}
+.latest__hd{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.latest__hd .mono-tag{margin:0}
+.latest__meta{display:flex;align-items:baseline;gap:12px;font-family:var(--ff-mono);
+  font-size:10.5px;letter-spacing:.1em;color:var(--text-faint);margin-left:auto}
+.latest__date{color:var(--amber)}
+.latest__cat{color:var(--cyan);text-transform:uppercase;letter-spacing:.12em}
+.latest__title{font-family:var(--ff-display);font-size:clamp(18px,2.2vw,22px);font-weight:600;
+  color:var(--text-strong);line-height:1.3;margin:0 0 9px;transition:color .2s var(--ease)}
+.latest:hover .latest__title{color:var(--amber)}
+.latest__sum{font-size:14px;color:var(--text-dim);line-height:1.6;margin:0 0 12px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.latest__cta{display:inline-flex;align-items:center;gap:6px;font-family:var(--ff-mono);
+  font-size:11px;letter-spacing:.1em;color:var(--amber)}
+.latest__cta .ar{transition:transform .2s var(--ease)}
+.latest:hover .latest__cta .ar{transform:translateX(3px)}
+@media(max-width:620px){
+  .latest__hd{gap:8px}
+  .latest__meta{margin-left:0;width:100%;gap:10px}
+}
+
 .pub-nav{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:38px}
 @media(max-width:620px){
   .pub{grid-template-columns:1fr auto}
@@ -1027,9 +1055,9 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   <nav class="topnav" aria-label="Navigation principale">
     <a href="#accueil" data-sec="accueil"><span class="num">01</span>Accueil</a>
     <a href="#realisations" data-sec="realisations"><span class="num">02</span>Réalisations</a>
-    <a href="#parcours" data-sec="parcours"><span class="num">03</span>Parcours</a>
-    <a href="#code" data-sec="code"><span class="num">04</span>Le code</a>
-    <a href="#publications" data-sec="publications"><span class="num">05</span>Publications</a>
+    <a href="#publications" data-sec="publications"><span class="num">03</span>Publications</a>
+    <a href="#parcours" data-sec="parcours"><span class="num">04</span>Parcours</a>
+    <a href="#code" data-sec="code"><span class="num">05</span>Le code</a>
     <a href="#profil" data-sec="profil"><span class="num">06</span>Profil</a>
     <a href="#competences" data-sec="competences"><span class="num">07</span>Compétences</a>
     <a href="#projets" data-sec="projets"><span class="num">08</span>Projets</a>
@@ -1050,9 +1078,9 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <nav class="mobile-nav" id="mnav" aria-label="Menu mobile">
   <a href="#accueil"><span class="num">01</span>Accueil</a>
   <a href="#realisations"><span class="num">02</span>Réalisations</a>
-  <a href="#parcours"><span class="num">03</span>Parcours</a>
-  <a href="#code"><span class="num">04</span>Le code</a>
-  <a href="#publications"><span class="num">05</span>Publications</a>
+  <a href="#publications"><span class="num">03</span>Publications</a>
+  <a href="#parcours"><span class="num">04</span>Parcours</a>
+  <a href="#code"><span class="num">05</span>Le code</a>
   <a href="#profil"><span class="num">06</span>Profil</a>
   <a href="#competences"><span class="num">07</span>Compétences</a>
   <a href="#projets"><span class="num">08</span>Projets</a>
@@ -1106,8 +1134,26 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
       <div class="stat reveal"><div class="n" data-count="24"><span class="counter">0</span><span class="u">&nbsp;ANS</span></div><div class="l">D'informatique</div></div>
       <a class="stat stat--lk reveal d1" href="#code"><div class="n"><span id="stGh">2&thinsp;906</span></div><div class="l">Contributions GitHub</div></a>
       <a class="stat stat--lk reveal d2" href="#code"><div class="n"><span id="stDays">216 j</span></div><div class="l">De code sur 12 mois</div></a>
-      <a class="stat stat--lk reveal d3" href="#publications"><div class="n"><span id="stPosts">32</span></div><div class="l">Articles publiés</div></a>
+      <a class="stat stat--lk reveal d3" href="#publications"><div class="n"><span id="stPosts">38</span></div><div class="l">Articles publiés</div></a>
     </div>
+
+    <!-- Tuile « dernière publication » : un titre à hauteur de regard, pas un
+         compteur. Repli écrit dans la page (dernier article connu), remplacé par
+         data/blog.json dès que le flux répond — même source que la liste
+         complète en bas, donc rien à retoucher à la main. -->
+    <a class="frame latest reveal d4" href="/blog/changer-de-pare-feu-decouvrir-le-si/" id="latest">
+      <div class="latest__hd">
+        <span class="mono-tag">// DERNIÈRE PUBLICATION</span>
+        <span class="latest__meta">
+          <span class="latest__date" id="latestDate">2026.10.03</span>
+          <span class="latest__cat" id="latestCat">Sûreté</span>
+          <span class="latest__rt" id="latestRt">11 min</span>
+        </span>
+      </div>
+      <h3 class="latest__title" id="latestTitle">Changer de pare-feu, découvrir le SI : quand la modernisation devient une enquête</h3>
+      <p class="latest__sum" id="latestSum">On devait juste remplacer un pare-feu de génération précédente par un NGFW. En posant la pièce neuve, on découvre tout ce qui manquait autour : l'authentification moderne, l'inventaire des applications, le périmètre réel du poste de travail.</p>
+      <span class="latest__cta">Lire l'article <span class="ar">→</span></span>
+    </a>
   </div>
 </section>
 
@@ -1266,11 +1312,69 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   </div>
 </section>
 
-<!-- ===== 03 · PARCOURS (frise chronologique) ===== -->
+<!-- ===================== PUBLICATIONS ===================== -->
+<section id="publications">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-meta"><span class="idx">03</span><span>// PUBLICATIONS</span><span class="ln"></span></div>
+      <h2 class="sec-title">Ce que j'<em>écris</em></h2>
+      <p class="sec-sub">Des notes techniques et des retours d'expérience, publiés depuis 2007 et remis en ligne à leur date d'origine : lecture de capture réseau, durcissement de serveur, domotique, modération à l'échelle. J'écris ce que j'ai réellement démonté. Pas de commentaires, pas de pistage : un <a href="/blog/feed.xml">flux RSS</a>, et c'est tout.</p>
+    </div>
+
+    <!-- Trois titres écrits dans la page, avant la liste chargée depuis
+         data/blog.json. Ils ne dépendent d'aucun flux : si le JSON ne répond
+         pas, il reste trois sujets lisibles plutôt qu'un compteur. -->
+    <div class="mono-tag pins__lab reveal">// À lire en premier</div>
+    <div class="pins">
+      <a class="frame pin reveal" href="/blog/lire-un-pcap-quand-l-alarme-a-deja-sonne/">
+        <span class="pin__meta"><span class="pin__date">2022.06.08</span><span class="pin__rt">2 min</span></span>
+        <h3 class="pin__title">Lire un pcap quand l'alarme a déjà sonné</h3>
+        <p class="pin__sum">Quatre passes pour tirer quelque chose d'utile d'une capture de plusieurs gigaoctets, sans se noyer dans l'interface graphique.</p>
+      </a>
+      <a class="frame pin reveal d1" href="/blog/une-camera-est-un-ordinateur-avec-une-horloge-fausse/">
+        <span class="pin__meta"><span class="pin__date">2024.12.19</span><span class="pin__rt">18 min</span></span>
+        <h3 class="pin__title">Une caméra est un ordinateur avec une horloge fausse</h3>
+        <p class="pin__sum">NVR, ONVIF, PoE, débit montant : le composant qui décide de la valeur d'une installation, le jour où on en a besoin, c'est l'horloge.</p>
+      </a>
+      <a class="frame pin reveal d2" href="/blog/reconnaitre-quelqu-un-qui-revient/">
+        <span class="pin__meta"><span class="pin__date">2025.10.08</span><span class="pin__rt">19 min</span></span>
+        <h3 class="pin__title">Reconnaître quelqu'un qui revient</h3>
+        <p class="pin__sum">Un banni revient en quarante secondes, autre pseudo, autre adresse. Ce que chaque indice vaut pris seul, et pourquoi c'est leur constellation qui parle.</p>
+      </a>
+    </div>
+
+    <div class="pub-stats reveal" id="pubStats" hidden>
+      <div class="pub-stat"><b id="pubCount">—</b><small>articles publiés</small></div>
+      <div class="pub-stat"><b id="pubSpan">—</b><small>d'écriture</small></div>
+      <div class="pub-stat"><b id="pubCats">—</b><small>domaines couverts</small></div>
+      <div class="pub-stat"><b id="pubMin">—</b><small>de lecture au total</small></div>
+    </div>
+
+    <div class="frame gh-panel reveal">
+      <div class="gh-panel__bar"><span class="dots"><i></i><i></i><i></i></span> ls -lt /blog<span class="grow"></span><a href="/blog/">tout voir →</a></div>
+      <div class="gh-panel__body">
+        <div class="publist" id="pubList">
+          <div class="gh-loading">chargement des publications <span class="bk">_</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- une pastille par catégorie, avec son nombre d'articles -->
+    <div class="pub-chips reveal" id="pubChips" hidden></div>
+
+    <div class="pub-nav reveal">
+      <a href="/blog/" class="btn">Toutes les publications <span class="ar">→</span></a>
+      <a href="/blog/archives/" class="btn btn--ghost">Par date</a>
+      <a href="/blog/categorie/" class="btn btn--ghost">Par catégorie</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 04 · PARCOURS (frise chronologique) ===== -->
 <section id="parcours">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">03</span><span>// TRAJECTOIRE</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">04</span><span>// TRAJECTOIRE</span><span class="ln"></span></div>
       <h2 class="sec-title">Plus de vingt ans <em>sans décrocher</em></h2>
       <p class="sec-sub">Les technologies changent tous les trois ou quatre ans. Ce qui ne change pas, c'est la méthode : comprendre le système en entier, puis le construire. Et parfois ce n'est pas le langage qui change, c'est la façon de travailler : la virtualisation, les conteneurs, l'IA. Voici les piles que j'ai traversées, et ce que j'en ai fait.</p>
     </div>
@@ -1425,7 +1529,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
 <section id="code">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">04</span><span>// ACTIVITÉ GITHUB</span><span class="ln"></span></div>
+      <div class="sec-meta"><span class="idx">05</span><span>// ACTIVITÉ GITHUB</span><span class="ln"></span></div>
       <h2 class="sec-title">Le code <em>parle</em></h2>
       <p class="sec-sub">Vingt-quatre ans plus tard, j'écris toujours du code presque tous les jours — en dehors des heures de bureau. Ce ne sont pas des démonstrations : ces dépôts tournent en production depuis des années, chez moi et chez des tiers que je ne connais pas, qui ouvrent des tickets et proposent des correctifs. Lisible, documenté, sous licence libre. Flux synchronisé chaque jour depuis <a href="https://github.com/replicatorbe" target="_blank" rel="noopener">@replicatorbe</a> — rien de saisi à la main sur cette page.</p>
     </div>
@@ -1463,64 +1567,6 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
           <div class="gh-langs" id="ghLangs" hidden></div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== PUBLICATIONS ===================== -->
-<section id="publications">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="sec-meta"><span class="idx">05</span><span>// PUBLICATIONS</span><span class="ln"></span></div>
-      <h2 class="sec-title">Ce que j'<em>écris</em></h2>
-      <p class="sec-sub">Des notes techniques et des retours d'expérience, publiés depuis 2007 et remis en ligne à leur date d'origine : lecture de capture réseau, durcissement de serveur, domotique, modération à l'échelle. J'écris ce que j'ai réellement démonté. Pas de commentaires, pas de pistage : un <a href="/blog/feed.xml">flux RSS</a>, et c'est tout.</p>
-    </div>
-
-    <!-- Trois titres écrits dans la page, avant la liste chargée depuis
-         data/blog.json. Ils ne dépendent d'aucun flux : si le JSON ne répond
-         pas, il reste trois sujets lisibles plutôt qu'un compteur. -->
-    <div class="mono-tag pins__lab reveal">// À lire en premier</div>
-    <div class="pins">
-      <a class="frame pin reveal" href="/blog/lire-un-pcap-quand-l-alarme-a-deja-sonne/">
-        <span class="pin__meta"><span class="pin__date">2022.06.08</span><span class="pin__rt">2 min</span></span>
-        <h3 class="pin__title">Lire un pcap quand l'alarme a déjà sonné</h3>
-        <p class="pin__sum">Quatre passes pour tirer quelque chose d'utile d'une capture de plusieurs gigaoctets, sans se noyer dans l'interface graphique.</p>
-      </a>
-      <a class="frame pin reveal d1" href="/blog/une-camera-est-un-ordinateur-avec-une-horloge-fausse/">
-        <span class="pin__meta"><span class="pin__date">2024.12.19</span><span class="pin__rt">18 min</span></span>
-        <h3 class="pin__title">Une caméra est un ordinateur avec une horloge fausse</h3>
-        <p class="pin__sum">NVR, ONVIF, PoE, débit montant : le composant qui décide de la valeur d'une installation, le jour où on en a besoin, c'est l'horloge.</p>
-      </a>
-      <a class="frame pin reveal d2" href="/blog/reconnaitre-quelqu-un-qui-revient/">
-        <span class="pin__meta"><span class="pin__date">2025.10.08</span><span class="pin__rt">19 min</span></span>
-        <h3 class="pin__title">Reconnaître quelqu'un qui revient</h3>
-        <p class="pin__sum">Un banni revient en quarante secondes, autre pseudo, autre adresse. Ce que chaque indice vaut pris seul, et pourquoi c'est leur constellation qui parle.</p>
-      </a>
-    </div>
-
-    <div class="pub-stats reveal" id="pubStats" hidden>
-      <div class="pub-stat"><b id="pubCount">—</b><small>articles publiés</small></div>
-      <div class="pub-stat"><b id="pubSpan">—</b><small>d'écriture</small></div>
-      <div class="pub-stat"><b id="pubCats">—</b><small>domaines couverts</small></div>
-      <div class="pub-stat"><b id="pubMin">—</b><small>de lecture au total</small></div>
-    </div>
-
-    <div class="frame gh-panel reveal">
-      <div class="gh-panel__bar"><span class="dots"><i></i><i></i><i></i></span> ls -lt /blog<span class="grow"></span><a href="/blog/">tout voir →</a></div>
-      <div class="gh-panel__body">
-        <div class="publist" id="pubList">
-          <div class="gh-loading">chargement des publications <span class="bk">_</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- une pastille par catégorie, avec son nombre d'articles -->
-    <div class="pub-chips reveal" id="pubChips" hidden></div>
-
-    <div class="pub-nav reveal">
-      <a href="/blog/" class="btn">Toutes les publications <span class="ar">→</span></a>
-      <a href="/blog/archives/" class="btn btn--ghost">Par date</a>
-      <a href="/blog/categorie/" class="btn btn--ghost">Par catégorie</a>
     </div>
   </div>
 </section>
@@ -1720,7 +1766,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 40px}
   </div>
 </footer>
 
-<script src="assets/site.js?v=17"></script>
+<script src="assets/site.js?v=18"></script>
 
 </body>
 </html>

@@ -374,7 +374,7 @@ var fcbHasIO=(function(){ try{ return typeof IntersectionObserver==='function'; 
       const id=e.target.id; if(map[id]) map[id].classList.add('active');
     }});
   },{rootMargin:'-45% 0px -50% 0px'});
-  ['accueil','realisations','parcours','code','publications','profil','competences','projets','contact'].forEach(id=>{
+  ['accueil','realisations','publications','parcours','code','profil','competences','projets','contact'].forEach(id=>{
     const s=document.getElementById(id); if(s) io.observe(s);
   });
 }catch(e){ if(window.console&&window.console.warn) window.console.warn('fafchamps.be :',e); } })();
@@ -481,9 +481,29 @@ var fcbHasIO=(function(){ try{ return typeof IntersectionObserver==='function'; 
     }
   }
 
+  /* Rail « dernière publication » dans le hero : titre + date + catégorie +
+     résumé, pris sur posts[0] (la liste est triée du plus récent au plus
+     ancien). Repli écrit dans la page — on ne touche à rien si le flux ne
+     renvoie pas de post valide. */
+  function renderLatest(b){
+    const card=gid('latest');
+    if(!card) return;
+    const posts=Array.isArray(b.posts)?b.posts:[];
+    if(!posts.length) return;
+    const p=posts[0];
+    if(typeof p.url==='string' && /^\/[\w\-./]*$/.test(p.url)) card.href=p.url;
+    const put=(id,v)=>{ const e=gid(id); if(e&&v) e.textContent=v; };
+    put('latestTitle', p.title);
+    put('latestDate', String(p.date||'').replace(/-/g,'.'));
+    put('latestCat', p.category);
+    put('latestRt', (p.minutes||1)+' min');
+    put('latestSum', p.summary);
+  }
+
   fetch('data/blog.json',{cache:'no-cache'}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(b=>{
     window.fcbBlog=b;
     renderSummary(b);
+    renderLatest(b);
     const posts=Array.isArray(b.posts)?b.posts:[];
     if(!posts.length){ host.innerHTML='<div class="gh-loading">première publication en préparation <span class="bk">_</span></div>'; return; }
     host.innerHTML='';
